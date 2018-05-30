@@ -17,12 +17,20 @@ import { TabNavigator } from "react-navigation";
 
 import { SearchBar, Button } from "react-native-elements";
 
+import EventCard from "../components/EventCard";
+
 import * as firebase from "firebase";
 
 const TINT_COLOR = "rgb(4, 159, 239)";
 
+
+const cardList = [
+  { nomeEvento: "Evento1", localita: "località1", agenzia: "agenzia1"}
+];
+
 export default class Home extends React.Component {
   state = {
+    cardList: cardList,
     request: "",
   };
 
@@ -34,13 +42,25 @@ export default class Home extends React.Component {
       }
   }
 
+  renderCard = ({item}) => (
+    <EventCard data={item}/>
+  )
+
+  _keyExtractor = (item, index) => {
+    item.id = index;
+    String(index);
+  };
 
   render() {
     return (
       <ScrollView>
         <View style={styles.searchContainer}>
-          
           <Text>{this.state.request}</Text>
+          <FlatList
+            data={this.state.cardList}
+            renderItem={this.renderCard}
+            keyExtractor={this._keyExtractor}
+          />
         </View>
       </ScrollView>
     );
