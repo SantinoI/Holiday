@@ -12,6 +12,7 @@ import {
 import { Permissions, Location } from "expo";
 
 import { MaterialIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import { TabNavigator } from "react-navigation";
 
@@ -46,6 +47,11 @@ export default class Home extends React.Component {
   }
 
   // Funzione che passa come parametro il contenuto della searchBar alla navigation quando viene premuto il button search
+  _goToResult = item => {
+    this.props.navigation.navigate("SearchResult", {
+      request: item,
+    })
+  }
 
   render() {
     return (
@@ -61,15 +67,20 @@ export default class Home extends React.Component {
             Platform={Platform.OS === "ios" ? "ios" : "android"}
             cancelIcon={{ type: "font-awesome", name: "chevron-left" }}
           />
-          <Text>{this.state.text}</Text>
+          
           <Button
-            style={{ marginTop: 50 }}
+            style={{ marginTop:10 }}
             // loading = {this.state.isLoading}
             raised
             backgroundColor={TINT_COLOR}
             title="Trova Escursioni"
-            //onPress={this.onRequest} // Ricerca
+            onPress={()=>this._goToResult(this.state.text)} // Ricerca
           />
+        </View>
+
+        <View style={styles.scrolltext}>
+            <Text style={{color: TINT_COLOR}} >Scorri per i risultati nelle vicinanze</Text>
+            <Feather name="chevron-up" size={24} color={TINT_COLOR} />
         </View>
       </ScrollView>
     );
@@ -86,14 +97,23 @@ Home.navigationOptions = ({ navigation }) => {
 const styles = StyleSheet.create({
   searchContainer: {
     flex: 1,
-    marginTop: 150,
-    alignItems: "stretch",
+    flexDirection: "column",
     justifyContent: "center",
-    backgroundColor: "#ecf0f1"
+    alignItems: "stretch",
+    marginTop: 150,
+    backgroundColor: "#ecf0f1",
+    borderWidth:1
   },
   searchBar: {
     marginLeft: 10,
     marginRight: 10,
     backgroundColor: "white"
+  },
+  scrolltext: {
+    marginTop: 100,
+    alignItems: "center",
+    borderColor: "red",
+    borderWidth:1
+
   }
 });

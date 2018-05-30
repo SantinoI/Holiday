@@ -6,6 +6,7 @@ import {TabNavigator} from "react-navigation";
 
 import Login from "./screens/Login";
 import Home from "./screens/Home";
+import SearchResult from "./screens/SearchResult";
 
 import * as firebase from 'firebase';
 
@@ -28,7 +29,10 @@ const App = createStackNavigator(
     },
     Login: {
       screen: Login
-    }
+    },
+    SearchResult: {
+      screen: SearchResult
+    },
   },
   {
     initialRouteName: "Home",
