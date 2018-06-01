@@ -19,6 +19,7 @@ export default class EventCard extends React.Component {
   render() {
     return (
       <View style={styles.row}>
+<<<<<<< HEAD
         <View style={styles.textbox}>
           <Text style={{marginBottom: 20}}>{this.props.data.nomeEvento}</Text>
           <Text style={styles.text}>{this.props.data.localita}</Text>
@@ -32,6 +33,19 @@ export default class EventCard extends React.Component {
             source= {require("../assets/image.png")}
           />
         {/*</View>*/}
+=======
+        <Text style={styles.text}>{this.props.data.nomeEvento}</Text>
+        <Text style={styles.text}>{this.props.data.localita}</Text>
+        <Text style={styles.text}>{this.props.data.agenzia}</Text>
+
+        <View style={styles.box1}>
+          <Image
+            resizeMethod="resize"
+            style= {{width: 150, height: 150}}
+            source= {require("../assets/image.png")}
+          />
+        </View>
+>>>>>>> f2f9649ffb3e37bd5fe2c590285a8fa75b5f5dd8
         
         
       </View>
@@ -41,7 +55,10 @@ export default class EventCard extends React.Component {
 
 const styles = StyleSheet.create({
   row: {
+<<<<<<< HEAD
     // se metti flex 1 crasha il mondo
+=======
+>>>>>>> f2f9649ffb3e37bd5fe2c590285a8fa75b5f5dd8
     flexDirection: 'row',
     height: 200,
     //borderBottomWidth:,
@@ -63,6 +80,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -20,
     left: -20,
+<<<<<<< HEAD
     borderRadius: 30,
   },
 
@@ -74,10 +92,17 @@ const styles = StyleSheet.create({
     top: -30,
     marginLeft: 150,
     marginRight: 25,
+=======
+    backgroundColor: 'red',
+    borderRadius: 30,
+>>>>>>> f2f9649ffb3e37bd5fe2c590285a8fa75b5f5dd8
   },
-
+  
   text: {
     color: 'blue',
+<<<<<<< HEAD
     marginBottom: 10,
+=======
+>>>>>>> f2f9649ffb3e37bd5fe2c590285a8fa75b5f5dd8
   },
 });
