@@ -1,70 +1,56 @@
-import React from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Switch,
-  TextInput,
-  Platform,
-  TouchableOpacity,
-  Image,
-  ActionSheetIOS,
-} from 'react-native';
+import React, { Component } from 'react';
+import { Image, TouchableOpacity} from 'react-native';
+import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import { MaterialIcons, Feather } from "@expo/vector-icons";
 
-import { Card, Button, FormLabel, FormInput } from 'react-native-elements';
 
-const TINT_COLOR = 'rgb(4, 159, 239)';
 
-export default class EventCard extends React.Component {
+export default class EventCard extends Component {
   render() {
     return (
-      <View style={styles.row}>
-        <Text style={styles.text}>{this.props.data.nomeEvento}</Text>
-        <Text style={styles.text}>{this.props.data.localita}</Text>
-        <Text style={styles.text}>{this.props.data.agenzia}</Text>
-
-        <View style={styles.box1}>
-          <Image
-            resizeMethod="resize"
-            style= {{width: 150, height: 150}}
-            source= {require("../assets/image.png")}
-          />
-        </View>
-        
-        
-      </View>
+      <Container style={{marginBottom: -450, marginLeft: 10, marginRight: 10}} >
+        {/*<Header />*/}
+        <Content>
+          <Card style={{borderRadius: 25}}>
+            <CardItem style={{borderRadius: 25}}>
+              <Left>
+                <Thumbnail source={{uri: 'Image URL'}} />
+                <Body>
+                  <Text>{this.props.data.nomeEvento}</Text>
+                  <Text note>{this.props.data.agenzia}</Text>
+                </Body>
+              </Left>
+              <Right>
+                <Text>55$</Text>
+              </Right>
+            </CardItem>
+            <CardItem cardBody style={{borderRadius: 25}}>
+              <Image source= {require("../assets/image.png")} style={{height: 200, width: null, flex: 1}}/>
+            </CardItem>
+            <CardItem style={{borderRadius: 25,}}>
+              <Left>
+                <Button transparent>
+                  <Icon active name="thumbs-up" />
+                  <Text>12 Likes</Text>
+                </Button>
+              </Left>
+              <Body>
+                <Button transparent>
+                  <Icon active name="chatbubbles" />
+                  <Text>4 Comments</Text>
+                </Button>
+              </Body>
+              <Right style={{marginRight: 25}}>
+                <TouchableOpacity onPress={this.props.onFavorite}>
+                  {this.props.data.favorite ? (
+                    <Feather name="heart" size={25} color="red"/>) : (
+                    <Feather name="heart" size={25} color="black"/>)}
+                </TouchableOpacity>
+              </Right>
+            </CardItem>
+          </Card>
+        </Content>
+      </Container>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    height: 200,
-    //borderBottomWidth:,
-    borderBottomColor: '#ddd',
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 25,
-    marginLeft: 25,
-    marginRight: 25,
-    marginBottom: 25,
-    borderRadius: 30,
-    //padding: 10,
-  },
-
-  box1: {
-    height: 150,
-    width: 150,
-    position: 'absolute',
-    top: -20,
-    left: -20,
-    backgroundColor: 'red',
-    borderRadius: 30,
-  },
-  
-  text: {
-    color: 'blue',
-  },
-});

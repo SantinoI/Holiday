@@ -26,10 +26,10 @@ const TINT_COLOR = "rgb(4, 159, 239)";
 
 /*       CARDLIST ARRAY         */ 
 const cardListArray = [
-  { nomeEvento: "Evento1", localita: "località1", agenzia: "agenzia1"},
-  { nomeEvento: "Evento2", localita: "località2", agenzia: "agenzia2"},
-  { nomeEvento: "Evento3", localita: "località3", agenzia: "agenzia3"},
-  { nomeEvento: "Evento4", localita: "località4", agenzia: "agenzia4"}
+  { nomeEvento: "Evento1", localita: "località1", agenzia: "agenzia1", favorite: false},
+  { nomeEvento: "Evento2", localita: "località2", agenzia: "agenzia2", favorite: false},
+  { nomeEvento: "Evento3", localita: "località3", agenzia: "agenzia3", favorite: true},
+  { nomeEvento: "Evento4", localita: "località4", agenzia: "agenzia4", favorite: false}
 ];
 
 export default class Home extends React.Component {
@@ -68,7 +68,7 @@ export default class Home extends React.Component {
 
 /*       FUNZIONE PER IL RENDERING DI CIASCUNA CARD DELLA FLATLIST          */ 
   renderCard = ({item}) => ( 
-    <EventCard data={item}/>     // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
+    <EventCard data={item} onFavorite= {() => this._favorite(item)}/>     // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
                                 // AI TEXT IN OUTPUT NEL FILE EVENTCARD
   )
 
@@ -77,6 +77,15 @@ export default class Home extends React.Component {
     String(index);
   };
 
+
+  /* CALL BACK PER EVENT CARD */
+  _favorite = (item) => {
+    const newCardlist = this.state.cardList.map(
+      currentCard => (currentCard === item ? {...currentCard, favorite: !currentCard.favorite} : currentCard)
+    )
+    this.setState({cardList: newCardlist});
+  }
+   /*************************/
 
   render() {
     return (
