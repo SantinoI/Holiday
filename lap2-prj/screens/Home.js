@@ -25,7 +25,7 @@ import * as firebase from "firebase";
 const TINT_COLOR = "rgb(4, 159, 239)";
 
 /*       CARDLIST ARRAY         */ 
-const cardList = [
+const cardListArray = [
   { nomeEvento: "Evento1", localita: "località1", agenzia: "agenzia1"},
   { nomeEvento: "Evento2", localita: "località2", agenzia: "agenzia2"},
   { nomeEvento: "Evento3", localita: "località3", agenzia: "agenzia3"},
@@ -38,11 +38,11 @@ export default class Home extends React.Component {
     address: "",
     location:"",
 
-    cardList: cardList, /*       AGGIUNTA DELL'ARRAY NELLO STATE        */ 
+    cardList: cardListArray, /*       AGGIUNTA DELL'ARRAY NELLO STATE        */ 
   };
 
   async componentWillMount(){
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    /*let { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status !== "granted") {
         alert("You need to enable the GPS and authorize it");
         return;
@@ -55,7 +55,8 @@ export default class Home extends React.Component {
           address: address[0].city + ", " + address[0].name
         });
         console.log(address);
-      }
+      }*/
+      this.setState({cardList: cardListArray})
   }
 
   // Funzione che passa come parametro il contenuto della searchBar alla navigation quando viene premuto il button search

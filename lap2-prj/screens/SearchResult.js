@@ -28,9 +28,9 @@ const cardList = [
   { nomeEvento: "Evento1", localita: "località1", agenzia: "agenzia1"}
 ];
 
-export default class Home extends React.Component {
+export default class SearchResult extends React.Component {
   state = {
-    cardList: cardList,
+    cardList: cardList || [],
     request: "",
   };
 
@@ -67,7 +67,7 @@ export default class Home extends React.Component {
   }   
 }
 
-Home.navigationOptions = ({ navigation }) => {
+SearchResult.navigationOptions = ({ navigation }) => {
   return {
     title: "SearchResult",
     headerStyle: {}

@@ -11,79 +11,60 @@ import {
   ActionSheetIOS,
 } from 'react-native';
 
-import { Card, Button, FormLabel, FormInput } from "react-native-elements";
-
+import { Card, Button, FormLabel, FormInput } from 'react-native-elements';
 
 const TINT_COLOR = 'rgb(4, 159, 239)';
 
 export default class EventCard extends React.Component {
-  /*state = {
-    nomeEvento:"Nome da esempio",
-    localita: "località da esempio",
-    agenzia: "agenzia esempio"
-  };*/
-
   render() {
     return (
-      <View style={styles.container}>
-        <Card containerStyle={styles.box1}>
-          <View style={{marginLeft: 50}}>
-            <Text>{this.props.data.nomeEvento}</Text>
-            <Text>{this.props.data.localita}</Text>
-            <Text>{this.props.data.agenzia}</Text>
-          </View>
-        </Card>
-        <View style={styles.box2}>
+      <View style={styles.row}>
+        <Text style={styles.text}>{this.props.data.nomeEvento}</Text>
+        <Text style={styles.text}>{this.props.data.localita}</Text>
+        <Text style={styles.text}>{this.props.data.agenzia}</Text>
+
+        <View style={styles.box1}>
           <Image
-              resizeMode="contain" // vedere altre modalità
-              style= {{width: 100, height: 100}}
-              borderRadius = {25}
-              source = {require("../assets/image.png")}
-              /*source = { this.state.image
-                ? { uri: this.state.image }
-                : require("../assets/image.png")
-              }*/
-            />
+            resizeMethod="resize"
+            style= {{width: 150, height: 150}}
+            source= {require("../assets/image.png")}
+          />
         </View>
+        
+        
       </View>
     );
   }
 }
 
-/*EventCard.navigationOptions = ({ navigation }) => {
-  return {
-    title: "Event",
-    headerStyle: {}
-  };
-};*/
-
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+  row: {
+    flexDirection: 'row',
+    height: 200,
+    //borderBottomWidth:,
+    borderBottomColor: '#ddd',
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 25,
+    marginLeft: 25,
+    marginRight: 25,
+    marginBottom: 25,
+    borderRadius: 30,
+    //padding: 10,
   },
+
   box1: {
-    position: 'absolute',
-    top: 40,
-    left: 40,
-    width: 300,
     height: 150,
-    borderRadius: 40,
-
-  },
-  box2: {
+    width: 150,
     position: 'absolute',
-    top: 35,
-    left: 25,
-    width: 75,
-    height: 75,
-    backgroundColor: 'blue',
-    borderRadius: 40,
+    top: -20,
+    left: -20,
+    backgroundColor: 'red',
+    borderRadius: 30,
   },
-
+  
   text: {
-    color: '#ffffff',
-    fontSize: 80
-  }
+    color: 'blue',
+  },
 });
