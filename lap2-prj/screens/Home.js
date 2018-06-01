@@ -18,19 +18,31 @@ import { TabNavigator } from "react-navigation";
 
 import { SearchBar, Button } from "react-native-elements";
 
+import EventCard from "../components/EventCard";
+
 import * as firebase from "firebase";
 
 const TINT_COLOR = "rgb(4, 159, 239)";
+
+/*       CARDLIST ARRAY         */ 
+const cardListArray = [
+  { nomeEvento: "Evento1", localita: "località1", agenzia: "agenzia1"},
+  { nomeEvento: "Evento2", localita: "località2", agenzia: "agenzia2"},
+  { nomeEvento: "Evento3", localita: "località3", agenzia: "agenzia3"},
+  { nomeEvento: "Evento4", localita: "località4", agenzia: "agenzia4"}
+];
 
 export default class Home extends React.Component {
   state = {
     text: "",
     address: "",
-    location:""
+    location:"",
+
+    cardList: cardListArray, /*       AGGIUNTA DELL'ARRAY NELLO STATE        */ 
   };
 
   async componentWillMount(){
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    /*let { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status !== "granted") {
         alert("You need to enable the GPS and authorize it");
         return;
@@ -43,7 +55,8 @@ export default class Home extends React.Component {
           address: address[0].city + ", " + address[0].name
         });
         console.log(address);
-      }
+      }*/
+      this.setState({cardList: cardListArray})
   }
 
   // Funzione che passa come parametro il contenuto della searchBar alla navigation quando viene premuto il button search
@@ -52,6 +65,18 @@ export default class Home extends React.Component {
       request: item,
     })
   }
+
+/*       FUNZIONE PER IL RENDERING DI CIASCUNA CARD DELLA FLATLIST          */ 
+  renderCard = ({item}) => ( 
+    <EventCard data={item}/>     // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
+                                // AI TEXT IN OUTPUT NEL FILE EVENTCARD
+  )
+
+  _keyExtractor = (item, index) => {
+    item.id = index;
+    String(index);
+  };
+
 
   render() {
     return (
@@ -81,6 +106,13 @@ export default class Home extends React.Component {
         <View style={styles.scrolltext}>
             <Text style={{color: TINT_COLOR}} >Scorri per i risultati nelle vicinanze</Text>
             <Feather name="chevron-up" size={24} color={TINT_COLOR} />
+        </View>
+        <View>
+          <FlatList                     // VISTUALIZZO LA FLATLIST
+              data={this.state.cardList}      
+              renderItem={this.renderCard}
+              keyExtractor={this._keyExtractor}
+            />
         </View>
       </ScrollView>
     );
