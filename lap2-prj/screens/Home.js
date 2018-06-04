@@ -15,6 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import { TabNavigator } from "react-navigation";
+import { Font } from "expo";
 
 import { SearchBar, Button } from "react-native-elements";
 
@@ -24,24 +25,51 @@ import * as firebase from "firebase";
 
 const TINT_COLOR = "rgb(4, 159, 239)";
 
-/*       CARDLIST ARRAY         */ 
+/*       CARDLIST ARRAY         */
+
 const cardListArray = [
-  { nomeEvento: "Evento1", localita: "località1", agenzia: "agenzia1", favorite: false},
-  { nomeEvento: "Evento2", localita: "località2", agenzia: "agenzia2", favorite: false},
-  { nomeEvento: "Evento3", localita: "località3", agenzia: "agenzia3", favorite: true},
-  { nomeEvento: "Evento4", localita: "località4", agenzia: "agenzia4", favorite: false}
+  {
+    nomeEvento: "Evento1",
+    localita: "località1",
+    agenzia: "agenzia1",
+    favorite: false
+  },
+  {
+    nomeEvento: "Evento2",
+    localita: "località2",
+    agenzia: "agenzia2",
+    favorite: false
+  },
+  {
+    nomeEvento: "Evento3",
+    localita: "località3",
+    agenzia: "agenzia3",
+    favorite: true
+  },
+  {
+    nomeEvento: "Evento4",
+    localita: "località4",
+    agenzia: "agenzia4",
+    favorite: false
+  }
 ];
 
 export default class Home extends React.Component {
   state = {
     text: "",
     address: "",
-    location:"",
-
-    cardList: cardListArray, /*       AGGIUNTA DELL'ARRAY NELLO STATE        */ 
+    location: "",
+    loadingFont: true,
+    cardList: cardListArray /*       AGGIUNTA DELL'ARRAY NELLO STATE        */
   };
 
-  async componentWillMount(){
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
+    });
+    this.setState({ loadingFont: false });
+
     /*let { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status !== "granted") {
         alert("You need to enable the GPS and authorize it");
@@ -56,38 +84,44 @@ export default class Home extends React.Component {
         });
         console.log(address);
       }*/
-      this.setState({cardList: cardListArray})
+    this.setState({ cardList: cardListArray });
   }
 
   // Funzione che passa come parametro il contenuto della searchBar alla navigation quando viene premuto il button search
   _goToResult = item => {
     this.props.navigation.navigate("SearchResult", {
-      request: item,
-    })
-  }
+      request: item
+    });
+  };
 
-/*       FUNZIONE PER IL RENDERING DI CIASCUNA CARD DELLA FLATLIST          */ 
-  renderCard = ({item}) => ( 
-    <EventCard data={item} onFavorite= {() => this._favorite(item)}/>     // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
-                                // AI TEXT IN OUTPUT NEL FILE EVENTCARD
-  )
+  /*       FUNZIONE PER IL RENDERING DI CIASCUNA CARD DELLA FLATLIST          */
+
+  renderCard = ({ item }) => (
+    <EventCard data={item} onFavorite={() => this._favorite(item)} /> // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
+    // AI TEXT IN OUTPUT NEL FILE EVENTCARD
+  );
 
   _keyExtractor = (item, index) => {
     item.id = index;
     String(index);
   };
 
-
   /* CALL BACK PER EVENT CARD */
-  _favorite = (item) => {
+  _favorite = item => {
     const newCardlist = this.state.cardList.map(
-      currentCard => (currentCard === item ? {...currentCard, favorite: !currentCard.favorite} : currentCard)
-    )
-    this.setState({cardList: newCardlist});
-  }
-   /*************************/
+      currentCard =>
+        currentCard === item
+          ? { ...currentCard, favorite: !currentCard.favorite }
+          : currentCard
+    );
+    this.setState({ cardList: newCardlist });
+  };
+  /*************************/
 
   render() {
+    if (this.state.loadingFont) {
+      return <Expo.AppLoading />;
+    }
     return (
       <ScrollView>
         <View style={styles.searchContainer}>
@@ -101,27 +135,28 @@ export default class Home extends React.Component {
             Platform={Platform.OS === "ios" ? "ios" : "android"}
             cancelIcon={{ type: "font-awesome", name: "chevron-left" }}
           />
-          
           <Button
-            style={{ marginTop:10 }}
+            style={{ marginTop: 10 }}
             // loading = {this.state.isLoading}
             raised
             backgroundColor={TINT_COLOR}
             title="Trova Escursioni"
-            onPress={()=>this._goToResult(this.state.text)} // Ricerca
+            onPress={() => this._goToResult(this.state.text)} // Ricerca
           />
         </View>
 
         <View style={styles.scrolltext}>
-            <Text style={{color: TINT_COLOR, fontSize: 20}} >Scorri per i risultati nelle vicinanze</Text>
-            <Feather name="chevron-up" size={24} color={TINT_COLOR} />
+          <Text style={{ color: TINT_COLOR, fontSize: 20 }}>
+            Scorri per i risultati nelle vicinanze
+          </Text>
+          <Feather name="chevron-up" size={24} color={TINT_COLOR} />
         </View>
         <View>
-          <FlatList                     // VISTUALIZZO LA FLATLIST
-              data={this.state.cardList}      
-              renderItem={this.renderCard}
-              keyExtractor={this._keyExtractor}
-            />
+          <FlatList // VISTUALIZZO LA FLATLIST
+            data={this.state.cardList}
+            renderItem={this.renderCard}
+            keyExtractor={this._keyExtractor}
+          />
         </View>
       </ScrollView>
     );
@@ -143,7 +178,7 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     marginTop: 150,
     backgroundColor: "#ecf0f1",
-    borderWidth:1
+    borderWidth: 1
   },
   searchBar: {
     marginLeft: 10,
@@ -155,7 +190,6 @@ const styles = StyleSheet.create({
     marginBottom: 150,
     alignItems: "center",
     borderColor: "red",
-    borderWidth:1
-
+    borderWidth: 1
   }
 });

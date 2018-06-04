@@ -5,6 +5,7 @@ import { Card, Button, FormLabel, FormInput } from "react-native-elements";
 
 import * as firebase from "firebase";
 
+
 const TINT_COLOR = "rgb(4, 159, 239)";
 
 export default class LoginForm extends React.Component {
