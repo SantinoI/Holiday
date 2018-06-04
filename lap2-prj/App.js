@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, FlatList, TouchableHighlight, Button, TextInput
 import {MaterialIcons} from "@expo/vector-icons";
 import {createStackNavigator} from "react-navigation";
 import {TabNavigator} from "react-navigation";
+import { createBottomTabNavigator } from 'react-navigation';
 
 import Login from "./screens/Login";
 import Home from "./screens/Home";
@@ -43,4 +44,6 @@ const App = createStackNavigator(
     mode: "modal"
   }
 );
+
+
 export default App;

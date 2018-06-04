@@ -14,7 +14,7 @@ export default class EventCard extends Component {
           <Card style={{borderRadius: 25}}>
             <CardItem style={{borderRadius: 25}}>
               <Left>
-                <Thumbnail source={{uri: 'Image URL'}} />
+                <Thumbnail source= {require("../assets/userEvent.png")} />
                 <Body>
                   <Text>{this.props.data.nomeEvento}</Text>
                   <Text note>{this.props.data.agenzia}</Text>

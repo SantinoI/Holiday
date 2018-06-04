@@ -113,7 +113,7 @@ export default class Home extends React.Component {
         </View>
 
         <View style={styles.scrolltext}>
-            <Text style={{color: TINT_COLOR}} >Scorri per i risultati nelle vicinanze</Text>
+            <Text style={{color: TINT_COLOR, fontSize: 20}} >Scorri per i risultati nelle vicinanze</Text>
             <Feather name="chevron-up" size={24} color={TINT_COLOR} />
         </View>
         <View>
@@ -151,7 +151,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
   scrolltext: {
-    marginTop: 100,
+    marginTop: 300,
+    marginBottom: 150,
     alignItems: "center",
     borderColor: "red",
     borderWidth:1
