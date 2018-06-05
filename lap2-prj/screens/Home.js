@@ -69,8 +69,8 @@ export default class Home extends React.Component {
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
     });
     this.setState({ loadingFont: false });
-
-    /*let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    /*
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status !== "granted") {
         alert("You need to enable the GPS and authorize it");
         return;
@@ -85,6 +85,25 @@ export default class Home extends React.Component {
         console.log(address);
       }*/
     this.setState({ cardList: cardListArray });
+    var location = "Messina";
+    
+    // Carico database in base all'utente
+    let eventList = firebase
+      .database()
+      .ref("App/Events");
+      eventList.on("value", snap =>{
+        var eventi = [];
+        snap.forEach(child => {
+          if(child.val().Place.City == location){
+          eventi.push({
+            nomeEvento: child.val().Title,
+            localita: location,
+            agenzia: child.val().Manager
+          })}
+        })
+      this.setState({cardList: eventi});  
+      })
+      
   }
 
   // Funzione che passa come parametro il contenuto della searchBar alla navigation quando viene premuto il button search
