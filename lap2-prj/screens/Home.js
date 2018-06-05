@@ -7,7 +7,9 @@ import {
   View,
   FlatList,
   TouchableHighlight,
-  TextInput
+  TextInput,
+  Dimensions,
+  Alert,
 } from "react-native";
 import { Permissions, Location } from "expo";
 
@@ -108,9 +110,13 @@ export default class Home extends React.Component {
 
   // Funzione che passa come parametro il contenuto della searchBar alla navigation quando viene premuto il button search
   _goToResult = item => {
-    this.props.navigation.navigate("SearchResult", {
-      request: item
-    });
+    if (this.state.text != "")
+      this.props.navigation.navigate("SearchResult", {
+        request: item
+      });
+    else {
+      Alert.alert('Non posso effettuare la ricerca', 'Inserisci cosa vuoi cercare',)
+    }
   };
 
   /*       FUNZIONE PER IL RENDERING DI CIASCUNA CARD DELLA FLATLIST          */
@@ -142,7 +148,7 @@ export default class Home extends React.Component {
       return <Expo.AppLoading />;
     }
     return (
-      <ScrollView>
+      <ScrollView style={styles.scrollViewStyle}>
         <View style={styles.searchContainer}>
           <SearchBar
             containerStyle={styles.searchBar}
@@ -190,8 +196,13 @@ Home.navigationOptions = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  
+  scrollViewStyle: {
+    flex: 1
+  },
+  
   searchContainer: {
-    flex: 1,
+    marginTop: Dimensions.get('window').height/4,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "stretch",
