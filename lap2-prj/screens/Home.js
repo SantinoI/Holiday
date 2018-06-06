@@ -34,11 +34,7 @@ const BACKGROUND_COLOR = "#d7e4e5";
 StatusBar.setHidden(true);
 StatusBar.setBarStyle("light-content");
 
-<<<<<<< HEAD
 /*
-=======
-/*       CARDLIST ARRAY         */ 
->>>>>>> 0e348179028430d3c780c702eb1a1d82113b2278
 const cardListArray = [
   { nomeEvento: "Escursione Monte Calanducci", 
     agenzia: "Tele-Truffa",
