@@ -7,7 +7,9 @@ import {
   View,
   FlatList,
   TouchableHighlight,
+  TouchableOpacity,
   TextInput,
+  StatusBar,
   Dimensions,
   Alert,
 } from "react-native";
@@ -27,34 +29,43 @@ import * as firebase from "firebase";
 
 const TINT_COLOR = "rgb(4, 159, 239)";
 
-/*       CARDLIST ARRAY         */
+StatusBar.setHidden(true);
 
+<<<<<<< HEAD
 /*
+=======
+/*       CARDLIST ARRAY         */ 
+>>>>>>> 0e348179028430d3c780c702eb1a1d82113b2278
 const cardListArray = [
-  {
-    nomeEvento: "Evento1",
-    localita: "località1",
+  { nomeEvento: "Escursione Monte Calanducci", 
+    agenzia: "Tele-Truffa",
+    immagineEvento: "../assets/image.png",
+    localitaEvento: "Unknow", 
+    prezzoEvento: '10000$',
+    descrizioneEvento: 'Alla ricerca delle merdate Calanducciane ',
+    favorite: false,
+  },
+  { nomeEvento: "Evento1", 
     agenzia: "agenzia1",
-    favorite: false
+    immagineEvento: "../assets/image.png",
+    localitaEvento: "località1", 
+    descrizioneEvento: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    favorite: false,
   },
-  {
-    nomeEvento: "Evento2",
-    localita: "località2",
-    agenzia: "agenzia2",
-    favorite: false
+  { nomeEvento: "Evento1", 
+  agenzia: "agenzia1",
+  immagineEvento: "../assets/image.png",
+  localitaEvento: "località1", 
+  descrizioneEvento: 'Questa è una breve descrizione',
+  favorite: false,
   },
-  {
-    nomeEvento: "Evento3",
-    localita: "località3",
-    agenzia: "agenzia3",
-    favorite: true
+  { nomeEvento: "Evento1", 
+  agenzia: "agenzia1",
+  immagineEvento: "../assets/image.png",
+  localitaEvento: "località1", 
+      descrizioneEvento: 'Questa è una breve descrizione',
+      favorite: false,
   },
-  {
-    nomeEvento: "Evento4",
-    localita: "località4",
-    agenzia: "agenzia4",
-    favorite: false
-  }
 ];
 */
 export default class Home extends React.Component {
@@ -150,41 +161,39 @@ export default class Home extends React.Component {
       return <Expo.AppLoading />;
     }
     return (
-      <ScrollView style={styles.scrollViewStyle}>
+      <ScrollView>
+       
         <View style={styles.searchContainer}>
+          
           <SearchBar
+            inputStyle={{backgroundColor: 'rgb(233,233,238)'}}
             containerStyle={styles.searchBar}
+            placeholderTextColor={'#g5g5g5'}
+            placeholder={'Scrivi qui'}
             onChangeText={value => this.setState({ text: value })}
-            lightTheme
-            showLoading
-            searchIcon={true}
-            placeholder="Type Here..."
-            Platform={Platform.OS === "ios" ? "ios" : "android"}
-            cancelIcon={{ type: "font-awesome", name: "chevron-left" }}
           />
-          <Button
-            style={{ marginTop: 10 }}
-            // loading = {this.state.isLoading}
-            raised
-            backgroundColor={TINT_COLOR}
-            title="Trova Escursioni"
-            onPress={() => this._goToResult(this.state.text)} // Ricerca
-          />
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.searchButton} activeOpacity = { .5 } onPress={()=>this._goToResult(this.state.text)} title="Trova Escursioni">
+              <Text style={{color: 'white'}}> Trova Escursioni </Text>
+            </TouchableOpacity>
+          </View>
+          
         </View>
 
         <View style={styles.scrolltext}>
-          <Text style={{ color: TINT_COLOR, fontSize: 20 }}>
-            Scorri per i risultati nelle vicinanze
-          </Text>
-          <Feather name="chevron-up" size={24} color={TINT_COLOR} />
+            <Text style={{color: TINT_COLOR, fontSize: 20}} >Scorri per i risultati nelle vicinanze</Text>
+            <Feather name="chevron-up" size={24} color={TINT_COLOR} />
         </View>
+
         <View>
-          <FlatList // VISTUALIZZO LA FLATLIST
-            data={this.state.cardList}
-            renderItem={this.renderCard}
-            keyExtractor={this._keyExtractor}
-          />
+          <FlatList                     // VISTUALIZZO LA FLATLIST
+              data={this.state.cardList}      
+              renderItem={this.renderCard}
+              keyExtractor={this._keyExtractor}
+            />
         </View>
+
       </ScrollView>
     );
   }
@@ -198,30 +207,38 @@ Home.navigationOptions = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  
-  scrollViewStyle: {
-    flex: 1
-  },
-  
   searchContainer: {
-    marginTop: Dimensions.get('window').height/4,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "stretch",
-    marginTop: 150,
-    backgroundColor: "#ecf0f1",
-    borderWidth: 1
+    flexDirection: 'column', 
+    alignItems: 'center',
+    marginTop: Dimensions.get('window').height/2-150,
   },
+
   searchBar: {
-    marginLeft: 10,
-    marginRight: 10,
-    backgroundColor: "white"
+    backgroundColor: 'rgb(233,233,238)', 
+    borderTopColor: 'rgb(233,233,238)', 
+    width: 250
   },
+
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+
+  searchButton: {
+    marginTop:20,
+    paddingTop:15,
+    paddingBottom:15,
+    padding: 30,
+    marginLeft:30,
+    marginRight:30,
+    backgroundColor: TINT_COLOR,
+    borderRadius:30,
+   
+  },
+
   scrolltext: {
-    marginTop: 300,
-    marginBottom: 150,
+    marginTop: Dimensions.get('window').height/2-80,
     alignItems: "center",
     borderColor: "red",
-    borderWidth: 1
   }
 });
