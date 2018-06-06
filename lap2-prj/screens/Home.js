@@ -258,7 +258,8 @@ const styles = StyleSheet.create({
   },
 
   scrolltext: {
-    marginTop: Dimensions.get('window').height/2-80,
+    marginTop: Dimensions.get('window').height/2-220,
+    marginBottom: (200/110)*100,
     alignItems: "center",
     borderColor: "red",
   }

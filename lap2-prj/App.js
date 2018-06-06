@@ -71,10 +71,10 @@ export default createBottomTabNavigator(
         let iconName;
         if (routeName === 'Home') {
           iconName = `home${focused ? '' : '-outline'}`;
-          return <MaterialCommunityIcons name={iconName} size={40} color={TINT_COLOR} />;
+          return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
         } else if (routeName === 'Favorites') {
           iconName = `heart${focused ? '' : '-outline'}`;
-          return <MaterialCommunityIcons name={iconName} size={40} color={TINT_COLOR} />;
+          return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
         }
       }
     }),
