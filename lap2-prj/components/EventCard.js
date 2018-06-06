@@ -7,6 +7,7 @@ import { MaterialIcons, Feather } from "@expo/vector-icons";
 
 export default class EventCard extends Component {
   render() {
+    
     return (
       <Card style={{ marginLeft: 10, marginRight: 10, borderRadius: 25}}>
        
@@ -14,7 +15,7 @@ export default class EventCard extends Component {
         <CardItem style={{borderRadius: 25}}>
 
           <Left style={{flex:0.8}}>
-            <Thumbnail source= {require("../assets/userEvent.png")} /> DA MODIFICARE CON PROP
+            <Thumbnail source={{uri: this.props.data.immagineAgenzia}} /> 
             <Body>
               <Text style={{fontSize: 20,}}>{this.props.data.nomeEvento}</Text>
               <Text note style={{color: 'gray'}}>{this.props.data.agenzia}</Text>
@@ -22,7 +23,7 @@ export default class EventCard extends Component {
           </Left>
 
           <Right style={{flex:0.2}}>
-            <Text>{this.props.data.prezzoEvento}</Text>
+            <Text>{this.props.data.prezzoEvento}€</Text>
           </Right>
 
         </CardItem>
@@ -31,7 +32,7 @@ export default class EventCard extends Component {
         <CardItem cardBody >
 
           <Image  style={{borderRadius: 5, marginLeft: 5, marginRight: 5, height: 200, width: null, flex: 1}}
-                  source={require("../assets/image.png")} //DA MODIFICARE CON PROP
+                  source={{uri: this.props.data.immagineEvento}} //DA MODIFICARE CON PROP
            />
 
         </CardItem>
@@ -40,7 +41,7 @@ export default class EventCard extends Component {
         <CardItem content style={{borderRadius: 25}}>
 
           <Left style={{flex:0.8, flexDirection: 'column', alignItems: 'flex-start' }}>
-            <Text style={{fontStyle: 'italic'}}>{this.props.data.localitaEvento}</Text>
+            <Text style={{fontStyle: 'italic'}}>{this.props.data.localitaEvento} {this.props.data.giorno}/{this.props.data.mese}/{this.props.data.anno}</Text>
             <Text>{this.props.data.descrizioneEvento}</Text>
           </Left>
 

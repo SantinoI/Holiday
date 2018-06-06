@@ -111,8 +111,15 @@ export default class Home extends React.Component {
           if(child.val().Place.City == location){
           eventi.push({
             nomeEvento: child.val().Title,
-            localita: location,
-            agenzia: child.val().Manager
+            localitaEvento: child.val().Place.City,
+            agenzia: child.val().Manager,
+            prezzoEvento: child.val().Price,
+            immagineEvento: child.val().EventPreview,
+            descrizioneEvento: child.val().Description,
+            immagineAgenzia: child.val().AgencyImage,
+            giorno: child.val().Date.Day,
+            mese: child.val().Date.Month,
+            anno: child.val().Date.Year,
           })}
         })
       this.setState({cardList: eventi});  
