@@ -73,8 +73,8 @@ export default createBottomTabNavigator(
           iconName = `home${focused ? '' : '-outline'}`;
           return <MaterialCommunityIcons name={iconName} size={40} color={TINT_COLOR} />;
         } else if (routeName === 'Favorites') {
-          iconName = `heart${focused ? '' : '-o'}`;
-          return <FontAwesome name={iconName} size={30} color={TINT_COLOR} />;
+          iconName = `heart${focused ? '' : '-outline'}`;
+          return <MaterialCommunityIcons name={iconName} size={40} color={TINT_COLOR} />;
         }
       }
     }),
