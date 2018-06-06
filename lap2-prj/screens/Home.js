@@ -17,6 +17,7 @@ import { Permissions, Location } from "expo";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import { TabNavigator } from "react-navigation";
 import { Font } from "expo";
@@ -27,9 +28,11 @@ import EventCard from "../components/EventCard";
 
 import * as firebase from "firebase";
 
-const TINT_COLOR = "rgb(4, 159, 239)";
+const TINT_COLOR = "#39b9c3";
+const BACKGROUND_COLOR = "#d7e4e5";
 
 StatusBar.setHidden(true);
+StatusBar.setBarStyle("light-content");
 
 /*       CARDLIST ARRAY         */ 
 const cardListArray = [
@@ -156,14 +159,14 @@ export default class Home extends React.Component {
       return <Expo.AppLoading />;
     }
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: BACKGROUND_COLOR}}>
        
         <View style={styles.searchContainer}>
           
           <SearchBar
             inputStyle={{backgroundColor: 'rgb(233,233,238)'}}
             containerStyle={styles.searchBar}
-            placeholderTextColor={'#g5g5g5'}
+            //placeholderTextColor='#g5g5g5'
             placeholder={'Scrivi qui'}
             onChangeText={value => this.setState({ text: value })}
           />
@@ -197,7 +200,19 @@ export default class Home extends React.Component {
 Home.navigationOptions = ({ navigation }) => {
   return {
     title: "Home",
-    headerStyle: {}
+    headerStyle: {
+      backgroundColor: BACKGROUND_COLOR,
+    },
+    headerRight: (
+      <TouchableOpacity>
+        <FontAwesome
+          style={{ paddingHorizontal: 15 }}
+          name="user-circle"
+          size={34}
+          color={TINT_COLOR}
+        />
+    </TouchableOpacity>
+    )
   };
 };
 
@@ -210,8 +225,10 @@ const styles = StyleSheet.create({
 
   searchBar: {
     backgroundColor: 'rgb(233,233,238)', 
-    borderTopColor: 'rgb(233,233,238)', 
-    width: 250
+    borderTopColor: 'rgb(233,233,238)',
+    borderRadius: 25,
+    borderBottomWidth: 0,
+    width: (Dimensions.get('window').width/110)*100
   },
 
   buttonContainer: {
@@ -227,8 +244,8 @@ const styles = StyleSheet.create({
     marginLeft:30,
     marginRight:30,
     backgroundColor: TINT_COLOR,
-    borderRadius:30,
-   
+    borderRadius:25,
+    
   },
 
   scrolltext: {

@@ -18,6 +18,7 @@ import Home from "./screens/Home";
 import EventCard from "./components/EventCard";
 import SearchResult from "./screens/SearchResult";
 
+
 import * as firebase from "firebase";
 
 var config = {
@@ -31,6 +32,7 @@ var config = {
 firebase.initializeApp(config);
 
 !firebase.apps.length ? firebase.initializeApp(config) : null;
+
 
 const App = createStackNavigator(
   {
@@ -53,4 +55,9 @@ const App = createStackNavigator(
   }
 );
 
-export default App;
+export default createBottomTabNavigator({
+  Home: {screen: App},
+  
+});
+
+//export default App;
