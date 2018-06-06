@@ -210,6 +210,7 @@ Home.navigationOptions = ({ navigation }) => {
     title: "Home",
     headerStyle: {
       backgroundColor: BACKGROUND_COLOR,
+      borderBottomWidth: 0
     },
     headerRight: (
       <TouchableOpacity>
