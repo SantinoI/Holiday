@@ -29,6 +29,7 @@ const TINT_COLOR = "rgb(4, 159, 239)";
 
 /*       CARDLIST ARRAY         */
 
+/*
 const cardListArray = [
   {
     nomeEvento: "Evento1",
@@ -55,14 +56,14 @@ const cardListArray = [
     favorite: false
   }
 ];
-
+*/
 export default class Home extends React.Component {
   state = {
     text: "",
     address: "",
     location: "",
     loadingFont: true,
-    cardList: cardListArray /*       AGGIUNTA DELL'ARRAY NELLO STATE        */
+    //cardList: cardListArray /*       AGGIUNTA DELL'ARRAY NELLO STATE        */
   };
 
   async componentWillMount() {
@@ -71,7 +72,7 @@ export default class Home extends React.Component {
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
     });
     this.setState({ loadingFont: false });
-    /*
+  /*
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status !== "granted") {
         alert("You need to enable the GPS and authorize it");
@@ -83,10 +84,11 @@ export default class Home extends React.Component {
         let address = await Location.reverseGeocodeAsync(location.coords);
         this.setState({
           address: address[0].city + ", " + address[0].name
-        });
+        })
         console.log(address);
-      }*/
-    this.setState({ cardList: cardListArray });
+      }
+      */
+   // this.setState({ cardList: cardListArray });
     var location = "Messina";
     
     // Carico database in base all'utente
