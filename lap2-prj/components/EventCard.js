@@ -14,7 +14,7 @@ export default class EventCard extends Component {
         <CardItem style={{borderRadius: 25}}>
 
           <Left style={{flex:0.8}}>
-            <Thumbnail source= {require("../assets/userEvent.png")} /> DA MODIFICARE CON PROP
+            <Thumbnail source= {require("../assets/userEvent.png")} />
             <Body>
               <Text style={{fontSize: 20,}}>{this.props.data.nomeEvento}</Text>
               <Text note style={{color: 'gray'}}>{this.props.data.agenzia}</Text>
@@ -22,7 +22,7 @@ export default class EventCard extends Component {
           </Left>
 
           <Right style={{flex:0.2}}>
-            <Text>{this.props.data.prezzoEvento}</Text>
+            <Text>{this.props.data.prezzo}</Text>
           </Right>
 
         </CardItem>
@@ -41,7 +41,7 @@ export default class EventCard extends Component {
 
           <Left style={{flex:0.8, flexDirection: 'column', alignItems: 'flex-start' }}>
             <Text style={{fontStyle: 'italic'}}>{this.props.data.localitaEvento}</Text>
-            <Text>{this.props.data.descrizioneEvento}</Text>
+            <Text>{this.props.data.descrizione}</Text>
           </Left>
 
           <Right style={{flex:0.2}}>
