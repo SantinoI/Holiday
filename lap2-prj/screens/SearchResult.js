@@ -7,12 +7,14 @@ import {
   View,
   FlatList,
   TouchableHighlight,
+  TouchableOpacity,
   TextInput
 } from "react-native";
 import { Permissions, Location } from "expo";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
+import { FontAwesome } from "@expo/vector-icons";
 import { TabNavigator } from "react-navigation";
 
 import { SearchBar, Button } from "react-native-elements";
@@ -21,7 +23,8 @@ import EventCard from "../components/EventCard";
 
 import * as firebase from "firebase";
 
-const TINT_COLOR = "rgb(4, 159, 239)";
+const TINT_COLOR = "#39b9c3";
+const BACKGROUND_COLOR = "#d7e4e5";
 
 
 const cardList = [
@@ -70,7 +73,17 @@ export default class SearchResult extends React.Component {
 SearchResult.navigationOptions = ({ navigation }) => {
   return {
     title: "SearchResult",
-    headerStyle: {}
+    headerStyle: {},
+    headerRight: (
+      <TouchableOpacity>
+        <FontAwesome
+          style={{ paddingHorizontal: 15 }}
+          name="user-circle"
+          size={34}
+          color={TINT_COLOR}
+        />
+    </TouchableOpacity>
+    )
   };
 };
 

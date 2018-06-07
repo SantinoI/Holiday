@@ -77,7 +77,7 @@ export default class LoginForm extends React.Component {
   render() {
     return (
       <View>
-        <Card>
+        <Card style={{flex: 1}}>
           <FormLabel>E-mail</FormLabel>
             <FormInput
               label="E-mail"

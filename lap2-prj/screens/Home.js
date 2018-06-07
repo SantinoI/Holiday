@@ -17,6 +17,7 @@ import { Permissions, Location, Font, Constants } from "expo";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import { TabNavigator } from "react-navigation";
 
@@ -26,9 +27,11 @@ import EventCard from "../components/EventCard";
 
 import * as firebase from "firebase";
 
-const TINT_COLOR = "rgb(4, 159, 239)";
+const TINT_COLOR = "#39b9c3";
+const BACKGROUND_COLOR = "#d7e4e5";
 
 StatusBar.setHidden(true);
+StatusBar.setBarStyle("light-content");
 
 /*       CARDLIST ARRAY         */
 
@@ -220,7 +223,19 @@ export default class Home extends React.Component {
 Home.navigationOptions = ({ navigation }) => {
   return {
     title: "Home",
-    headerStyle: {}
+    headerStyle: {
+      backgroundColor: BACKGROUND_COLOR,
+    },
+    headerRight: (
+      <TouchableOpacity>
+        <FontAwesome
+          style={{ paddingHorizontal: 15 }}
+          name="user-circle"
+          size={34}
+          color={TINT_COLOR}
+        />
+    </TouchableOpacity>
+    )
   };
 };
 
@@ -250,7 +265,12 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
     backgroundColor: TINT_COLOR,
+<<<<<<< HEAD
     borderRadius: 30
+=======
+    borderRadius:25,
+    
+>>>>>>> af15ce5c41f46f7bdf1ca0f48c2c8ed52b0e6f64
   },
 
   scrolltext: {

@@ -9,6 +9,9 @@ import {
   TextInput
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createStackNavigator } from "react-navigation";
 import { TabNavigator } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation";
@@ -19,6 +22,8 @@ import EventCard from "./components/EventCard";
 import SearchResult from "./screens/SearchResult";
 
 import * as firebase from "firebase";
+
+const TINT_COLOR = "#39b9c3";
 
 var config = {
   apiKey: "AIzaSyDo22G7nwFINeNlUOY4ATAHoE3l99uLhqo",
@@ -31,6 +36,7 @@ var config = {
 firebase.initializeApp(config);
 
 !firebase.apps.length ? firebase.initializeApp(config) : null;
+
 
 const App = createStackNavigator(
   {
@@ -53,4 +59,32 @@ const App = createStackNavigator(
   }
 );
 
-export default App;
+export default createBottomTabNavigator(
+  {
+    Home: { screen: App},
+    Favorites: {screen: SearchResult} // searchResult andrà sostituito con la screen FAVORITES
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = `home${focused ? '' : '-outline'}`;
+          return <MaterialCommunityIcons name={iconName} size={40} color={TINT_COLOR} />;
+        } else if (routeName === 'Favorites') {
+          iconName = `heart${focused ? '' : '-outline'}`;
+          return <MaterialCommunityIcons name={iconName} size={40} color={TINT_COLOR} />;
+        }
+      }
+    }),
+    tabBarOptions: {
+      activeTintColor: TINT_COLOR,
+      inactiveTintColor: 'gray',
+    },
+  }
+);
+
+//export default App;
+//return <MaterialCommunityIcons name={"home-outline"} size={40} color={TINT_COLOR} />;
+//return <Entypo name={"heart-outlined"} size={25} color={tintColor} />
