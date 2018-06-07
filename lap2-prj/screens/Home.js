@@ -37,13 +37,13 @@ StatusBar.setBarStyle("light-content");
 
 const cardListArray = [
   {
-    nomeEvento: "Escursione Monte Calanducci",
-    agenzia: "Tele-Truffa",
+    nomeEvento: "Escursione Monte",
+    agenzia: "Agenzia",
     immagineEvento:
       "https://firebasestorage.googleapis.com/v0/b/lap2-prj-v2.appspot.com/o/egyptian.png?alt=media&token=3c54fa48-57d4-46f7-8398-f287583ec269",
     localitaEvento: "Unknow",
     prezzoEvento: "10000$",
-    descrizioneEvento: "Alla ricerca delle merdate Calanducciane ",
+    descrizioneEvento: "descrizione",
     favorite: false
   },
   {
@@ -179,12 +179,11 @@ export default class Home extends React.Component {
       return <Expo.AppLoading />;
     }
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: BACKGROUND_COLOR}}>
         <View style={styles.searchContainer}>
           <SearchBar
-            inputStyle={{ backgroundColor: "rgb(233,233,238)" }}
+            inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
             containerStyle={styles.searchBar}
-            placeholderTextColor={"#g5g5g5"}
             placeholder={"Scrivi qui"}
             onChangeText={value => this.setState({ text: value })}
           />
@@ -249,7 +248,9 @@ const styles = StyleSheet.create({
   searchBar: {
     backgroundColor: "rgb(233,233,238)",
     borderTopColor: "rgb(233,233,238)",
-    width: 250
+    borderRadius: 30,
+    borderBottomWidth:0,
+    width: (Dimensions.get("window").width * 90)/ 100
   },
 
   buttonContainer: {
@@ -265,12 +266,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
     backgroundColor: TINT_COLOR,
-<<<<<<< HEAD
     borderRadius: 30
-=======
-    borderRadius:25,
-    
->>>>>>> af15ce5c41f46f7bdf1ca0f48c2c8ed52b0e6f64
   },
 
   scrolltext: {
