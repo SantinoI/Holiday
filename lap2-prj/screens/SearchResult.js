@@ -51,7 +51,7 @@ _loadDatabase = async => {
       });
 }
 
-async componentWillMount(){
+  async componentWillMount(){
     await this._loadDatabase();
 
   }
@@ -65,6 +65,9 @@ async componentWillMount(){
     String(index);
   };
 
+
+
+
   render() {
     return (
       <ScrollView style={{backgroundColor:BACKGROUND_COLOR}}>
@@ -77,11 +80,16 @@ async componentWillMount(){
             onSubmitEditing={() => this._loadDatabase(this.state.text)}
           />
         </View>
-          <FlatList
-            data={this.state.cardList}
-            renderItem={this.renderCard}
-            keyExtractor={this._keyExtractor}
-          />
+          
+          {/* Visualizza FlatList solo se cardList[] > 0 */}
+          {this.state.cardList.length ? (
+            <FlatList
+              data={this.state.cardList}
+              renderItem={this.renderCard}
+              keyExtractor={this._keyExtractor}
+            />) :
+            (<Text style={styles.noResultText}>Nessun risultato, cerca altro :(</Text>)}
+
       </ScrollView>
     );
   }   
@@ -90,7 +98,10 @@ async componentWillMount(){
 SearchResult.navigationOptions = ({ navigation }) => {
   return {
     title: "SearchResult",
-    headerStyle: {},
+    headerStyle: {
+      backgroundColor: BACKGROUND_COLOR,
+      borderBottomWidth: 0
+    },
     headerRight: (
       <TouchableOpacity>
         <FontAwesome
@@ -118,4 +129,10 @@ const styles = StyleSheet.create({
     borderBottomWidth:0,
     width: (Dimensions.get("window").width * 90)/ 100
   },
+  noResultText: {
+    color: TINT_COLOR,
+    marginTop: '50%',
+    fontSize: 20,
+    textAlign: 'center'
+  }
 });
