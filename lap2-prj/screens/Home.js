@@ -33,44 +33,6 @@ const BACKGROUND_COLOR = "#d7e4e5";
 StatusBar.setHidden(true);
 StatusBar.setBarStyle("light-content");
 
-/*       CARDLIST ARRAY         */
-
-const cardListArray = [
-  {
-    nomeEvento: "Escursione Monte",
-    agenzia: "Agenzia",
-    immagineEvento:
-      "https://firebasestorage.googleapis.com/v0/b/lap2-prj-v2.appspot.com/o/egyptian.png?alt=media&token=3c54fa48-57d4-46f7-8398-f287583ec269",
-    localitaEvento: "Unknow",
-    prezzoEvento: "10000$",
-    descrizioneEvento: "descrizione",
-    favorite: false
-  },
-  {
-    nomeEvento: "Evento1",
-    agenzia: "agenzia1",
-    immagineEvento: "../assets/image.png",
-    localitaEvento: "località1",
-    descrizioneEvento: "aaaaaaaaaaaaaaaaaaaaa",
-    favorite: false
-  },
-  {
-    nomeEvento: "Evento1",
-    agenzia: "agenzia1",
-    immagineEvento: "../assets/image.png",
-    localitaEvento: "località1",
-    descrizioneEvento: "Questa è una breve descrizione",
-    favorite: false
-  },
-  {
-    nomeEvento: "Evento1",
-    agenzia: "agenzia1",
-    immagineEvento: "../assets/image.png",
-    localitaEvento: "località1",
-    descrizioneEvento: "Questa è una breve descrizione",
-    favorite: false
-  }
-];
 
 export default class Home extends React.Component {
   state = {
@@ -79,7 +41,7 @@ export default class Home extends React.Component {
     address: null,
     location: null,
     loadingFont: true,
-    cardList: cardListArray/*       AGGIUNTA DELL'ARRAY NELLO STATE        */
+    cardList: null/*       AGGIUNTA DELL'ARRAY NELLO STATE        */
   };
 
   _getLocationAsync = async () => {
@@ -95,15 +57,15 @@ export default class Home extends React.Component {
     this.setState({ address });
   };
 
-  _loadDatabaseAsync = async => {
+  _loadDatabaseAsync = async request => {
     let eventList = firebase.database().ref("App/Events");
     eventList.on("value", snap => {
       var eventi = [];
       snap.forEach(child => {
-        if (child.val().Place.City == this.state.address[0].city) {
+        if (child.val().Place.City == request) {
           eventi.push({
             nomeEvento: child.val().Title,
-            localita: this.state.address[0].city,
+            localita: request,
             agenzia: child.val().Manager,
             descrizione: child.val().Description,
             prezzo: child.val().Price
@@ -123,12 +85,10 @@ export default class Home extends React.Component {
 
     // Geolocation
     await this._getLocationAsync();
-
-    this.setState({ cardList: cardListArray });
     //var location = "Messina";
 
     // Carico database in base all'utente
-    await this._loadDatabaseAsync();
+    await this._loadDatabaseAsync(this.state.address[0].city);
   }
 
   // Funzione che passa come parametro il contenuto della searchBar alla navigation quando viene premuto il button search

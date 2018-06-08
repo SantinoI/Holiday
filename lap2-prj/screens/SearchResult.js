@@ -28,19 +28,19 @@ const BACKGROUND_COLOR = "#d7e4e5";
 
 export default class SearchResult extends React.Component {
   state = {
-    text:"",
+    text:this.props.navigation.state.params.request || null,
     cardList: [],
   };
 
-_loadDatabase = request => {
+_loadDatabase = async => {
   let eventList = firebase.database().ref("App/Events");
     eventList.on("value", snap => {
       var eventi = [];
       snap.forEach(child => {
-        if (child.val().Place.City == request) {
+        if (child.val().Place.City == this.state.text) {
           eventi.push({
             nomeEvento: child.val().Title,
-            localita: request,
+            localita: this.state.text,
             agenzia: child.val().Manager,
             descrizione: child.val().Description,
             prezzo: child.val().Price
@@ -51,9 +51,8 @@ _loadDatabase = request => {
       });
 }
 
-componentWillMount(){
-    let request = this.props.navigation.state.params.request;
-    this._loadDatabase(request);
+async componentWillMount(){
+    await this._loadDatabase();
 
   }
 
@@ -83,7 +82,6 @@ componentWillMount(){
             renderItem={this.renderCard}
             keyExtractor={this._keyExtractor}
           />
-        }
       </ScrollView>
     );
   }   
