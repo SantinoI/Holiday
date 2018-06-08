@@ -8,15 +8,15 @@ import {
   FlatList,
   TouchableHighlight,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Dimensions
 } from "react-native";
-import { Permissions, Location } from "expo";
 
+import { Permissions, Location } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import { FontAwesome } from "@expo/vector-icons";
 import { TabNavigator } from "react-navigation";
-
 import { SearchBar, Button } from "react-native-elements";
 
 import EventCard from "../components/EventCard";
@@ -26,23 +26,35 @@ import * as firebase from "firebase";
 const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
 
-
-const cardList = [
-  { nomeEvento: "Evento1", localita: "località1", agenzia: "agenzia1"}
-];
-
 export default class SearchResult extends React.Component {
   state = {
-    cardList: cardList || [],
-    request: "",
+    text:"",
+    cardList: [],
   };
 
-  async componentWillMount(){
-    let item = this.props.navigation.state.params.request;
-      console.log(item);
-      if (item) {
-        this.setState({request: item});
-      }
+_loadDatabase = request => {
+  let eventList = firebase.database().ref("App/Events");
+    eventList.on("value", snap => {
+      var eventi = [];
+      snap.forEach(child => {
+        if (child.val().Place.City == request) {
+          eventi.push({
+            nomeEvento: child.val().Title,
+            localita: request,
+            agenzia: child.val().Manager,
+            descrizione: child.val().Description,
+            prezzo: child.val().Price
+          });
+        }
+      });
+        this.setState({ cardList: eventi });
+      });
+}
+
+componentWillMount(){
+    let request = this.props.navigation.state.params.request;
+    this._loadDatabase(request);
+
   }
 
   renderCard = ({item}) => (
@@ -56,15 +68,22 @@ export default class SearchResult extends React.Component {
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor:BACKGROUND_COLOR}}>
         <View style={styles.searchContainer}>
-          <Text>{this.state.request}</Text>
+        <SearchBar
+            inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
+            containerStyle={styles.searchBar}
+            placeholder={"Scrivi qui"}
+            onChangeText={value => this.setState({ text: value })}
+            onSubmitEditing={() => this._loadDatabase(this.state.text)}
+          />
+        </View>
           <FlatList
             data={this.state.cardList}
             renderItem={this.renderCard}
             keyExtractor={this._keyExtractor}
           />
-        </View>
+        }
       </ScrollView>
     );
   }   
@@ -89,15 +108,16 @@ SearchResult.navigationOptions = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   searchContainer: {
-    flex: 1,
-    marginTop: 150,
-    alignItems: "stretch",
-    justifyContent: "center",
-    backgroundColor: "#ecf0f1"
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: 25,
+    marginBottom: 25,
   },
   searchBar: {
-    marginLeft: 10,
-    marginRight: 10,
-    backgroundColor: "white"
-  }
+    backgroundColor: "rgb(233,233,238)",
+    borderTopColor: "rgb(233,233,238)",
+    borderRadius: 30,
+    borderBottomWidth:0,
+    width: (Dimensions.get("window").width * 90)/ 100
+  },
 });

@@ -23,7 +23,7 @@ export default class EventCard extends Component {
           </Left>
 
           <Right style={{flex:0.2}}>
-            <Text>{this.props.data.prezzoEvento}€</Text>
+            <Text>{this.props.data.prezzo}</Text>
           </Right>
 
         </CardItem>
@@ -41,8 +41,8 @@ export default class EventCard extends Component {
         <CardItem content style={{borderRadius: 25}}>
 
           <Left style={{flex:0.8, flexDirection: 'column', alignItems: 'flex-start' }}>
-            <Text style={{fontStyle: 'italic'}}>{this.props.data.localitaEvento} {this.props.data.giorno}/{this.props.data.mese}/{this.props.data.anno}</Text>
-            <Text>{this.props.data.descrizioneEvento}</Text>
+            <Text style={{fontStyle: 'italic'}}>{this.props.data.localitaEvento}</Text>
+            <Text>{this.props.data.descrizione}</Text>
           </Left>
 
           <Right style={{flex:0.2}}>

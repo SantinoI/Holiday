@@ -11,16 +11,15 @@ import {
   TextInput,
   StatusBar,
   Dimensions,
-  Alert,
+  Alert
 } from "react-native";
-import { Permissions, Location } from "expo";
+import { Permissions, Location, Font, Constants } from "expo";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import { TabNavigator } from "react-navigation";
-import { Font } from "expo";
 
 import { SearchBar, Button } from "react-native-elements";
 
@@ -34,46 +33,85 @@ const BACKGROUND_COLOR = "#d7e4e5";
 StatusBar.setHidden(true);
 StatusBar.setBarStyle("light-content");
 
-/*
+/*       CARDLIST ARRAY         */
+
 const cardListArray = [
-  { nomeEvento: "Escursione Monte Calanducci", 
-    agenzia: "Tele-Truffa",
-    immagineEvento: "../assets/image.png",
-    localitaEvento: "Unknow", 
-    prezzoEvento: '10000$',
-    descrizioneEvento: 'Alla ricerca delle merdate Calanducciane ',
-    favorite: false,
+  {
+    nomeEvento: "Escursione Monte",
+    agenzia: "Agenzia",
+    immagineEvento:
+      "https://firebasestorage.googleapis.com/v0/b/lap2-prj-v2.appspot.com/o/egyptian.png?alt=media&token=3c54fa48-57d4-46f7-8398-f287583ec269",
+    localitaEvento: "Unknow",
+    prezzoEvento: "10000$",
+    descrizioneEvento: "descrizione",
+    favorite: false
   },
-  { nomeEvento: "Evento1", 
+  {
+    nomeEvento: "Evento1",
     agenzia: "agenzia1",
     immagineEvento: "../assets/image.png",
-    localitaEvento: "località1", 
-    descrizioneEvento: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    favorite: false,
+    localitaEvento: "località1",
+    descrizioneEvento: "aaaaaaaaaaaaaaaaaaaaa",
+    favorite: false
   },
-  { nomeEvento: "Evento1", 
-  agenzia: "agenzia1",
-  immagineEvento: "../assets/image.png",
-  localitaEvento: "località1", 
-  descrizioneEvento: 'Questa è una breve descrizione',
-  favorite: false,
+  {
+    nomeEvento: "Evento1",
+    agenzia: "agenzia1",
+    immagineEvento: "../assets/image.png",
+    localitaEvento: "località1",
+    descrizioneEvento: "Questa è una breve descrizione",
+    favorite: false
   },
-  { nomeEvento: "Evento1", 
-  agenzia: "agenzia1",
-  immagineEvento: "../assets/image.png",
-  localitaEvento: "località1", 
-      descrizioneEvento: 'Questa è una breve descrizione',
-      favorite: false,
-  },
+  {
+    nomeEvento: "Evento1",
+    agenzia: "agenzia1",
+    immagineEvento: "../assets/image.png",
+    localitaEvento: "località1",
+    descrizioneEvento: "Questa è una breve descrizione",
+    favorite: false
+  }
 ];
-*/
+
 export default class Home extends React.Component {
   state = {
     text: "",
-    address: "",
-    location: "",
+    errorMessage: null,
+    address: null,
+    location: null,
     loadingFont: true,
-    //cardList: cardListArray /*       AGGIUNTA DELL'ARRAY NELLO STATE        */
+    cardList: cardListArray/*       AGGIUNTA DELL'ARRAY NELLO STATE        */
+  };
+
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== "granted") {
+      this.setState({
+        errorMessage: " Permission to access location was denied"
+      });
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    this.setState({ location });
+    let address = await Location.reverseGeocodeAsync(location.coords);
+    this.setState({ address });
+  };
+
+  _loadDatabaseAsync = async => {
+    let eventList = firebase.database().ref("App/Events");
+    eventList.on("value", snap => {
+      var eventi = [];
+      snap.forEach(child => {
+        if (child.val().Place.City == this.state.address[0].city) {
+          eventi.push({
+            nomeEvento: child.val().Title,
+            localita: this.state.address[0].city,
+            agenzia: child.val().Manager,
+            descrizione: child.val().Description,
+            prezzo: child.val().Price
+          });
+        }
+      });
+      this.setState({ cardList: eventi });
+    });
   };
 
   async componentWillMount() {
@@ -82,49 +120,15 @@ export default class Home extends React.Component {
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
     });
     this.setState({ loadingFont: false });
-  /*
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-      if (status !== "granted") {
-        alert("You need to enable the GPS and authorize it");
-        return;
-      }else{
-        let location = await Location.getCurrentPositionAsync();
-        console.log(location);
-        this.setState({ location: location.coords, isMapVisible: true });
-        let address = await Location.reverseGeocodeAsync(location.coords);
-        this.setState({
-          address: address[0].city + ", " + address[0].name
-        })
-        console.log(address);
-      }
-      */
-   // this.setState({ cardList: cardListArray });
-    var location = "Messina";
-    
+
+    // Geolocation
+    await this._getLocationAsync();
+
+    this.setState({ cardList: cardListArray });
+    //var location = "Messina";
+
     // Carico database in base all'utente
-    let eventList = firebase
-      .database()
-      .ref("App/Events");
-      eventList.on("value", snap =>{
-        var eventi = [];
-        snap.forEach(child => {
-          if(child.val().Place.City == location){
-          eventi.push({
-            nomeEvento: child.val().Title,
-            localitaEvento: child.val().Place.City,
-            agenzia: child.val().Manager,
-            prezzoEvento: child.val().Price,
-            immagineEvento: child.val().EventPreview,
-            descrizioneEvento: child.val().Description,
-            immagineAgenzia: child.val().AgencyImage,
-            giorno: child.val().Date.Day,
-            mese: child.val().Date.Month,
-            anno: child.val().Date.Year,
-          })}
-        })
-      this.setState({cardList: eventi});  
-      })
-      
+    await this._loadDatabaseAsync();
   }
 
   // Funzione che passa come parametro il contenuto della searchBar alla navigation quando viene premuto il button search
@@ -134,16 +138,24 @@ export default class Home extends React.Component {
         request: item
       });
     else {
-      Alert.alert('Non posso effettuare la ricerca', 'Inserisci cosa vuoi cercare',)
+      Alert.alert(
+        "Non posso effettuare la ricerca",
+        "Inserisci cosa vuoi cercare"
+      );
     }
   };
 
   /*       FUNZIONE PER IL RENDERING DI CIASCUNA CARD DELLA FLATLIST          */
 
-  renderCard = ({ item }) => (
-    <EventCard data={item} onFavorite={() => this._favorite(item)} /> // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
-    // AI TEXT IN OUTPUT NEL FILE EVENTCARD
-  );
+  renderCard = ({ item }) => {
+    {
+      console.log(item);
+    }
+    return (
+      <EventCard data={item} onFavorite={() => this._favorite(item)} /> // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
+      // AI TEXT IN OUTPUT NEL FILE EVENTCARD
+    );
+  };
 
   _keyExtractor = (item, index) => {
     item.id = index;
@@ -168,38 +180,40 @@ export default class Home extends React.Component {
     }
     return (
       <ScrollView style={{backgroundColor: BACKGROUND_COLOR}}>
-       
         <View style={styles.searchContainer}>
-          
           <SearchBar
-            inputStyle={{backgroundColor: 'rgb(233,233,238)'}}
+            inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
             containerStyle={styles.searchBar}
-            //placeholderTextColor='#g5g5g5'
-            placeholder={'Scrivi qui'}
+            placeholder={"Scrivi qui"}
             onChangeText={value => this.setState({ text: value })}
           />
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.searchButton} activeOpacity = { .5 } onPress={()=>this._goToResult(this.state.text)} title="Trova Escursioni">
-              <Text style={{color: 'white'}}> Trova Escursioni </Text>
+            <TouchableOpacity
+              style={styles.searchButton}
+              activeOpacity={0.5}
+              onPress={() => this._goToResult(this.state.text)}
+              title="Trova Escursioni"
+            >
+              <Text style={{ color: "white" }}> Trova Escursioni </Text>
             </TouchableOpacity>
           </View>
-          
         </View>
 
         <View style={styles.scrolltext}>
-            <Text style={{color: TINT_COLOR, fontSize: 20}} >Scorri per i risultati nelle vicinanze</Text>
-            <Feather name="chevron-up" size={24} color={TINT_COLOR} />
+          <Text style={{ color: TINT_COLOR, fontSize: 20 }}>
+            Scorri per i risultati nelle vicinanze
+          </Text>
+          <Feather name="chevron-up" size={24} color={TINT_COLOR} />
         </View>
 
         <View>
-          <FlatList                     // VISTUALIZZO LA FLATLIST
-              data={this.state.cardList}      
-              renderItem={this.renderCard}
-              keyExtractor={this._keyExtractor}
-            />
+          <FlatList // VISTUALIZZO LA FLATLIST
+            data={this.state.cardList}
+            renderItem={this.renderCard}
+            keyExtractor={this._keyExtractor}
+          />
         </View>
-
       </ScrollView>
     );
   }
@@ -227,40 +241,38 @@ Home.navigationOptions = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   searchContainer: {
-    flexDirection: 'column', 
-    alignItems: 'center',
-    marginTop: Dimensions.get('window').height/2-150,
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: Dimensions.get("window").height / 2 - 150
   },
 
   searchBar: {
-    backgroundColor: 'rgb(233,233,238)', 
-    borderTopColor: 'rgb(233,233,238)',
-    borderRadius: 25,
-    borderBottomWidth: 0,
-    width: (Dimensions.get('window').width/110)*100
+    backgroundColor: "rgb(233,233,238)",
+    borderTopColor: "rgb(233,233,238)",
+    borderRadius: 30,
+    borderBottomWidth:0,
+    width: (Dimensions.get("window").width * 90)/ 100
   },
 
   buttonContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center"
   },
 
   searchButton: {
-    marginTop:20,
-    paddingTop:15,
-    paddingBottom:15,
+    marginTop: 20,
+    paddingTop: 15,
+    paddingBottom: 15,
     padding: 30,
-    marginLeft:30,
-    marginRight:30,
+    marginLeft: 30,
+    marginRight: 30,
     backgroundColor: TINT_COLOR,
-    borderRadius:25,
-    
+    borderRadius: 30
   },
 
   scrolltext: {
-    marginTop: Dimensions.get('window').height/2-220,
-    marginBottom: (200/110)*100,
+    marginTop: Dimensions.get("window").height / 2 - 80,
     alignItems: "center",
-    borderColor: "red",
+    borderColor: "red"
   }
 });
