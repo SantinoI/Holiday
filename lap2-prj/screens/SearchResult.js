@@ -70,17 +70,18 @@ _loadDatabase = async => {
 
   render() {
     return (
-      <ScrollView style={{backgroundColor:BACKGROUND_COLOR}}>
+    <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100}}>
         <View style={styles.searchContainer}>
-        <SearchBar
-            inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
-            containerStyle={styles.searchBar}
-            placeholder={"Scrivi qui"}
-            onChangeText={value => this.setState({ text: value })}
-            onSubmitEditing={() => this._loadDatabase(this.state.text)}
-          />
+          <SearchBar
+              inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
+              containerStyle={styles.searchBar}
+              placeholder={"Scrivi qui"}
+              onChangeText={value => this.setState({ text: value })}
+              onSubmitEditing={() => this._loadDatabase(this.state.text)}
+            />
         </View>
-          
+        
+        <ScrollView style={{backgroundColor:BACKGROUND_COLOR}}>
           {/* Visualizza FlatList solo se cardList[] > 0 */}
           {this.state.cardList.length ? (
             <FlatList
@@ -90,7 +91,9 @@ _loadDatabase = async => {
             />) :
             (<Text style={styles.noResultText}>Nessun risultato, cerca altro :(</Text>)}
 
-      </ScrollView>
+        </ScrollView>
+      </View>
+
     );
   }   
 }
@@ -117,10 +120,11 @@ SearchResult.navigationOptions = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   searchContainer: {
+    backgroundColor: BACKGROUND_COLOR,
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 25,
-    marginBottom: 25,
+    marginTop: 20,
+    marginBottom: 20,
   },
   searchBar: {
     backgroundColor: "rgb(233,233,238)",
