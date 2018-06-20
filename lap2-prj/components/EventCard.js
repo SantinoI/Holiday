@@ -9,6 +9,7 @@ export default class EventCard extends Component {
   render() {
     
     return (
+      <TouchableOpacity onPress={this.props.onEventPress}>
       <Card style={{ marginLeft: 10, marginRight: 10, borderRadius: 25}}>
        
         {/* IMMAGINE UTENTE - EVENTO - AGENZIA - PREZZO */}
@@ -55,6 +56,7 @@ export default class EventCard extends Component {
 
         </CardItem>
       </Card>
+      </TouchableOpacity>
     )
   }
 }

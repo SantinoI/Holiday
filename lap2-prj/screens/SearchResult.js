@@ -57,8 +57,18 @@ _loadDatabase = async => {
   }
 
   renderCard = ({item}) => (
-    <EventCard data={item}/>
+    <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage") }/>
   )
+
+  _favorite = item => {
+    const newCardlist = this.state.cardList.map(
+      currentCard =>
+        currentCard === item
+          ? { ...currentCard, favorite: !currentCard.favorite }
+          : currentCard
+    );
+    this.setState({ cardList: newCardlist });
+  };
 
   _keyExtractor = (item, index) => {
     item.id = index;
@@ -70,7 +80,7 @@ _loadDatabase = async => {
 
   render() {
     return (
-    <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100}}>
+    <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex:1}}>
         <View style={styles.searchContainer}>
           <SearchBar
               inputStyle={{ backgroundColor: "rgb(233,233,238)", }}

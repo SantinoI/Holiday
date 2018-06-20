@@ -18,7 +18,8 @@ import { createBottomTabNavigator } from "react-navigation";
 
 import Login from "./screens/Login";
 import Home from "./screens/Home";
-import EventCard from "./components/EventCard";
+import EventPage from "./screens/EventPage";
+import Favorites from "./screens/Favorites";
 import SearchResult from "./screens/SearchResult";
 
 import * as firebase from "firebase";
@@ -48,10 +49,10 @@ const App = createStackNavigator(
     },
     SearchResult: {
       screen: SearchResult
-    }
-    /*EventCard: {
-      screen: EventCard
-    },*/
+    },
+    EventPage: {
+      screen: EventPage
+    },
   },
   {
     initialRouteName: "Home",
@@ -59,10 +60,18 @@ const App = createStackNavigator(
   }
 );
 
+const Favorite = createStackNavigator(
+  {
+    Favorites: {
+      screen: Favorites
+    }
+  }
+)
+
 export default createBottomTabNavigator(
   {
     Home: { screen: App},
-    Favorites: {screen: SearchResult} // searchResult andrà sostituito con la screen FAVORITES
+    Favorites: {screen: Favorite} // searchResult andrà sostituito con la screen FAVORITES
   },
   {
     navigationOptions: ({ navigation }) => ({

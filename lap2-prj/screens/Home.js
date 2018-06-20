@@ -112,7 +112,7 @@ export default class Home extends React.Component {
       console.log(item);
     }
     return (
-      <EventCard data={item} onFavorite={() => this._favorite(item)} /> // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
+      <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage") }/> // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
       // AI TEXT IN OUTPUT NEL FILE EVENTCARD
     );
   };
