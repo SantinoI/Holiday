@@ -57,7 +57,7 @@ _loadDatabase = async => {
   }
 
   renderCard = ({item}) => (
-    <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage") }/>
+    <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item}) }/>
   )
 
   _favorite = item => {
@@ -80,7 +80,7 @@ _loadDatabase = async => {
 
   render() {
     return (
-    <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex:1}}>
+    <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100}}>
         <View style={styles.searchContainer}>
           <SearchBar
               inputStyle={{ backgroundColor: "rgb(233,233,238)", }}

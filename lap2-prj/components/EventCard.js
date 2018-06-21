@@ -18,7 +18,7 @@ export default class EventCard extends Component {
           <Left style={{flex:0.8}}>
             <Thumbnail source={{uri: this.props.data.immagineAgenzia}} /> 
             <Body>
-              <Text style={{fontSize: 20,}}>{this.props.data.nomeEvento}</Text>
+              <Text style={{fontSize: 20}}>{this.props.data.nomeEvento}</Text>
               <Text note style={{color: 'gray'}}>{this.props.data.agenzia}</Text>
             </Body>
           </Left>

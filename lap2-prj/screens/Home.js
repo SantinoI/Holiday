@@ -68,7 +68,9 @@ export default class Home extends React.Component {
             localita: request,
             agenzia: child.val().Manager,
             descrizione: child.val().Description,
-            prezzo: child.val().Price
+            prezzo: child.val().Price,
+            immagineAgenzia: child.val().AgencyImage,
+            immagineEvento: child.val().EventPreview
           });
         }
       });
