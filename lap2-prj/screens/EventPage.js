@@ -52,7 +52,7 @@ export default class EventPage extends React.Component {
       {/* LOCALITA' - DESCRIZIONE - FAVORITE */}
       <CardItem >
         <Left style={{flex:0.8, flexDirection: 'column', alignItems: 'flex-start' }}>
-         <Text style={{fontSize:10, fontStyle: 'italic'}}>Etna, Rifugio Sapienza la torre</Text>
+         <Text style={{fontSize:10, fontStyle: 'italic'}}>{this.props.navigation.state.params.eventInfo.localita}</Text>
         </Left>
 
         <Right>
@@ -61,7 +61,7 @@ export default class EventPage extends React.Component {
       </CardItem>
 
       <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
-      <Text style={{fontSize: 24, textAlign: 'center'}}>Passeggiata nel bosco</Text>
+      <Text style={{fontSize: 24, textAlign: 'center'}}>{this.props.navigation.state.params.eventInfo.nomeEvento}</Text>
       </CardItem>
 
       <CardItem >
