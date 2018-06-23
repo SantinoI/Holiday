@@ -40,10 +40,10 @@ export default class EventCard extends Component {
 
         {/* LOCALITA' - DESCRIZIONE - FAVORITE */}
         <CardItem content style={{borderRadius: 25}}>
-
+  
           <Left style={{flex:0.8, flexDirection: 'column', alignItems: 'flex-start' }}>
-            <Text style={{fontStyle: 'italic'}}>{this.props.data.localitaEvento}</Text>
-            <Text>{this.props.data.descrizione}</Text>
+            <Text style={{fontStyle: 'italic'}}>{this.props.data.citta}</Text>
+            <Text>{this.props.data.descrizioneBreve}</Text>
           </Left>
 
           <Right style={{flex:0.2}}>

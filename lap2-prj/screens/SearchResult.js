@@ -37,13 +37,26 @@ _loadDatabase = async => {
     eventList.on("value", snap => {
       var eventi = [];
       snap.forEach(child => {
-        if (child.val().Place.City == this.state.text) {
+        if (child.val().Localita.Provincia == this.state.text) {
           eventi.push({
-            nomeEvento: child.val().Title,
-            localita: this.state.text,
-            agenzia: child.val().Manager,
-            descrizione: child.val().Description,
-            prezzo: child.val().Price
+            IDevento: child.val().IDevento,
+            agenzia: child.val().Agenzia,
+            email: child.val().Email,
+            numero: child.val().Numero,
+            facebook: child.val().Facebook,
+            nomeEvento: child.val().NomeEvento,
+            citta: child.val().Localita.Citta,
+            provincia: child.val().Localita.Provincia,
+            descrizioneBreve: child.val().DescrizioneBreve,
+            descrizioneCompleta: child.val().DescrizioneCompleta,
+            prezzo: child.val().Prezzo,
+            difficolta: child.val().Difficolta,
+            data: child.val().Data,
+            orario: child.val().Orario,
+            durata: child.val().Durata,
+            immagineAgenzia: child.val().ImmagineAgenzia,
+            immagineEvento: child.val().ImmagineEvento,
+
           });
         }
       });
