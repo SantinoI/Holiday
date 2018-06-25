@@ -167,72 +167,63 @@ export default class RegisterPage extends React.Component {
     return (
       
       <Container style={{padding:25, backgroundColor : BACKGROUND_COLOR}}>
-        
-          <Card style={{padding:30, borderRadius: 10}}>
-                
-                <ScrollView>
-                  <Form>
+          <Card style={{marginTop:40,padding:10, borderRadius: 10}}>
+                  {/* Immagine utente che rimane fissa in top */}
+                  <TouchableOpacity style={{marginTop: -75, marginBottom: 20,alignSelf: 'center'}} onPress={this._selectPhoto}>
+									  <Image
+                      resizeMode="cover"
+                      rounded
+											style= {{borderRadius:60, width: 120, height: 120}}
+											source = {  this.state.image ? { uri: this.state.image } : require("../assets/image.png")}/>
+								  </TouchableOpacity>
+                {/* Form vero e proprio all'interno di un scroll */}
+                <ScrollView >
+                  <Form style={{marginTop:0}}>
+                      <Item floatingLabel style={{marginTop:0}}>
+                        <Label style={{}} >Username</Label>
+                        <Input  onChangeText={text => this.setState({ username: text })}
+                        />
+                      </Item>           
 
-											<TouchableOpacity style={{alignSelf: 'center'}} onPress={this._selectPhoto}>
-												<Image
-                          resizeMode="cover"
-                          rounded
-													style= {{borderRadius:60, width: 120, height: 120}}
-													source = { this.state.image
-													? { uri: this.state.image }
-													: require("../assets/image.png")
-													}
-												/>
-											</TouchableOpacity>
+                      <Item floatingLabel>
+                        <Label style={{}} >Nome</Label>
+                        <Input  onChangeText={text => this.setState({ nome: text })}
+                        />
+                      </Item>                    
 
-                  <Item floatingLabel>
-                      <Label style={{}} >Username</Label>
-                      <Input  onChangeText={text => this.setState({ username: text })}
-                      />
-                    </Item>           
+                      <Item floatingLabel>
+                        <Label style={{}} >Cognome</Label>
+                        <Input  onChangeText={text => this.setState({ cognome: text })}
+                        />
+                      </Item>           
+                        
+                      <Item floatingLabel>
+                        <Label style={{}} >E-mail</Label>
+                        <Input  onChangeText={text => this.setState({ email: text })}
+                        />
+                      </Item>
 
-                    <Item floatingLabel>
-                      <Label style={{}} >Nome</Label>
-                      <Input  onChangeText={text => this.setState({ nome: text })}
-                      />
-                    </Item>                    
+                      <Item floatingLabel>
+                        <Label style={{}} >Conferma E-mail </Label>
+                        <Input  onChangeText={text => this.setState({ confirmEmail: text })}
 
-                    <Item floatingLabel>
-                      <Label style={{}} >Cognome</Label>
-                      <Input  onChangeText={text => this.setState({ cognome: text })}
-                      />
-                    </Item>           
-                      
-                  <Item floatingLabel>
-                      <Label style={{}} >E-mail</Label>
-                      <Input  onChangeText={text => this.setState({ email: text })}
-                      />
+                        />
                     </Item>
 
-									<Item floatingLabel>
-                      <Label style={{}} >Conferma E-mail </Label>
-											<Input  onChangeText={text => this.setState({ confirmEmail: text })}
+                      <Item floatingLabel last style={{marginTop:25}} >
+                        <Label>Password</Label>
+                        <Input  onChangeText={text => this.setState({ password: text })} 
+                        />
+                      </Item>
 
-                      />
-                  </Item>
-
-                    <Item floatingLabel last style={{marginTop:25}} >
-                      <Label>Password</Label>
-                      <Input  onChangeText={text => this.setState({ password: text })} 
-                      />
-                    </Item>
-
-                    <Item floatingLabel last style={{marginTop:25}} >
-                      <Label>Conferma Password</Label>
-                      <Input  onChangeText={text => this.setState({ confirmPassword: text })} 
-                      />
-                    </Item>
-
-
+                      <Item floatingLabel last style={{marginTop:25}} >
+                        <Label>Conferma Password</Label>
+                        <Input  onChangeText={text => this.setState({ confirmPassword: text })} 
+                        />
+                      </Item>
                   </Form>
-                
-
                 </ScrollView>
+                  {/* Tasto registrati, quando si clicca si attivano i controlli */}
                   <View style={styles.buttonContainer}>
                       <TouchableOpacity
                           loading = {this.state.isLoading}
@@ -245,11 +236,7 @@ export default class RegisterPage extends React.Component {
                         <Text style={{textAlign:'center', color: "white" }}> Registrati </Text>
                       </TouchableOpacity>
                   </View>
-                
-
-
-             </Card>
-             
+             </Card>    
     </Container>
     );
   }
