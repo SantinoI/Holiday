@@ -53,6 +53,8 @@ export default class RegisterPage extends React.Component {
 
 
   _singUp = () => {
+
+    //controlli sulla compilazione di tutti i campi, controllo coincidenza email e pass, controllo pass.lenght  >= 8
     if (!(this.state.username && 
           this.state.nome && this.state.cognome &&
           this.state.email && this.state.confirmEmail &&
@@ -119,6 +121,8 @@ export default class RegisterPage extends React.Component {
       });
   }
 
+  
+    //Apertura galleria per choosing foto profilo utente
 	_openPhotoGallery = async () => {
     const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
     if (status !== "granted") {
