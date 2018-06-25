@@ -13,6 +13,13 @@ import {
   TextInput,
   Dimensions
 } from "react-native";
+
+import {
+  ImagePicker,
+  ImageManipulator,
+  Permissions,
+} from "expo";
+
 import { Button, FormLabel, FormInput } from "react-native-elements";
 import { Text, Form, Item, Label, Input, Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
 import { StackNavigator } from "react-navigation";
