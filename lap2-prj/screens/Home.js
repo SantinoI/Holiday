@@ -211,7 +211,6 @@ Home.navigationOptions = ({ navigation }) => {
         '',
         [
           {text: 'Log-out', onPress: () => firebase.auth().signOut()},
-          {text: 'Profilo', onPress: () => console.log('profile Pressed')},
           {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
         ],
         { cancelable: false }

@@ -20,6 +20,7 @@ import Login from "./screens/Login";
 import Home from "./screens/Home";
 import EventPage from "./screens/EventPage";
 import Favorites from "./screens/Favorites";
+import Profile from "./screens/Profile";
 import RegisterPage from "./screens/RegisterPage";
 import SearchResult from "./screens/SearchResult";
 
@@ -72,10 +73,19 @@ const Favorite = createStackNavigator(
   }
 )
 
+const ProfileNavigator = createStackNavigator(
+  {
+    Profile: {
+      screen: Profile
+    }
+  }
+)
+
 export default createBottomTabNavigator(
   {
     Home: { screen: App},
-    Favorites: {screen: Favorite} // searchResult andrà sostituito con la screen FAVORITES
+    Favorites: {screen: Favorite},
+    Profile: {screen: ProfileNavigator}
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -89,6 +99,11 @@ export default createBottomTabNavigator(
           iconName = `heart${focused ? '' : '-outline'}`;
           return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
         }
+        else if (routeName === 'Profile') {
+          iconName = `account${focused ? '' : '-outline'}`;
+          return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
+        }
+        
       }
     }),
     tabBarOptions: {
