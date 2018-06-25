@@ -125,13 +125,14 @@ export default class RegisterPage extends React.Component {
         
           <Card style={{padding:30, borderRadius: 10}}>
                 
+                <ScrollView>
                   <Form>
 
 											<TouchableOpacity style={{alignSelf: 'center'}} onPress={this._selectPhoto}>
 												<Image
                           resizeMode="cover"
                           rounded
-													style= {{borderWidth: 1, borderRadious:100, width: 80, height: 80}}
+													style= {{borderRadius:60, width: 120, height: 120}}
 													source = { this.state.image
 													? { uri: this.state.image }
 													: require("../assets/image.png")
@@ -193,7 +194,7 @@ export default class RegisterPage extends React.Component {
                   </View>
                 
 
-
+</ScrollView>
 
              </Card>
              
