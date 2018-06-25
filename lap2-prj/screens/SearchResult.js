@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
   noResultText: {
     color: TINT_COLOR,
     marginTop: '50%',
+    marginBottom: Dimensions.get("window").height/3,
     fontSize: 20,
     textAlign: 'center'
   }
