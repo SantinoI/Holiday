@@ -93,7 +93,7 @@ _loadDatabase = async => {
 
   render() {
     return (
-    <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100}}>
+    <View style={{flex:1, backgroundColor:BACKGROUND_COLOR, paddingBottom: 0}}>
         <View style={styles.searchContainer}>
           <SearchBar
               inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
   noResultText: {
     color: TINT_COLOR,
     marginTop: '50%',
-    marginBottom: Dimensions.get("window").height/3,
     fontSize: 20,
     textAlign: 'center'
   }
