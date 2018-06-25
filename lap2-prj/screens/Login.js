@@ -118,9 +118,12 @@ export default class Login extends React.Component {
                   
                   <View style={styles.buttonContainer}>
                       <TouchableOpacity
+                          loading = {this.state.isLoading}
+                          raised
+                          title="Login"
+                          onPress={this._login}
                           style={styles.searchButton}
                           activeOpacity={0.5}
-                          title="Login"
                       >
                         <Text style={{textAlign:'center', color: "white" }}> Login </Text>
                       </TouchableOpacity>
@@ -128,9 +131,12 @@ export default class Login extends React.Component {
 
                   <View style={styles.buttonContainer}>
                       <TouchableOpacity
+                          loading = {this.state.isLoading}
+                          raised
+                          title="Register"
+                          onPress={this._singUp}
                           style={styles.searchButton}
                           activeOpacity={0.5}
-                          title="Registrati"
                       >
                         <Text style={{textAlign:'center', color: "white" }}> Registrati </Text>
                       </TouchableOpacity>
