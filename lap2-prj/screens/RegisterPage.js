@@ -107,7 +107,7 @@ export default class RegisterPage extends React.Component {
       ActionSheetIOS.showActionSheetWithOptions({
         options: ["Camera", "Photo Gallery", "Cancel"],
         cancelButtonIndex: 2,
-        title: "choose a picture from: "
+        title: "Scegli immagine da:"
       },
       (buttonIndex) => {
         if (buttonIndex == 1) {
@@ -126,6 +126,18 @@ export default class RegisterPage extends React.Component {
           <Card style={{padding:30, borderRadius: 10}}>
                 
                   <Form>
+
+											<TouchableOpacity style={{alignSelf: 'center'}} onPress={this._selectPhoto}>
+												<Image
+                          resizeMode="cover"
+                          rounded
+													style= {{borderWidth: 1, borderRadious:100, width: 80, height: 80}}
+													source = { this.state.image
+													? { uri: this.state.image }
+													: require("../assets/image.png")
+													}
+												/>
+											</TouchableOpacity>
 
                   <Item floatingLabel>
                       <Label style={{}} >Username</Label>
@@ -164,20 +176,6 @@ export default class RegisterPage extends React.Component {
                       />
                     </Item>
 
-                    <Item style={{marginTop: 50 }}>
-                      <Label style={{}}> Imagine del profilo </Label>
-											<TouchableOpacity onPress={this._selectPhoto}>
-												<Image
-													resizeMode="cover"
-													style= {{width: 35, height: 35}}
-													source = { this.state.image
-													? { uri: this.state.image }
-													: require("../assets/image.png")
-													}
-												/>
-											</TouchableOpacity>
-
-                    </Item>
 
                   </Form>
                 
