@@ -11,7 +11,8 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
-  Dimensions
+	Dimensions,
+	Alert
 } from "react-native";
 
 import {
@@ -38,17 +39,30 @@ export default class RegisterPage extends React.Component {
     title: "Login"
   };
   state = {
+		correct: false,
     isLoading: false,
     username:"",
     nome:"",
     cognome:"",
-    email: "",
+		email: "",
+		confirmEmail:"",
     password: "",
     error: ""
   };
 
 
   _singUp = () => {
+		if (this.state.email !== this.state.confirmEmail) {
+			Alert.alert(
+				'le email non coincidono',
+				'',
+        [
+          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        ],
+				{ cancelable: false }
+			)
+			return;
+		}
     this.setState({isLoading: true});
     firebase
       .auth()
@@ -133,13 +147,13 @@ export default class RegisterPage extends React.Component {
 
                     <Item floatingLabel>
                       <Label style={{}} >Nome</Label>
-                      <Input  onChangeText={text => this.setState({ username: text })}
+                      <Input  onChangeText={text => this.setState({ nome: text })}
                       />
                     </Item>                    
 
                     <Item floatingLabel>
                       <Label style={{}} >Cognome</Label>
-                      <Input  onChangeText={text => this.setState({ username: text })}
+                      <Input  onChangeText={text => this.setState({ cognome: text })}
                       />
                     </Item>           
                       
@@ -148,6 +162,13 @@ export default class RegisterPage extends React.Component {
                       <Input  onChangeText={text => this.setState({ email: text })}
                       />
                     </Item>
+
+									<Item floatingLabel>
+                      <Label style={{}} >confirm E-mail</Label>
+											<Input  onChangeText={text => this.setState({ confirmEmail: text })}
+
+                      />
+                  </Item>
 
                     <Item floatingLabel last style={{marginTop:25}} >
                       <Label>Password</Label>
