@@ -68,30 +68,6 @@ export default class Login extends React.Component {
       });
   }
 
-  
-
-  renderLoginOrSpinner() {
-    return (
-      <View style={{ backgroundColor: BACKGROUND_COLOR, justifyContent: "space-between", height: "40%"}}>
-        <Button style={{marginTop: 50}}
-          loading = {this.state.isLoading}
-          raised
-          backgroundColor = {TINT_COLOR}
-          title="Login"
-          onPress={this._login}
-        />
-
-        <Button style={{marginTop: 40}}
-          loading = {this.state.isLoading}
-          raised
-          backgroundColor = {TINT_COLOR}
-          title="Register"
-          onPress={this._singUp}
-        />
-
-      </View>
-    );
-  }
 
   render() {
     return (
@@ -134,7 +110,7 @@ export default class Login extends React.Component {
                           loading = {this.state.isLoading}
                           raised
                           title="Register"
-                          onPress={this._singUp}
+                          onPress={() => this.props.navigation.navigate("RegisterPage")}
                           style={styles.searchButton}
                           activeOpacity={0.5}
                       >
@@ -177,28 +153,3 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
 });
-
-{/* <View >
-        
-            <FormLabel>E-mail</FormLabel>
-            <FormInput
-              label="E-mail"
-              placeholder="Inserisci la tua email"
-              onChangeText={text => this.setState({ email: text })}
-              //value={this.state.email}
-            />
-            <FormLabel>Password</FormLabel>
-            <FormInput
-              label="password"
-              placeholder="Inserisci password"
-              onChangeText={text => this.setState({ password: text })}
-              //value={this.state.password}
-            />
-          
-          {this.renderLoginOrSpinner()}
-          <Text>{this.state.error}</Text>
-          
-        
-      </View> */}
-
-

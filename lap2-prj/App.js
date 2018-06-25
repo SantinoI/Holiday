@@ -20,6 +20,7 @@ import Login from "./screens/Login";
 import Home from "./screens/Home";
 import EventPage from "./screens/EventPage";
 import Favorites from "./screens/Favorites";
+import RegisterPage from "./screens/RegisterPage";
 import SearchResult from "./screens/SearchResult";
 
 import * as firebase from "firebase";
@@ -46,6 +47,9 @@ const App = createStackNavigator(
     },
     Login: {
       screen: Login
+    },
+    RegisterPage: {
+      screen: RegisterPage
     },
     SearchResult: {
       screen: SearchResult
