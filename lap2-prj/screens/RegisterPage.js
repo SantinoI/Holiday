@@ -47,14 +47,18 @@ export default class RegisterPage extends React.Component {
 		email: "",
 		confirmEmail:"",
     password: "",
+    confirmPassword: "",
     error: ""
   };
 
 
   _singUp = () => {
-		if (this.state.email !== this.state.confirmEmail) {
+    if (!(this.state.username && 
+          this.state.nome && this.state.cognome &&
+          this.state.email && this.state.confirmEmail &&
+          this.state.password && this.state.confirmPassword)){
 			Alert.alert(
-				'le email non coincidono',
+				'Riempi i campi vuoti per poterti registrare',
 				'',
         [
           {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
@@ -62,7 +66,44 @@ export default class RegisterPage extends React.Component {
 				{ cancelable: false }
 			)
 			return;
-		}
+    }
+
+		if (!(this.state.email === this.state.confirmEmail)) {
+			Alert.alert(
+				'Le email non coincidono',
+				'',
+        [
+          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        ],
+				{ cancelable: false }
+			)
+			return;
+    }
+    
+    if (!(this.state.password === this.state.confirmPassword)) {
+			Alert.alert(
+				'Le password non coincidono',
+				'',
+        [
+          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        ],
+				{ cancelable: false }
+			)
+			return;
+    }
+
+    if (this.state.password.length < 8) {
+			Alert.alert(
+				'La password deve essere di almeno 8 caratteri',
+				'',
+        [
+          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        ],
+				{ cancelable: false }
+			)
+			return;
+    }
+    
     this.setState({isLoading: true});
     firebase
       .auth()
@@ -165,7 +206,7 @@ export default class RegisterPage extends React.Component {
                     </Item>
 
 									<Item floatingLabel>
-                      <Label style={{}} >confirm E-mail</Label>
+                      <Label style={{}} >Conferma E-mail </Label>
 											<Input  onChangeText={text => this.setState({ confirmEmail: text })}
 
                       />
@@ -177,9 +218,17 @@ export default class RegisterPage extends React.Component {
                       />
                     </Item>
 
+                    <Item floatingLabel last style={{marginTop:25}} >
+                      <Label>Conferma Password</Label>
+                      <Input  onChangeText={text => this.setState({ confirmPassword: text })} 
+                      />
+                    </Item>
+
 
                   </Form>
                 
+
+                </ScrollView>
                   <View style={styles.buttonContainer}>
                       <TouchableOpacity
                           loading = {this.state.isLoading}
@@ -194,7 +243,6 @@ export default class RegisterPage extends React.Component {
                   </View>
                 
 
-</ScrollView>
 
              </Card>
              
