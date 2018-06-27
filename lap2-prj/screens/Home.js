@@ -191,32 +191,6 @@ export default class Home extends React.Component {
 
 
 Home.navigationOptions = ({ navigation }) => {
-  _onAccountPress = () => {
-    var uid = firebase.auth().currentUser;
-    if (!uid) {
-      Alert.alert(
-        'Accedi',
-        '',
-        [
-          {text: 'Log-in', onPress: () => navigation.navigate("Login")},
-          //{text: 'Log-out', onPress: () => console.log('OK Pressed')},
-          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        ],
-        { cancelable: false }
-      )
-    }
-    else {
-      Alert.alert(
-        'Ciao ' + firebase.auth().currentUser.uid.displayName + '!',
-        '',
-        [
-          {text: 'Log-out', onPress: () => firebase.auth().signOut()},
-          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        ],
-        { cancelable: false }
-      )
-    }
-  };
   return {
     title: "Home",
     headerStyle: {
@@ -224,7 +198,7 @@ Home.navigationOptions = ({ navigation }) => {
       borderBottomWidth: 0
     },
     headerRight: (
-      <TouchableOpacity onPress={() => this._onAccountPress()}>
+      <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
         <FontAwesome
           style={{ paddingHorizontal: 15 }}
           name="user-circle"

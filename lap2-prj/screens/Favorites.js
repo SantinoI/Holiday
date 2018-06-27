@@ -121,14 +121,14 @@ Favorites.navigationOptions = ({ navigation }) => {
         borderBottomWidth: 0
       },
       headerRight: (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           <FontAwesome
             style={{ paddingHorizontal: 15 }}
             name="user-circle"
             size={34}
             color={TINT_COLOR}
           />
-      </TouchableOpacity>
+        </TouchableOpacity>
       )
     };
   };
