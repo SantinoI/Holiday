@@ -14,14 +14,14 @@ import {
   Dimensions
 } from "react-native";
 
-import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
+import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container, Button } from 'native-base';
 
 import { Permissions, Location } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 import { TabNavigator } from "react-navigation";
-import { SearchBar, Button } from "react-native-elements";
+import { SearchBar } from "react-native-elements";
 import EventCard from "../components/EventCard";
 
 
@@ -72,70 +72,41 @@ export default class Profile extends React.Component {
 
         <Container style={{ backgroundColor : BACKGROUND_COLOR, marginTop: 75}}>
           <Card style={{ marginLeft: 10, marginRight: 10, borderRadius: 10}}>
-              <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
-                  <Image
-                  resizeMode="cover"
-                  rounded
-                  style= {{borderRadius:80, width: 160, height: 160}}
-                  source = {  this.state.image ? { uri: this.state.image } : require("../assets/image.png")}/>
-              </TouchableOpacity>
+                <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
+                    <Image
+                    resizeMode="cover"
+                    rounded
+                    style= {{borderRadius:80, width: 160, height: 160}}
+                    source = {  this.state.image ? { uri: this.state.image } : require("../assets/image.png")}/>
+                </TouchableOpacity>
 
-              <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
-              <Text style={{fontSize: 24, textAlign: 'center'}}> Nome Utente </Text>
-              </CardItem>
-          <ScrollView>
-                {/* DATA CALENDARIO */}
-                <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 5, borderRadius: 10}} >
-                  <Left style={{}}>
-                      <Text>Informazioni personali</Text>
-                  </Left>
+                <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
+                  <Text style={{fontSize: 24}}>Nome Utente</Text>
                 </CardItem>
+         
+                {/* Informazioni personali */}
+                <TouchableOpacity>
+                  <CardItem  style={{flexDirection: 'column', alignItems: 'center',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
+                    <Text style={{}}>Informazioni personali</Text>
+                  </CardItem>
+                </TouchableOpacity>
                 
-                {/* ORARIO/I */}
-                <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
-                  <Left style={{ }}>
-                      <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/clock.png')}/>
-                      <Text >orario</Text>
-                  </Left>
-                </CardItem>
+                {/* Eventi Prenotati */}
+                <TouchableOpacity>
+                  <CardItem  style={{flexDirection: 'column', alignItems: 'center',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
+                    <Text style={{}}>Eventi Prenotati</Text>
+                  </CardItem>
+                </TouchableOpacity>
 
-                {/* TEMPO E DIFFICOLTA'*/}
-                <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
-                  <Left style={{}}>
-                      <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/stopwatch.png')}/>
-                      <Text >durata</Text>
-                  </Left>
-
-                  <Left style={{}}>
-                      <FontAwesome name='level-up' size={20}/>
-                      <Text style={{marginLeft: 10}}>difficolta</Text>
-                  </Left>
-                </CardItem>
-
-
-                {/* AGENZIA E EMAIL */}
-                <CardItem  style={{flexDirection: 'column', flexWrap: 'wrap',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
-                  <Body style={{flexDirection: 'row', margin: 5}}>
-                  <SimpleLineIcons name='user' size={16}/>
-                  <Text style={{marginLeft: 10}}>agenzia</Text>
-                  </Body>
-
-                  <Body style={{flexDirection: 'row', margin: 5}}>
-                    <MaterialCommunityIcons name='email-outline' size={16}/>
-                    <Text style={{marginLeft: 10}}>email</Text>
-                </Body>
-
-                <Body style={{flexDirection: 'row', margin: 5}}>
-                    <Feather name='phone' size={16}/>
-                    <Text style={{marginLeft: 10}}>numero</Text>
-                </Body>
-
-                <Body style={{flexDirection: 'row', margin: 5}}>
-                      <MaterialCommunityIcons name='facebook' size={16}/>
-                      <Text style={{marginLeft: 10}}>facebook</Text>
-                </Body>
-                </CardItem>
-            </ScrollView>
+                {/* Logout */}
+                <Button transparent >
+                  <CardItem  style={{flexDirection: 'column', alignItems: 'center',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
+                    
+                      <Text style={{textAlign: 'center'}}>Logout</Text>
+                    
+                  </CardItem>
+                  </Button>
+            
           </Card>
         </Container>
       );
