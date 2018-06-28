@@ -36,19 +36,19 @@ const BACKGROUND_COLOR = "#d7e4e5";
 
 export default class Profile extends React.Component {
     state = {
-      logged: true
+      logged: false
     }
 
     componentWillMount() {
-     /* var uid = firebase.auth().currentUser;
+      var uid = firebase.auth().currentUser;
       if (uid) {
-        this.setState({logged: true});
+        return true;
         console.log("logged")
       }
       else {
-        this.setState({logged: false});
+        return false
         console.log("not logged")
-      }*/
+      }
     }
 
     renderNotLog() {
@@ -61,22 +61,20 @@ export default class Profile extends React.Component {
 
     renderLog() {
       return (
-        <Container style={{ backgroundColor : BACKGROUND_COLOR, marginTop: 75}}>
-          <Card style={{ marginLeft: 10, marginRight: 10, borderRadius: 10}}>
-          
-              <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
-                  <Image
-                  resizeMode="cover"
-                  rounded
-                  style= {{borderRadius:80, width: 160, height: 160}}
-                  source = {  this.state.image ? { uri: this.state.image } : require("../assets/image.png")}/>
-              </TouchableOpacity>
+        <ScrollView style={{ paddingTop: 50,marginBottom: -88}}>
+          <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10}}>
+                <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
+                    <Image
+                    resizeMode="cover"
+                    rounded
+                    style= {{borderRadius:80, width: 160, height: 160}}
+                    source = {  this.state.image ? { uri: this.state.image } : require("../assets/image.png")}/>
+                </TouchableOpacity>
 
-              <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
-              <Text style={{fontSize: 24, textAlign: 'center'}}> Nome Utente </Text>
-              </CardItem>
+                <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
+                <Text style={{fontSize: 24, textAlign: 'center'}}> Nome Utente </Text>
+                </CardItem>
 
-          <ScrollView>
                 {/* AGENZIA E EMAIL */}
                 <CardItem  style={{flexDirection: 'column', flexWrap: 'wrap',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
                   <Text>Informazioni personali</Text>
@@ -120,19 +118,16 @@ export default class Profile extends React.Component {
                       // disabledByDefault={true}
                       hideArrows={false}
                     />
-                    </CardItem>
-
-
-            </ScrollView>
-          </Card>
-        </Container>
+                  </CardItem>
+             </Card>
+          </ScrollView>
       );
     }
 
     render() {
       return(
         <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex: 1}}>
-            {this.state.logged ? (this.renderLog()) : (this.renderNotLog())}          
+            {this.componentWillMount() ? (this.renderLog()) : (this.renderNotLog())}          
         </View>
         
       );
@@ -145,15 +140,16 @@ Profile.navigationOptions = ({ navigation }) => {
     var uid = firebase.auth().currentUser;
 
     if (!uid) {
-      Alert.alert(
-        'Accedi',
-        '',
-        [
-          {text: 'Log-in', onPress: () => navigation.navigate("Login")},
-          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        ],
-        { cancelable: false }
-      )
+      // Alert.alert(
+      //   'Accedi',
+      //   '',
+      //   [
+      //     {text: 'Log-in', onPress: () => navigation.navigate("Login")},
+      //     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+      //   ],
+      //   { cancelable: false }
+      // )
+      navigation.navigate("Login")
     }
     else {
       Alert.alert(
@@ -167,6 +163,7 @@ Profile.navigationOptions = ({ navigation }) => {
       )
     }
   };
+
   return {
       title: "Profile",
       headerStyle: {
