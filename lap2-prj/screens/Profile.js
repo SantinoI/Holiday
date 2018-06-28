@@ -14,14 +14,14 @@ import {
   Dimensions
 } from "react-native";
 
-import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
+import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container, Button } from 'native-base';
 
 import { Permissions, Location } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 import { TabNavigator } from "react-navigation";
-import { SearchBar, Button } from "react-native-elements";
+import { SearchBar } from "react-native-elements";
 import EventCard from "../components/EventCard";
 
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
