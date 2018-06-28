@@ -85,7 +85,7 @@ export default createBottomTabNavigator(
   {
     Home: { screen: App},
     Favorites: {screen: Favorite},
-    Profile: {screen: ProfileNavigator}
+    Profile: {screen: ProfileNavigator},
   },
   {
     navigationOptions: ({ navigation }) => ({

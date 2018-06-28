@@ -24,6 +24,8 @@ import { TabNavigator } from "react-navigation";
 import { SearchBar, Button } from "react-native-elements";
 import EventCard from "../components/EventCard";
 
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+
 
 import * as firebase from "firebase";
 
@@ -59,19 +61,9 @@ export default class Profile extends React.Component {
 
     renderLog() {
       return (
-        /*  <View style={{backgroungColor: "red",alignItems: 'center',flex: 0.5, borderWidth:1}}>
-            <Image
-              resizeMode="cover"
-              rounded
-              style= {{borderRadius:80, width: 160, height: 160, marginTop:20 ,marginBottom: 20}}
-              source = {  this.state.image ? { uri: this.state.image } : require("../assets/image.png")}
-            />
-            <Text style={{fontSize: 20}}>Nome Utente</Text>
-            <Text style={{marginTop: 5, fontSize: 15}}>Example@gmail.com</Text>
-          </View>*/
-
         <Container style={{ backgroundColor : BACKGROUND_COLOR, marginTop: 75}}>
           <Card style={{ marginLeft: 10, marginRight: 10, borderRadius: 10}}>
+          
               <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
                   <Image
                   resizeMode="cover"
@@ -83,41 +75,15 @@ export default class Profile extends React.Component {
               <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
               <Text style={{fontSize: 24, textAlign: 'center'}}> Nome Utente </Text>
               </CardItem>
+
           <ScrollView>
-                {/* DATA CALENDARIO */}
-                <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 5, borderRadius: 10}} >
-                  <Left style={{}}>
-                      <Text>Informazioni personali</Text>
-                  </Left>
-                </CardItem>
-                
-                {/* ORARIO/I */}
-                <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
-                  <Left style={{ }}>
-                      <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/clock.png')}/>
-                      <Text >orario</Text>
-                  </Left>
-                </CardItem>
-
-                {/* TEMPO E DIFFICOLTA'*/}
-                <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
-                  <Left style={{}}>
-                      <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/stopwatch.png')}/>
-                      <Text >durata</Text>
-                  </Left>
-
-                  <Left style={{}}>
-                      <FontAwesome name='level-up' size={20}/>
-                      <Text style={{marginLeft: 10}}>difficolta</Text>
-                  </Left>
-                </CardItem>
-
-
                 {/* AGENZIA E EMAIL */}
                 <CardItem  style={{flexDirection: 'column', flexWrap: 'wrap',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
+                  <Text>Informazioni personali</Text>
+
                   <Body style={{flexDirection: 'row', margin: 5}}>
                   <SimpleLineIcons name='user' size={16}/>
-                  <Text style={{marginLeft: 10}}>agenzia</Text>
+                  <Text style={{marginLeft: 10}}>nome cognome</Text>
                   </Body>
 
                   <Body style={{flexDirection: 'row', margin: 5}}>
@@ -134,7 +100,29 @@ export default class Profile extends React.Component {
                       <MaterialCommunityIcons name='facebook' size={16}/>
                       <Text style={{marginLeft: 10}}>facebook</Text>
                 </Body>
-                </CardItem>
+                </CardItem>                
+
+                <CardItem  style={{flexDirection: 'column', flexWrap: 'wrap',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
+                  <Text>Eventi in programma</Text>
+                  <Calendar
+                      style={styles.calendar}
+                      current={'2012-05-16'}
+                      minDate={'2012-05-10'}
+                      maxDate={'2012-05-29'}
+                      firstDay={1}
+                      markedDates={{
+                        '2012-05-23': {selected: true, marked: true},
+                        '2012-05-24': {selected: true, marked: true, dotColor: 'green'},
+                        '2012-05-25': {marked: true, dotColor: 'red'},
+                        '2012-05-26': {marked: true},
+                        '2012-05-27': {disabled: true, activeOpacity: 0}
+                      }}
+                      // disabledByDefault={true}
+                      hideArrows={false}
+                    />
+                    </CardItem>
+
+
             </ScrollView>
           </Card>
         </Container>
