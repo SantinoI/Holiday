@@ -59,11 +59,11 @@ export default class Profile extends React.Component {
     }
 
     componentWillMount() {
-      this._loadDatabase();
       firebase.auth().onAuthStateChanged( user => {
         //this.setState({logged: !this.state.logged})
         if (user) {
           this.setState({logged: true})
+          this._loadDatabase();
         }
         else {
           this.setState({logged: false})
