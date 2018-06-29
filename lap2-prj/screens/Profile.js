@@ -42,10 +42,11 @@ export default class Profile extends React.Component {
     }
 
     _loadDatabase = async => {
-      const uid = firebase.auth().currentUser.uid;
-      console.log(uid);
-      this.uid = uid;
-      if (uid) {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        console.log(user.uid);
+        var uid = user.uid;
+      
         this.setState({imageLoading: true})
         firebase.database().ref("App/Users/" + uid + "/ProfileImage")
           .on("value", snap => {
@@ -58,7 +59,7 @@ export default class Profile extends React.Component {
     }
 
     componentWillMount() {
-      //this._loadDatabase();
+      this._loadDatabase();
       firebase.auth().onAuthStateChanged( user => {
         //this.setState({logged: !this.state.logged})
         if (user) {
