@@ -35,15 +35,12 @@ export default class Favorites extends React.Component {
     }
 
     _loadDatabase = async => {
-      const uid = firebase.auth().currentUser.uid;
-    //const uid = "Fq1m5IHnZePsbbu19qzAaqAvmFm2";
-    console.log(uid);
-    this.uid = uid;
-    if (uid) {
-      firebase
-        .database()
+      const user = firebase.auth().currentUser;
+      if (user) {
+        console.log(user.uid);
+        var uid = user.uid;
         firebase.database().ref("App/Users/" + uid + "/favorites")
-        .on("value", snap => {
+          .on("value", snap => {
           let favoritelist = [];
           snap.forEach(child => {
             favoritelist.push({
@@ -69,26 +66,25 @@ export default class Favorites extends React.Component {
           this.setState({ cardList: favoritelist });
         });
     }
-    }
+  }
+  renderCard = ({item}) => (
+    <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item}) }/>
+  )
+
+  _keyExtractor = (item, index) => {
+    item.id = index;
+    String(index);
+  };
 
     render() {
       return(
         <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex: 1}}>
           <ScrollView style={{backgroundColor:BACKGROUND_COLOR}}>
-            {/* Visualizza FlatList solo se cardList[] > 0 */}
-
-            {this.state.logged == true ? (
-              this.state.cardList.length ? (
-                <FlatList
-                  data={this.state.cardList}
-                  renderItem={this.renderCard}
-                  keyExtractor={this._keyExtractor}
-                />) :
-                (<Text style={styles.noResultText}>Nessun Evento tra i preferiti :( </Text>)
-            ) :
-             (<Text style={styles.noResultText}> Non sei loggato </Text>)}
-
-            
+            <FlatList
+              data={this.state.cardList}
+              renderItem={this.renderCard}
+              keyExtractor={this._keyExtractor}
+            />
           </ScrollView>
         </View>
         
@@ -103,16 +99,6 @@ Favorites.navigationOptions = ({ navigation }) => {
         backgroundColor: BACKGROUND_COLOR,
         borderBottomWidth: 0
       },
-      headerRight: (
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          <FontAwesome
-            style={{ paddingHorizontal: 15 }}
-            name="user-circle"
-            size={34}
-            color={TINT_COLOR}
-          />
-        </TouchableOpacity>
-      )
     };
   };
 

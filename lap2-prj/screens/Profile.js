@@ -70,11 +70,11 @@ export default class Profile extends React.Component {
     }
 
     componentWillMount() {
-      this._loadDatabase();
       firebase.auth().onAuthStateChanged( user => {
         //this.setState({logged: !this.state.logged})
         if (user) {
           this.setState({logged: true})
+          this._loadDatabase();
         }
         else {
           this.setState({logged: false})
@@ -171,29 +171,8 @@ Profile.navigationOptions = ({ navigation }) => {
 
   _onAccountPress = () => {
     var uid = firebase.auth().currentUser;
-
-    if (!uid) {
-      // Alert.alert(
-      //   'Accedi',
-      //   '',
-      //   [
-      //     {text: 'Log-in', onPress: () => navigation.navigate("Login")},
-      //     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-      //   ],
-      //   { cancelable: false }
-      // )
-      navigation.navigate("Login")
-    }
-    else {
-      Alert.alert(
-        'Ciao ' + firebase.auth().currentUser.uid.displayName + '!',
-        '',
-        [
-          {text: 'Log-out', onPress: () => firebase.auth().signOut()},
-          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        ],
-        { cancelable: false }
-      )
+    if (uid) {
+     firebase.auth().signOut()
     }
   };
 
@@ -205,12 +184,7 @@ Profile.navigationOptions = ({ navigation }) => {
       },
       headerRight: (
         <TouchableOpacity onPress={() => _onAccountPress()}>
-          <SimpleLineIcons
-            style={{ paddingHorizontal: 15 }}
-            name="options-vertical"
-            size={20}
-            //color={TINT_COLOR}
-          />
+          <Text> Esci </Text>
       </TouchableOpacity>
       )
     };
