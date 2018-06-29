@@ -149,7 +149,7 @@ export default class Profile extends React.Component {
     render() {
       return(
         <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex: 1}}>
-            {this.state.logged ? (this.renderLog()) : (this.renderNotLog())}          
+            {this.state.logged ? (this.renderLog()) : this.props.navigation.navigate('Login')}}          
         </View>
         
       );
