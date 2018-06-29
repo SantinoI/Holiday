@@ -45,29 +45,11 @@ export default class Login extends React.Component {
       .then(user => {
         this.setState({ isLoading: false });
         console.log(user);
-        this.props.navigation.navigate("Home");
       })
       .catch(error=> {
         this.setState({error: error.message, isLoading: false})
       });
   }
-
-  _singUp = () => {
-    this.setState({isLoading: true});
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
-
-      .then(user => {
-        this.setState({ isLoading: false });
-        console.log(user);
-        this.props.navigation.navigate("Home");
-      })
-      .catch(error=> {
-        this.setState({error: error.message, isLoading: false})
-      });
-  }
-
 
   render() {
     return (
@@ -117,10 +99,11 @@ export default class Login extends React.Component {
                         <Text style={{textAlign:'center', color: "white" }}> Registrati </Text>
                       </TouchableOpacity>
                   </View>
+
+                  <View>
+                    <Text>{this.state.error}</Text>
+                  </View>
                 
-
-
-
              </Card>
              
     </Container>
@@ -146,8 +129,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
 
-  searchButton: {
-    
+  searchButton: { 
     padding: 10,
     backgroundColor: TINT_COLOR2,
     borderRadius: 30,

@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ActivityIndicator,
   Image,
   Dimensions
 } from "react-native";
@@ -36,10 +37,32 @@ const BACKGROUND_COLOR = "#d7e4e5";
 
 export default class Profile extends React.Component {
     state = {
-      logged: false
+      imageLoading: false,
+      profileImage: null,
+      logged: true
+    }
+
+    _loadDatabase = async => {
+      const uid = firebase.auth().currentUser.uid;
+      //console.log(uid);
+      this.uid = uid;
+      if (uid) {
+        this.setState({imageLoading: true})
+        firebase.database().ref("App/Users/" + uid + "/ProfileImage")
+          .on("value", snap => {
+            let imageURL = snap.val()
+            console.log(snap.val())
+            this.setState({ profileImage: imageURL });
+          });
+        this.setState({imageLoading: false})
+      }
     }
 
     componentWillMount() {
+      this._loadDatabase();
+    }
+
+    islogged = () => {
       var uid = firebase.auth().currentUser;
       if (uid) {
         return true;
@@ -64,11 +87,17 @@ export default class Profile extends React.Component {
         <ScrollView style={{ paddingTop: 50,marginBottom: -88}}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10}}>
                 <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
+                  {this.state.imageLoading ? (
+                    <ActivityIndicator size="small" color={TINT_COLOR} />
+                  ) :
+                  (
                     <Image
                     resizeMode="cover"
                     rounded
                     style= {{borderRadius:80, width: 160, height: 160}}
-                    source = {  this.state.image ? { uri: this.state.image } : require("../assets/image.png")}/>
+                    source = {  this.state.profileImage ? { uri: this.state.profileImage } : require("../assets/image.png")}
+                    />                    
+                  )}
                 </TouchableOpacity>
 
                 <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
@@ -127,7 +156,7 @@ export default class Profile extends React.Component {
     render() {
       return(
         <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex: 1}}>
-            {this.componentWillMount() ? (this.renderLog()) : (this.renderNotLog())}          
+            {this.islogged() ? (this.renderLog()) : (this.renderNotLog())}          
         </View>
         
       );
