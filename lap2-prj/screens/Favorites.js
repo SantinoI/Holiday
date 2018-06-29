@@ -31,63 +31,46 @@ const BACKGROUND_COLOR = "#d7e4e5";
 export default class Favorites extends React.Component {
     state = {
       cardList: [],
-      idFavorites:[],
-      logged: false
+      logged: true
     }
 
-  /*arrayContains = ({a, obj}) => {
-      for (var i = 0; i < a.length; i++) {
-          if (a[i] === obj) {
-              return true;
-          }
-      }
-      return false;
-  }*/
-    
-/*_loadUserDatabase = async => {
-  //const uid = firebase.auth().currentUser.uid;
-  const uid = 0
-
-  this.uid = uid;
-  if (uid == 0) {
-      this.setState({logged: true});
-      let idFavoriteList = firebase.database().ref("App/Users" + uid + "/Favorites");
-      idFavoriteList.on("value", snap => {
-        var ids = [];
-        snap.forEach(child => {
-          ids.push({
-            id: child.val().id
+    _loadDatabase = async => {
+      const uid = firebase.auth().currentUser.uid;
+    //const uid = "Fq1m5IHnZePsbbu19qzAaqAvmFm2";
+    console.log(uid);
+    this.uid = uid;
+    if (uid) {
+      firebase
+        .database()
+        firebase.database().ref("App/Users/" + uid + "/favorites")
+        .on("value", snap => {
+          let favoritelist = [];
+          snap.forEach(child => {
+            favoritelist.push({
+              IDevento: child.val().IDevento,
+              agenzia: child.val().Agenzia,
+              email: child.val().Email,
+              numero: child.val().Numero,
+              facebook: child.val().Facebook,
+              nomeEvento: child.val().NomeEvento,
+              citta: child.val().Localita.Citta,
+              provincia: child.val().Localita.Provincia,
+              descrizioneBreve: child.val().DescrizioneBreve,
+              descrizioneCompleta: child.val().DescrizioneCompleta,
+              prezzo: child.val().Prezzo,
+              difficolta: child.val().Difficolta,
+              data: child.val().Data,
+              orario: child.val().Orario,
+              durata: child.val().Durata,
+              immagineAgenzia: child.val().ImmagineAgenzia,
+              immagineEvento: child.val().ImmagineEvento,
+            });
           });
+          this.setState({ cardList: favoritelist });
         });
-          console.log(ids);
-          this.setState({ idFavorites: ids });
-      });
-
-      let eventList = firebase.database().ref("App/Events");
-      var idList = this.state.idFavorites;
-      eventList.on("value", snap => {
-        var events = [];
-        snap.forEach(child => {
-          if (this.arrayContains(this.state.idFavorites, child.val())){
-            events.push({
-              nomeEvento: child.val().Title,
-              localita: this.state.text,
-              agenzia: child.val().Manager,
-              descrizione: child.val().Description,
-              prezzo: child.val().Price
-            })
-          };
-        });
-        this.setState({ cardList: events });
-    });
-  }
-}
-
-    async componentWillMount(){
-      await this._loadUserDatabase();
-  
     }
-*/
+    }
+
     render() {
       return(
         <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex: 1}}>

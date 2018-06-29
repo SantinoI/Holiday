@@ -45,6 +45,7 @@ export default class Login extends React.Component {
       .then(user => {
         this.setState({ isLoading: false });
         console.log(user);
+        {this.props.navigation.navigate("Profile")}
       })
       .catch(error=> {
         this.setState({error: error.message, isLoading: false})

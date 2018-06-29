@@ -37,9 +37,8 @@ const BACKGROUND_COLOR = "#d7e4e5";
 
 export default class Profile extends React.Component {
     state = {
-      imageLoading: false,
       profileImage: null,
-      logged: true
+      logged: false
     }
 
     _loadDatabase = async => {
@@ -60,18 +59,10 @@ export default class Profile extends React.Component {
 
     componentWillMount() {
       this._loadDatabase();
-    }
 
-    islogged = () => {
-      var uid = firebase.auth().currentUser;
-      if (uid) {
-        return true;
-        console.log("logged")
-      }
-      else {
-        return false
-        console.log("not logged")
-      }
+      firebase.auth().onAuthStateChanged( user => {
+        this.setState({logged: !this.state.logged})
+      })
     }
 
     renderNotLog() {
@@ -87,17 +78,12 @@ export default class Profile extends React.Component {
         <ScrollView style={{ paddingTop: 50,marginBottom: -88}}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10}}>
                 <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
-                  {this.state.imageLoading ? (
-                    <ActivityIndicator size="small" color={TINT_COLOR} />
-                  ) :
-                  (
-                    <Image
+                  <Image
                     resizeMode="cover"
                     rounded
                     style= {{borderRadius:80, width: 160, height: 160}}
                     source = {  this.state.profileImage ? { uri: this.state.profileImage } : require("../assets/image.png")}
                     />                    
-                  )}
                 </TouchableOpacity>
 
                 <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
@@ -156,7 +142,7 @@ export default class Profile extends React.Component {
     render() {
       return(
         <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex: 1}}>
-            {this.islogged() ? (this.renderLog()) : (this.renderNotLog())}          
+            {this.state.logged ? (this.renderLog()) : (this.renderNotLog())}          
         </View>
         
       );
