@@ -46,12 +46,6 @@ const App = createStackNavigator(
     Home: {
       screen: Home
     },
-    Login: {
-      screen: Login
-    },
-    RegisterPage: {
-      screen: RegisterPage
-    },
     SearchResult: {
       screen: SearchResult
     },
@@ -77,7 +71,13 @@ const ProfileNavigator = createStackNavigator(
   {
     Profile: {
       screen: Profile
-    }
+    },
+    Login: {
+      screen: Login
+    },
+    RegisterPage: {
+      screen: RegisterPage
+    },
   }
 )
 

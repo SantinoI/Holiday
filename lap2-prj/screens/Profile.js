@@ -43,7 +43,7 @@ export default class Profile extends React.Component {
 
     _loadDatabase = async => {
       const uid = firebase.auth().currentUser.uid;
-      //console.log(uid);
+      console.log(uid);
       this.uid = uid;
       if (uid) {
         this.setState({imageLoading: true})
@@ -58,10 +58,16 @@ export default class Profile extends React.Component {
     }
 
     componentWillMount() {
-      this._loadDatabase();
-
+      //this._loadDatabase();
       firebase.auth().onAuthStateChanged( user => {
-        this.setState({logged: !this.state.logged})
+        //this.setState({logged: !this.state.logged})
+        if (user) {
+          this.setState({logged: true})
+        }
+        else {
+          this.setState({logged: false})
+        }
+        
       })
     }
 
