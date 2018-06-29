@@ -120,7 +120,7 @@ Login.navigationOptions = ({ navigation }) => {
       backgroundColor: BACKGROUND_COLOR,
       borderBottomWidth: 0
     },
-    
+    headerLeft: null
   };
 };
 
