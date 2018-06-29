@@ -71,7 +71,6 @@ export default class Profile extends React.Component {
 
     componentWillMount() {
       firebase.auth().onAuthStateChanged( user => {
-        //this.setState({logged: !this.state.logged})
         if (user) {
           this.setState({logged: true})
           this._loadDatabase();
@@ -184,7 +183,7 @@ Profile.navigationOptions = ({ navigation }) => {
       },
       headerRight: (
         <TouchableOpacity onPress={() => _onAccountPress()}>
-          <Text> Esci </Text>
+          <MaterialCommunityIcons style={{marginRight: 30}} name='exit-to-app' size={30} color={TINT_COLOR}/>
       </TouchableOpacity>
       )
     };
