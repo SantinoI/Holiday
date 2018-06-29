@@ -34,6 +34,17 @@ const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
 
 
+import {LocaleConfig} from 'react-native-calendars';
+
+LocaleConfig.locales['it'] = {
+  monthNames: ['Gennaio','Febbraio','Marzo','Aprile',' Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
+  monthNamesShort: ['Gen.','Febr.','Mar.','Apr.','Mag.','Giu.','Lug.','Ago.','Sett.','Ott.','Nov.','Dic.'],
+  dayNames: ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'],
+  dayNamesShort: ['Dom.','Lun.','Mar.','Mer.','Gio.','Ven.','Sab.']
+};
+
+LocaleConfig.defaultLocale = 'it';
+
 
 export default class Profile extends React.Component {
     state = {
