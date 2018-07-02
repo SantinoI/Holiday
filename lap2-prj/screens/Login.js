@@ -54,7 +54,7 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      
+      <View>
       <Container style={{padding:25, backgroundColor : BACKGROUND_COLOR}}>
         
           <Card style={{padding:30, borderRadius: 10}}>
@@ -108,6 +108,7 @@ export default class Login extends React.Component {
              </Card>
              
     </Container>
+    </View>
     );
   }
   
