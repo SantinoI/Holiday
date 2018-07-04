@@ -33,43 +33,65 @@ export default class Favorites extends React.Component {
   };
 
   componentWillMount() {
-    const user = firebase.auth().currentUser;
-    if (user) this._loadDatabase(user);
-    else {
-      alert("Effettua il login per mostrare i tuoi preferiti");
-    }
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({ logged: true });
+        this._loadDatabase();
+        //this.props.navigation.setParams({ logged: true })
+      } else {
+        this.setState({ logged: false });
+        //this.props.navigation.setParams({ logged: false })
+        this.props.navigation.navigate("Login");
+      }
+    });
   }
-  _loadDatabase = async user => {
-    this.state.setState({ logged: true });
-    var uid = user.uid;
-    firebase
-      .database()
-      .ref("App/Users/" + uid + "/favorites")
-      .on("value", snap => {
-        let favoritelist = [];
-        snap.forEach(child => {
-          favoritelist.push({
-            IDevento: child.val().IDevento,
-            agenzia: child.val().Agenzia,
-            email: child.val().Email,
-            numero: child.val().Numero,
-            facebook: child.val().Facebook,
-            nomeEvento: child.val().NomeEvento,
-            citta: child.val().Localita.Citta,
-            provincia: child.val().Localita.Provincia,
-            descrizioneBreve: child.val().DescrizioneBreve,
-            descrizioneCompleta: child.val().DescrizioneCompleta,
-            prezzo: child.val().Prezzo,
-            difficolta: child.val().Difficolta,
-            data: child.val().Data,
-            orario: child.val().Orario,
-            durata: child.val().Durata,
-            immagineAgenzia: child.val().ImmagineAgenzia,
-            immagineEvento: child.val().ImmagineEvento
+
+  componentWillMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({ logged: true });
+        this._loadDatabase();
+        //this.props.navigation.setParams({ logged: true })
+      } else {
+        this.setState({ logged: false });
+        //this.props.navigation.setParams({ logged: false })
+        this.props.navigation.navigate("Login");
+      }
+    });
+  }
+  _loadDatabase = async => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      var uid = user.uid;
+      firebase
+        .database()
+        .ref("App/Users/" + uid + "/favorites")
+        .on("value", snap => {
+          let favoritelist = [];
+          snap.forEach(child => {
+            favoritelist.push({
+              IDevento: child.val().IDevento,
+              agenzia: child.val().Agenzia,
+              email: child.val().Email,
+              numero: child.val().Numero,
+              facebook: child.val().Facebook,
+              nomeEvento: child.val().NomeEvento,
+              citta: child.val().Localita.Citta,
+              provincia: child.val().Localita.Provincia,
+              descrizioneBreve: child.val().DescrizioneBreve,
+              descrizioneCompleta: child.val().DescrizioneCompleta,
+              prezzo: child.val().Prezzo,
+              difficolta: child.val().Difficolta,
+              data: child.val().Data,
+              orario: child.val().Orario,
+              durata: child.val().Durata,
+              immagineAgenzia: child.val().ImmagineAgenzia,
+              immagineEvento: child.val().ImmagineEvento
+            });
           });
+          this.setState({ cardList: favoritelist });
         });
-        this.setState({ cardList: favoritelist });
-      });
+    }
   };
   renderCard = ({ item }) => (
     <EventCard
@@ -86,8 +108,8 @@ export default class Favorites extends React.Component {
     String(index);
   };
 
-  render() {
-    return this.state.logged ? (
+  renderLog() {
+    return (
       <View
         style={{
           backgroundColor: BACKGROUND_COLOR,
@@ -103,16 +125,27 @@ export default class Favorites extends React.Component {
           />
         </ScrollView>
       </View>
-    ) : (
+    );
+  }
+
+  renderNotLog() {
+    return (
       <View
         style={{
           backgroundColor: BACKGROUND_COLOR,
           paddingBottom: (80 * 110) / 100,
           flex: 1
-        }}>
-        <Text style={styles.noResultText}>Effettua prima il login per visualizzare i preferiti</Text>
-        </View>
+        }}
+      >
+        <Text style={styles.noResultText}>
+          Effettua prima il login per visualizzare i preferiti
+        </Text>
+      </View>
     );
+  }
+
+  render() {
+    return this.state.logged ? this.renderLog() : this.renderNotLog();
   }
 }
 

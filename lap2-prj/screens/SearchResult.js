@@ -66,7 +66,34 @@ _loadDatabase = async => {
 
   async componentWillMount(){
     await this._loadDatabase();
+  }
 
+  uploadFavorite = (item) => {
+    const userId = firebase.auth().currentUser.uid;
+    console.log(item)
+    var favorite = {
+      IDevento: item.IDevento,
+      agenzia: item.Agenzia,
+      email: item.Email,
+      numero: item.Numero,
+      facebook: item.Facebook,
+      nomeEvento: item.NomeEvento,
+      descrizioneBreve: item.DescrizioneBreve,
+      descrizioneCompleta: item.DescrizioneCompleta,
+      prezzo: item.Prezzo,
+      difficolta: item.Difficolta,
+      data: item.Data,
+      orario: item.Orario,
+      durata: item.Durata,
+      immagineAgenzia: item.ImmagineAgenzia,
+      immagineEvento: item.ImmagineEvento,
+
+    }
+    var newFavoritesKey = firebase.database().ref().child('App/' +'Users/'+ userId + '/'+ 'favorites/').push().key;
+    var updates = {};
+    updates['App/' +'Users/'+ userId + '/'+ 'favorites/' + newFavoritesKey] = favorite;
+
+     firebase.database().ref().update(updates)
   }
 
   renderCard = ({item}) => (
@@ -80,6 +107,7 @@ _loadDatabase = async => {
           ? { ...currentCard, favorite: !currentCard.favorite }
           : currentCard
     );
+    this.uploadFavorite(item);
     this.setState({ cardList: newCardlist });
   };
 
@@ -87,8 +115,6 @@ _loadDatabase = async => {
     item.id = index;
     String(index);
   };
-
-
 
 
   render() {

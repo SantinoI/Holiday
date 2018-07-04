@@ -3243,7 +3243,7 @@ mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-moment@^2.18.1:
+moment@>=2.10.3, moment@^2.18.1:
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
 
@@ -3857,6 +3857,12 @@ react-native-calendar-select@^0.1.2:
   resolved "https://registry.yarnpkg.com/react-native-calendar-select/-/react-native-calendar-select-0.1.2.tgz#814302a2add128209e91d1485d9afdb83b726712"
   dependencies:
     moment "^2.18.1"
+
+react-native-calendar@^0.13.1:
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/react-native-calendar/-/react-native-calendar-0.13.1.tgz#c3fb4b7dfb47adbf6f5f2d7313a88f99916b0fee"
+  dependencies:
+    moment ">=2.10.3"
 
 react-native-calendars@^1.19.3:
   version "1.19.3"

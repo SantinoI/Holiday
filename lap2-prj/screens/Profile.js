@@ -45,11 +45,10 @@ LocaleConfig.locales['it'] = {
 
 LocaleConfig.defaultLocale = 'it';
 
-
 export default class Profile extends React.Component {
     state = {
       profileImage: null,
-      logged: false
+      //logged: false
     }
 
     _loadDatabase = async => {
@@ -74,19 +73,44 @@ export default class Profile extends React.Component {
         if (user) {
           this.setState({logged: true})
           this._loadDatabase();
+          //this.props.navigation.setParams({ logged: true })
         }
         else {
           this.setState({logged: false})
+          //this.props.navigation.setParams({ logged: false })
+          this.props.navigation.navigate('Login')
         }
-        
       })
     }
 
     renderNotLog() {
       return (
-        <View style={{marginTop: -75, marginBottom: 20,alignSelf: 'center'}}>
-          <Text style={styles.noResultText}> Non sei loggato </Text>
-        </View>
+        <ScrollView style={{ paddingTop: 50, backgroundColor: BACKGROUND_COLOR }}>
+            <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10, alignItems:"center"}}>
+
+              <CardItem style={{flexDirection: 'column', alignItems: 'center', marginTop: 50 }} >
+                  <FontAwesome name='user-circle-o' size={160} color={TINT_COLOR}/>                         
+              </CardItem>            
+
+                <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 50 }} >
+                <Text style={{fontSize: 24, textAlign: 'center'}}> Effettua l'accesso per visualizzare i tuoi contenuti! </Text>
+                </CardItem>
+
+                <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 50 }} >
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.searchButton}
+                        activeOpacity={0.5}
+                        onPress={() => this.props.navigation.navigate("Login")}
+                    >
+                    <Text style={{textAlign:'center', color: "white" }}> ACCEDI </Text>
+                    </TouchableOpacity>
+                  </View>
+                </CardItem>
+
+
+             </Card>
+             </ScrollView>
       );
     }
 
@@ -100,7 +124,7 @@ export default class Profile extends React.Component {
                     rounded
                     style= {{borderRadius:80, width: 160, height: 160}}
                     source = {  this.state.profileImage ? { uri: this.state.profileImage } : require("../assets/image.png")}
-                    />                    
+                    />       
                 </TouchableOpacity>
 
                 <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
@@ -158,9 +182,9 @@ export default class Profile extends React.Component {
 
     render() {
       return(
-        <View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex: 1}}>
-            {this.state.logged ? (this.renderLog()) : this.props.navigation.navigate('Login')}}          
-        </View>
+        //<View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex: 1}}>
+          this.state.logged ? (this.renderLog()) : this.renderNotLog()          
+        //</View>
         
       );
     }
@@ -181,13 +205,15 @@ Profile.navigationOptions = ({ navigation }) => {
         backgroundColor: BACKGROUND_COLOR,
         borderBottomWidth: 0
       },
+      
       headerRight: (
         <TouchableOpacity onPress={() => _onAccountPress()}>
-          <MaterialCommunityIcons style={{marginRight: 30}} name='exit-to-app' size={30} color={TINT_COLOR}/>
-      </TouchableOpacity>
+            <MaterialCommunityIcons style={{marginRight: 30}} name='exit-to-app' size={30} color={TINT_COLOR}/>
+        </TouchableOpacity>
       )
     };
   };
+
 
   const styles = StyleSheet.create({
     searchContainer: {
@@ -197,12 +223,13 @@ Profile.navigationOptions = ({ navigation }) => {
       marginTop: 20,
       marginBottom: 20,
     },
-    searchBar: {
-      backgroundColor: "rgb(233,233,238)",
-      borderTopColor: "rgb(233,233,238)",
+    searchButton: {
+      marginLeft: '10%',
+      marginRight: '10%',
+      width: 160,
+      padding: 10,
+      backgroundColor: TINT_COLOR,
       borderRadius: 30,
-      borderBottomWidth:0,
-      width: (Dimensions.get("window").width * 90)/ 100
     },
     noResultText: {
       color: TINT_COLOR,
