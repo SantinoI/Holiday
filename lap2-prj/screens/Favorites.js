@@ -9,15 +9,20 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
+  Alert,
+  ActivityIndicator,
+  Image,
   Dimensions
 } from "react-native";
+
+import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container, Button } from 'native-base';
 
 import { Permissions, Location } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 import { TabNavigator } from "react-navigation";
-import { SearchBar, Button } from "react-native-elements";
+import { SearchBar } from "react-native-elements";
 
 import EventCard from "../components/EventCard";
 
@@ -37,25 +42,9 @@ export default class Favorites extends React.Component {
       if (user) {
         this.setState({ logged: true });
         this._loadDatabase();
-        //this.props.navigation.setParams({ logged: true })
       } else {
         this.setState({ logged: false });
-        //this.props.navigation.setParams({ logged: false })
-        this.props.navigation.navigate("Login");
-      }
-    });
-  }
-
-  componentWillMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ logged: true });
-        this._loadDatabase();
-        //this.props.navigation.setParams({ logged: true })
-      } else {
-        this.setState({ logged: false });
-        //this.props.navigation.setParams({ logged: false })
-        this.props.navigation.navigate("Login");
+        //this.props.navigation.navigate("Login");
       }
     });
   }
@@ -76,8 +65,8 @@ export default class Favorites extends React.Component {
               numero: child.val().Numero,
               facebook: child.val().Facebook,
               nomeEvento: child.val().NomeEvento,
-              citta: child.val().Localita.Citta,
-              provincia: child.val().Localita.Provincia,
+              //citta: child.val().Localita.Citta,
+              //provincia: child.val().Localita.Provincia,
               descrizioneBreve: child.val().DescrizioneBreve,
               descrizioneCompleta: child.val().DescrizioneCompleta,
               prezzo: child.val().Prezzo,
@@ -110,13 +99,7 @@ export default class Favorites extends React.Component {
 
   renderLog() {
     return (
-      <View
-        style={{
-          backgroundColor: BACKGROUND_COLOR,
-          paddingBottom: (80 * 110) / 100,
-          flex: 1
-        }}
-      >
+      <View style={{flex:1, backgroundColor:BACKGROUND_COLOR, paddingBottom: 0}}>
         <ScrollView style={{ backgroundColor: BACKGROUND_COLOR }}>
           <FlatList
             data={this.state.cardList}
@@ -130,17 +113,32 @@ export default class Favorites extends React.Component {
 
   renderNotLog() {
     return (
-      <View
-        style={{
-          backgroundColor: BACKGROUND_COLOR,
-          paddingBottom: (80 * 110) / 100,
-          flex: 1
-        }}
-      >
-        <Text style={styles.noResultText}>
-          Effettua prima il login per visualizzare i preferiti
-        </Text>
-      </View>
+      <ScrollView style={{ paddingTop: 50, backgroundColor: BACKGROUND_COLOR }}>
+        <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10, alignItems:"center"}}>
+
+          <CardItem style={{flexDirection: 'column', alignItems: 'center', marginTop: 50 }} >
+            <Feather name="heart" size={160} color= {TINT_COLOR}/>                         
+          </CardItem>            
+
+            <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 50 }} >
+            <Text style={{fontSize: 24, textAlign: 'center'}}> Effettua l'accesso per visualizzare i tuoi contenuti! </Text>
+            </CardItem>
+
+            <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 50 }} >
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.loginButton}
+                    activeOpacity={0.5}
+                    onPress={() => this.props.navigation.navigate("Login")}
+                >
+                <Text style={{textAlign:'center', color: "white" }}> ACCEDI </Text>
+                </TouchableOpacity>
+              </View>
+            </CardItem>
+
+
+        </Card>
+       </ScrollView>
     );
   }
 
@@ -179,5 +177,13 @@ const styles = StyleSheet.create({
     marginTop: "50%",
     fontSize: 20,
     textAlign: "center"
-  }
+  },
+  loginButton: {
+    marginLeft: '10%',
+    marginRight: '10%',
+    width: 160,
+    padding: 10,
+    backgroundColor: TINT_COLOR,
+    borderRadius: 30,
+  },
 });

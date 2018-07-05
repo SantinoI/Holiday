@@ -99,7 +99,7 @@ export default class Profile extends React.Component {
                 <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 50 }} >
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                      style={styles.searchButton}
+                      style={styles.loginButton}
                         activeOpacity={0.5}
                         onPress={() => this.props.navigation.navigate("Login")}
                     >
@@ -116,7 +116,7 @@ export default class Profile extends React.Component {
 
     renderLog() {
       return (
-        <ScrollView style={{ paddingTop: 50,marginBottom: -88}}>
+        <ScrollView style={{ paddingTop: 50,marginBottom: -88, backgroundColor: BACKGROUND_COLOR}}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10}}>
                 <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
                   <Image
@@ -124,7 +124,7 @@ export default class Profile extends React.Component {
                     rounded
                     style= {{borderRadius:80, width: 160, height: 160}}
                     source = {  this.state.profileImage ? { uri: this.state.profileImage } : require("../assets/image.png")}
-                    />       
+                    />         
                 </TouchableOpacity>
 
                 <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
@@ -223,7 +223,7 @@ Profile.navigationOptions = ({ navigation }) => {
       marginTop: 20,
       marginBottom: 20,
     },
-    searchButton: {
+    loginButton: {
       marginLeft: '10%',
       marginRight: '10%',
       width: 160,

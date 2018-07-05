@@ -63,7 +63,10 @@ const Favorite = createStackNavigator(
   {
     Favorites: {
       screen: Favorites
-    }
+    },
+    EventPage: {        // aggiunto anche su favoriti per specificare la navigazione dai preferiti.
+      screen: EventPage
+    },
   }
 )
 

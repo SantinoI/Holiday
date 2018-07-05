@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableHighlight,
   TouchableOpacity,
+  ActivityIndicator,
   TextInput,
   StatusBar,
   Dimensions,
@@ -40,8 +41,8 @@ export default class Home extends React.Component {
     errorMessage: null,
     address: null,
     location: null,
-    loadingFont: true,
-    cardList: null/*       AGGIUNTA DELL'ARRAY NELLO STATE        */
+    loading: true,
+    cardList: []/*       AGGIUNTA DELL'ARRAY NELLO STATE        */
   };
 
   _getLocationAsync = async () => {
@@ -52,9 +53,12 @@ export default class Home extends React.Component {
       });
     }
     let location = await Location.getCurrentPositionAsync({});
-    this.setState({ location });
+    this.setState({location: location});
     let address = await Location.reverseGeocodeAsync(location.coords);
-    this.setState({ address });
+    this.setState({address: address });
+
+    //console.log(location)
+    console.log(address)
   };
 
   _loadDatabaseAsync = async request => {
@@ -62,7 +66,7 @@ export default class Home extends React.Component {
     eventList.on("value", snap => {
       var eventi = [];
       snap.forEach(child => {
-        if (child.val().Localita.Provincia == this.state.text) {
+        if (child.val().Localita.Provincia == this.state.address[0].city) {
           eventi.push({
             IDevento: child.val().IDevento,
             agenzia: child.val().Agenzia,
@@ -86,18 +90,19 @@ export default class Home extends React.Component {
   };
 
   async componentWillMount() {
+    this.setState({loading: true})
     await Expo.Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
     });
-    this.setState({ loadingFont: false });
-
     // Geolocation
     await this._getLocationAsync();
     //var location = "Messina";
 
     // Carico database in base all'utente
     await this._loadDatabaseAsync(this.state.address[0].city);
+
+    this.setState({loading: false})
   }
 
   // Funzione che passa come parametro il contenuto della searchBar alla navigation quando viene premuto il button search
@@ -117,9 +122,7 @@ export default class Home extends React.Component {
   /*       FUNZIONE PER IL RENDERING DI CIASCUNA CARD DELLA FLATLIST          */
 
   renderCard = ({ item }) => {
-    {
-      console.log(item);
-    }
+    {console.log(item);}
     return (
       <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item}) }/> // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
       // AI TEXT IN OUTPUT NEL FILE EVENTCARD
@@ -169,20 +172,37 @@ export default class Home extends React.Component {
           </View>
         </View>
 
-        <View style={styles.scrolltext}>
-          <Text style={{ color: TINT_COLOR, fontSize: 20 }}>
-            Scorri per i risultati nelle vicinanze
-          </Text>
-          <Feather name="chevron-up" size={24} color={TINT_COLOR} />
-        </View>
+      
 
-        <View>
-          <FlatList // VISTUALIZZO LA FLATLIST
-            data={this.state.cardList}
-            renderItem={this.renderCard}
-            keyExtractor={this._keyExtractor}
-          />
-        </View>
+        {this.state.loading ? 
+        (
+          <View style={{marginTop: 50}}>
+            <ActivityIndicator size="large" color={TINT_COLOR} />
+          </View>
+        ) :
+        (
+          this.state.cardList.length ? 
+            (
+            <View>
+              <View style={styles.scrolltext}>
+                <Text style={{ color: TINT_COLOR, fontSize: 20 }}>
+                  Scorri per i risultati nelle vicinanze
+                </Text>
+                <Feather name="chevron-up" size={24} color={TINT_COLOR} />
+              </View>
+              <View>
+                <FlatList // VISTUALIZZO LA FLATLIST
+                  data={this.state.cardList}
+                  renderItem={this.renderCard}
+                  keyExtractor={this._keyExtractor}
+                />
+              </View>
+            </View>
+            ) :
+            ( 
+              <Text style={styles.noResultText}>Sembra che non ci siano eventi nelle vicinanze :(</Text>
+            )
+        )}
       </ScrollView>
     );
   }
@@ -236,5 +256,12 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     alignItems: "center",
     borderColor: "red"
+  },
+
+  noResultText: {
+    color: TINT_COLOR,
+    marginTop: '50%',
+    fontSize: 20,
+    textAlign: 'center'
   }
 });

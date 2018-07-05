@@ -30,9 +30,11 @@ export default class SearchResult extends React.Component {
   state = {
     text:this.props.navigation.state.params.request || null,
     cardList: [],
+    loading: false,
   };
 
 _loadDatabase = async => {
+  this.setState({loading: true})
   let eventList = firebase.database().ref("App/Events");
     eventList.on("value", snap => {
       var eventi = [];
@@ -62,6 +64,7 @@ _loadDatabase = async => {
       });
         this.setState({ cardList: eventi });
       });
+  this.setState({loading: false})
 }
 
   async componentWillMount(){
@@ -128,8 +131,12 @@ _loadDatabase = async => {
               onChangeText={value => this.setState({ text: value })}
               onSubmitEditing={() => this._loadDatabase(this.state.text)}
             />
-        </View>
-        
+        </View>        
+        {this.state.loading ? 
+        (
+          <ActivityIndicator size="large" color={TINT_COLOR} />
+        ) :
+        (
         <ScrollView style={{backgroundColor:BACKGROUND_COLOR}}>
           {/* Visualizza FlatList solo se cardList[] > 0 */}
           {this.state.cardList.length ? (
@@ -139,9 +146,9 @@ _loadDatabase = async => {
               keyExtractor={this._keyExtractor}
             />) :
             (<Text style={styles.noResultText}>Nessun risultato, cerca altro :(</Text>)}
-
         </ScrollView>
-      </View>
+        )}
+    </View>
 
     );
   }   
