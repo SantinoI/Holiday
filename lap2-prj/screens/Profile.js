@@ -175,6 +175,19 @@ export default class Profile extends React.Component {
                       hideArrows={false}
                     />
                   </CardItem>
+
+                  <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 50 }} >
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={styles.logoutButton}
+                        activeOpacity={0.5}
+                        onPress={() => _onAccountPress()}>
+                    >
+                    <Text style={{textAlign:'center', color: "grey" }}> Esci </Text>
+                    </TouchableOpacity>
+                  </View>
+                </CardItem>
+                  
              </Card>
           </ScrollView>
       );
@@ -206,11 +219,11 @@ Profile.navigationOptions = ({ navigation }) => {
         borderBottomWidth: 0
       },
       
-      headerRight: (
+      /*headerRight: (
         <TouchableOpacity onPress={() => _onAccountPress()}>
             <MaterialCommunityIcons style={{marginRight: 30}} name='exit-to-app' size={30} color={TINT_COLOR}/>
         </TouchableOpacity>
-      )
+      )*/
     };
   };
 
@@ -230,6 +243,17 @@ Profile.navigationOptions = ({ navigation }) => {
       padding: 10,
       backgroundColor: TINT_COLOR,
       borderRadius: 30,
+    },
+    logoutButton: {
+      marginLeft: '10%',
+      marginRight: '10%',
+      width: 160,
+      //height: 30,
+      padding: 10,
+      backgroundColor: "white",
+      borderRadius: 5,
+      borderWidth: 1,
+      borderColor:"grey"
     },
     noResultText: {
       color: TINT_COLOR,
