@@ -17,6 +17,7 @@ import { TabNavigator } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation";
 
 import Login from "./screens/Login";
+import ReservationPage from "./screens/ReservationPage";
 import Home from "./screens/Home";
 import EventPage from "./screens/EventPage";
 import Favorites from "./screens/Favorites";
@@ -52,6 +53,10 @@ const App = createStackNavigator(
     EventPage: {
       screen: EventPage
     },
+    ReservationPage: {
+      screen: ReservationPage
+    },
+
   },
   {
     initialRouteName: "Home",

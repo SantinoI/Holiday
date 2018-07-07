@@ -65,7 +65,8 @@ export default class EventPage extends React.Component {
                       <TouchableOpacity
                           style={styles.searchButton}
                           activeOpacity={0.5}
-                          //onPress={() => this._goToResult(this.state.text)}
+                          onPress={() => this.props.navigation.navigate("ReservationPage",
+                                                                         {eventInfo: this.props.navigation.state.params.eventInfo})}
                           title="Prenota"
                       >
                         <Text style={{textAlign:'center', color: "white" }}> Prenota adesso </Text>
