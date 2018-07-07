@@ -29,7 +29,7 @@ const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
 
 
-export default class ReservationPage extends React.Component {
+export default class BookingPage extends React.Component {
     state = {
         totale: 0,
         numeroPersone: 0
@@ -75,7 +75,7 @@ export default class ReservationPage extends React.Component {
   }   
 }
 
-ReservationPage.navigationOptions = ({ navigation }) => {
+BookingPage.navigationOptions = ({ navigation }) => {
   return {
     title: "Prenotazione",
     headerStyle: {

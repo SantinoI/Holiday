@@ -8,17 +8,16 @@ import {
   Button,
   TextInput
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createStackNavigator } from "react-navigation";
 import { TabNavigator } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation";
 
 import Login from "./screens/Login";
-import ReservationPage from "./screens/ReservationPage";
+import BookingPage from "./screens/BookingPage";
 import Home from "./screens/Home";
+import ManagerPage from "./screens/ManagerPage";
 import EventPage from "./screens/EventPage";
 import Favorites from "./screens/Favorites";
 import Profile from "./screens/Profile";
@@ -53,8 +52,11 @@ const App = createStackNavigator(
     EventPage: {
       screen: EventPage
     },
-    ReservationPage: {
-      screen: ReservationPage
+    BookingPage: {
+      screen: BookingPage
+    },
+    ManagerPage: {
+      screen: ManagerPage
     },
 
   },
@@ -71,6 +73,9 @@ const Favorite = createStackNavigator(
     },
     EventPage: {        // aggiunto anche su favoriti per specificare la navigazione dai preferiti.
       screen: EventPage
+    },
+    ManagerPage: {
+      screen: ManagerPage
     },
   }
 )

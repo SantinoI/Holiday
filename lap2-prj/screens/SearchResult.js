@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Platform,
   Text,
+  ImageBackground,
   ScrollView,
   View,
   FlatList,
@@ -28,46 +29,112 @@ const BACKGROUND_COLOR = "#d7e4e5";
 
 export default class SearchResult extends React.Component {
   state = {
+    searchOption: this.props.navigation.state.params.searchOption,
     text:this.props.navigation.state.params.request || null,
     cardList: [],
     loading: false,
   };
 
 _loadDatabase = async => {
-  this.setState({loading: true})
-  let eventList = firebase.database().ref("App/Events");
-    eventList.on("value", snap => {
-      var eventi = [];
-      snap.forEach(child => {
-        if (child.val().Localita.Provincia == this.state.text) {
-          eventi.push({
-            IDevento: child.val().IDevento,
-            agenzia: child.val().Agenzia,
-            email: child.val().Email,
-            numero: child.val().Numero,
-            facebook: child.val().Facebook,
-            nomeEvento: child.val().NomeEvento,
-            citta: child.val().Localita.Citta,
-            provincia: child.val().Localita.Provincia,
-            descrizioneBreve: child.val().DescrizioneBreve,
-            descrizioneCompleta: child.val().DescrizioneCompleta,
-            prezzo: child.val().Prezzo,
-            difficolta: child.val().Difficolta,
-            data: child.val().Data,
-            orario: child.val().Orario,
-            durata: child.val().Durata,
-            immagineAgenzia: child.val().ImmagineAgenzia,
-            immagineEvento: child.val().ImmagineEvento,
 
+  this.setState({loading: true})
+  if (this.state.searchOption === "Città") {
+    let eventList = firebase.database().ref("App/Events");
+          eventList.on("value", snap => {
+            var eventi = [];
+            snap.forEach(child => {
+              if (child.val().Localita.Provincia == this.state.text) {
+                eventi.push({
+                  IDevento: child.val().IDevento,
+                  agenzia: child.val().Agenzia,
+                  email: child.val().Email,
+                  numero: child.val().Numero,
+                  facebook: child.val().Facebook,
+                  nomeEvento: child.val().NomeEvento,
+                  citta: child.val().Localita.Citta,
+                  provincia: child.val().Localita.Provincia,
+                  descrizioneBreve: child.val().DescrizioneBreve,
+                  descrizioneCompleta: child.val().DescrizioneCompleta,
+                  prezzo: child.val().Prezzo,
+                  difficolta: child.val().Difficolta,
+                  data: child.val().Data,
+                  orario: child.val().Orario,
+                  durata: child.val().Durata,
+                  immagineAgenzia: child.val().ImmagineAgenzia,
+                  immagineEvento: child.val().ImmagineEvento,
+
+                });
+              }
+            });
+              this.setState({ cardList: eventi });
+            });
+  } else if (this.state.searchOption === "Eventi") {
+    let eventNameList = firebase.database().ref("App/Events");
+        eventNameList.on("value", snap => {
+          var eventi = [];
+          snap.forEach(child => {
+            if (child.val().NomeEvento == this.state.text) {
+              eventi.push({
+                IDevento: child.val().IDevento,
+                agenzia: child.val().Agenzia,
+                email: child.val().Email,
+                numero: child.val().Numero,
+                facebook: child.val().Facebook,
+                nomeEvento: child.val().NomeEvento,
+                citta: child.val().Localita.Citta,
+                provincia: child.val().Localita.Provincia,
+                descrizioneBreve: child.val().DescrizioneBreve,
+                descrizioneCompleta: child.val().DescrizioneCompleta,
+                prezzo: child.val().Prezzo,
+                difficolta: child.val().Difficolta,
+                data: child.val().Data,
+                orario: child.val().Orario,
+                durata: child.val().Durata,
+                immagineAgenzia: child.val().ImmagineAgenzia,
+                immagineEvento: child.val().ImmagineEvento,
+
+              });
+            }
           });
-        }
-      });
-        this.setState({ cardList: eventi });
-      });
+            this.setState({ cardList: eventi });
+          });
+  } else if (this.state.searchOption === "Organizzatori") {
+    let ManagerNameList = firebase.database().ref("App/Events");
+        ManagerNameList.on("value", snap => {
+          var eventi = [];
+          snap.forEach(child => {
+            if (child.val().Agenzia == this.state.text) {
+              eventi.push({
+                IDevento: child.val().IDevento,
+                agenzia: child.val().Agenzia,
+                email: child.val().Email,
+                numero: child.val().Numero,
+                facebook: child.val().Facebook,
+                nomeEvento: child.val().NomeEvento,
+                citta: child.val().Localita.Citta,
+                provincia: child.val().Localita.Provincia,
+                descrizioneBreve: child.val().DescrizioneBreve,
+                descrizioneCompleta: child.val().DescrizioneCompleta,
+                prezzo: child.val().Prezzo,
+                difficolta: child.val().Difficolta,
+                data: child.val().Data,
+                orario: child.val().Orario,
+                durata: child.val().Durata,
+                immagineAgenzia: child.val().ImmagineAgenzia,
+                immagineEvento: child.val().ImmagineEvento,
+
+              });
+            }
+          });
+            this.setState({ cardList: eventi });
+          });
+  }
+
   this.setState({loading: false})
 }
 
   async componentWillMount(){
+    //console.log(this.props.navigation.state.params.searchOption);
     await this._loadDatabase();
   }
 
@@ -100,7 +167,8 @@ _loadDatabase = async => {
   }
 
   renderCard = ({item}) => (
-    <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item}) }/>
+    <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item})}
+     onManagerPress={() => this.props.navigation.navigate("ManagerPage", {managerInfo: item.agenzia})}/>
   )
 
   _favorite = item => {
@@ -122,41 +190,45 @@ _loadDatabase = async => {
 
   render() {
     return (
-    <View style={{flex:1, backgroundColor:BACKGROUND_COLOR, paddingBottom: 0}}>
-        <View style={styles.searchContainer}>
-          <SearchBar
-              inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
-              containerStyle={styles.searchBar}
-              placeholder={"Scrivi qui"}
-              onChangeText={value => this.setState({ text: value })}
-              onSubmitEditing={() => this._loadDatabase(this.state.text)}
-            />
-        </View>        
-        {this.state.loading ? 
-        (
-          <ActivityIndicator size="large" color={TINT_COLOR} />
-        ) :
-        (
-        <ScrollView style={{backgroundColor:BACKGROUND_COLOR}}>
-          {/* Visualizza FlatList solo se cardList[] > 0 */}
-          {this.state.cardList.length ? (
-            <FlatList
-              data={this.state.cardList}
-              renderItem={this.renderCard}
-              keyExtractor={this._keyExtractor}
-            />) :
-            (<Text style={styles.noResultText}>Nessun risultato, cerca altro :(</Text>)}
-        </ScrollView>
-        )}
-    </View>
-
+      <ImageBackground
+      source={require("../assets/background.png")}
+      style={{resizeMode: 'stretch', flex:1}}
+      >
+        <View style={{paddingBottom: 0}}>
+            <View style={styles.searchContainer}>
+              <SearchBar
+                  inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
+                  containerStyle={styles.searchBar}
+                  placeholder={"Scrivi qui"}
+                  onChangeText={value => this.setState({ text: value })}
+                  onSubmitEditing={() => this._loadDatabase(this.state.text)}
+                />
+            </View>        
+            {this.state.loading ? 
+            (
+              <ActivityIndicator size="large" color={TINT_COLOR} />
+            ) :
+            (
+            <ScrollView>
+              {/* Visualizza FlatList solo se cardList[] > 0 */}
+              {this.state.cardList.length ? (
+                <FlatList
+                  data={this.state.cardList}
+                  renderItem={this.renderCard}
+                  keyExtractor={this._keyExtractor}
+                />) :
+                (<Text style={styles.noResultText}>Nessun risultato, cerca altro</Text>)}
+            </ScrollView>
+            )}
+        </View>
+      </ImageBackground>
     );
   }   
 }
 
 SearchResult.navigationOptions = ({ navigation }) => {
   return {
-    title: "SearchResult",
+    title: "Risultati",
     headerStyle: {
       backgroundColor: BACKGROUND_COLOR,
       borderBottomWidth: 0

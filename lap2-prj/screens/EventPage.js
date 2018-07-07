@@ -65,7 +65,7 @@ export default class EventPage extends React.Component {
                       <TouchableOpacity
                           style={styles.searchButton}
                           activeOpacity={0.5}
-                          onPress={() => this.props.navigation.navigate("ReservationPage",
+                          onPress={() => this.props.navigation.navigate("BookingPage",
                                                                          {eventInfo: this.props.navigation.state.params.eventInfo})}
                           title="Prenota"
                       >
@@ -150,7 +150,7 @@ export default class EventPage extends React.Component {
 
 EventPage.navigationOptions = ({ navigation }) => {
   return {
-    title: "EventPage",
+    title: "Evento",
     headerStyle: {
       backgroundColor: BACKGROUND_COLOR,
       borderBottomWidth: 0

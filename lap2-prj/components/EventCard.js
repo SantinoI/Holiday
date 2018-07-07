@@ -16,10 +16,14 @@ export default class EventCard extends Component {
         <CardItem style={{borderRadius: 25}}>
 
           <Left style={{flex:0.8}}>
+            <TouchableOpacity onPress={this.props.onManagerPress}>
             <Thumbnail source={{uri: this.props.data.immagineAgenzia}} /> 
+            </TouchableOpacity>
             <Body>
               <Text style={{fontSize: 20}}>{this.props.data.nomeEvento}</Text>
-              <Text note style={{color: 'gray'}}>{this.props.data.agenzia}</Text>
+              <TouchableOpacity onPress={this.props.onManagerPress}>
+                <Text note style={{color: 'gray'}}>{this.props.data.agenzia}</Text>
+              </TouchableOpacity>
             </Body>
           </Left>
 

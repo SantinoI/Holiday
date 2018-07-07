@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Platform,
   Text,
+  ImageBackground,
   ScrollView,
   View,
   FlatList,
@@ -19,10 +20,8 @@ import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container, Butto
 
 import { Permissions, Location } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
-import { StackNavigator } from "react-navigation";
 import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 import { TabNavigator } from "react-navigation";
-import { SearchBar } from "react-native-elements";
 import EventCard from "../components/EventCard";
 
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
@@ -85,7 +84,11 @@ export default class Profile extends React.Component {
 
     renderNotLog() {
       return (
-        <ScrollView style={{ paddingTop: 50, backgroundColor: BACKGROUND_COLOR }}>
+        <ImageBackground
+        source={require("../assets/background.png")}
+        style={{resizeMode: 'stretch'}}
+      >
+        <ScrollView style={{ paddingTop: 50, }}>
             <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10, alignItems:"center"}}>
 
               <CardItem style={{flexDirection: 'column', alignItems: 'center', marginTop: 50 }} >
@@ -111,6 +114,7 @@ export default class Profile extends React.Component {
 
              </Card>
              </ScrollView>
+        </ImageBackground>
       );
     }
 

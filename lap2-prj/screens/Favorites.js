@@ -82,15 +82,10 @@ export default class Favorites extends React.Component {
         });
     }
   };
-  renderCard = ({ item }) => (
-    <EventCard
-      data={item}
-      onFavorite={() => this._favorite(item)}
-      onEventPress={() =>
-        this.props.navigation.navigate("EventPage", { eventInfo: item })
-      }
-    />
-  );
+  renderCard = ({item}) => (
+    <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item})}
+     onManagerPress={() => this.props.navigation.navigate("ManagerPage", {ManagerInfo: item.agenzia})}/>
+  )
 
   _keyExtractor = (item, index) => {
     item.id = index;

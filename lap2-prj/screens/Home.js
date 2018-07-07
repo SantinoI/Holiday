@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   TextInput,
+  ImageBackground,
   StatusBar,
   Dimensions,
   Alert
@@ -38,6 +39,7 @@ StatusBar.setBarStyle("light-content");
 export default class Home extends React.Component {
   state = {
     text: "",
+    searchOption:"Città",
     errorMessage: null,
     address: null,
     location: null,
@@ -109,7 +111,8 @@ export default class Home extends React.Component {
   _goToResult = item => {
     if (this.state.text != "")
       this.props.navigation.navigate("SearchResult", {
-        request: item
+        request: item,
+        searchOption: this.state.searchOption,
       });
     else {
       Alert.alert(
@@ -144,6 +147,14 @@ export default class Home extends React.Component {
     );
     this.setState({ cardList: newCardlist });
   };
+
+  _searchOption = filter => {
+    switch (filter) {
+      case "Città" : this.setState({searchOption: "Città"}); break;
+      case "Eventi" : this.setState({searchOption: "Eventi"}); break;
+      case "Organizzatori" : this.setState({searchOption: "Organizzatori"}); break;
+    }
+  }
   /*************************/
 
   render() {
@@ -151,8 +162,40 @@ export default class Home extends React.Component {
       return <Expo.AppLoading />;
     }
     return (
-      <ScrollView style={{backgroundColor: BACKGROUND_COLOR}}>
+      <ImageBackground
+          source={require("../assets/background.png")}
+          style={{resizeMode: 'stretch'}}
+        >
+      <ScrollView >
         <View style={styles.searchContainer}>
+          <View style = {styles.buttonContainer} >
+            <TouchableOpacity
+                    style={this.state.searchOption === "Città" ? (styles.searchOptionSelect) : styles.searchOption}
+                    activeOpacity={0.5}
+                    onPress={() => this._searchOption("Città")}
+                  >
+                    <Text style={this.state.searchOption === "Città" ? (styles.optionTextSelect) : styles.optionText}>Città</Text>
+            </TouchableOpacity>
+
+
+            <TouchableOpacity
+                    style={this.state.searchOption === "Eventi" ? (styles.searchOptionSelect) : styles.searchOption}
+                    activeOpacity={0.5}
+                    onPress={() => this._searchOption("Eventi")}
+                  >
+                    <Text style={this.state.searchOption === "Eventi" ? (styles.optionTextSelect) : styles.optionText}>Eventi</Text>
+              </TouchableOpacity>
+
+            <TouchableOpacity
+                  style={this.state.searchOption === "Organizzatori" ? (styles.searchOptionSelect) : styles.searchOption}
+                  activeOpacity={0.5}
+                  onPress={() => this._searchOption("Organizzatori")}
+                >
+                  <Text style={this.state.searchOption === "Organizzatori" ? (styles.optionTextSelect) : styles.optionText}>Organizzatori</Text>
+            </TouchableOpacity>
+
+          </View>
+
           <SearchBar
             inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
             containerStyle={styles.searchBar}
@@ -167,7 +210,7 @@ export default class Home extends React.Component {
               onPress={() => this._goToResult(this.state.text)}
               title="Trova Escursioni"
             >
-              <Text style={{ color: "white" }}> Trova Escursioni </Text>
+              <Text style={{ color: "white" }}> Cerca </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -204,6 +247,7 @@ export default class Home extends React.Component {
             )
         )}
       </ScrollView>
+    </ImageBackground>
     );
   }
 }
@@ -226,7 +270,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: Dimensions.get("window").height / 2 - 150
   },
+  buttonContainer: {
 
+    flexDirection: "column",
+    //alignItems: "center",
+  },
   searchBar: {
     backgroundColor: "rgb(233,233,238)",
     borderTopColor: "rgb(233,233,238)",
@@ -249,6 +297,36 @@ const styles = StyleSheet.create({
     marginRight: 30,
     backgroundColor: TINT_COLOR,
     borderRadius: 30
+  },
+  searchOption: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderColor: TINT_COLOR,
+    borderWidth: 1,
+    padding: 15,
+    marginLeft: 10,
+    marginBottom: 10,
+    marginRight: 10,
+    borderRadius: 30
+  },
+
+  searchOptionSelect: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    padding: 15,
+    marginLeft: 10,
+    marginBottom: 10,
+    marginRight: 10,
+    borderRadius: 30,
+    backgroundColor: TINT_COLOR,
+  },
+  optionText: {
+    color: TINT_COLOR,
+    textAlign: "center"
+  },
+  optionTextSelect: {
+    color: "white",
+    textAlign: "center"
   },
 
   scrolltext: {
