@@ -89,7 +89,7 @@ export default class Profile extends React.Component {
         style={{resizeMode: 'stretch'}}
       >
         <ScrollView style={{ paddingTop: 50, }}>
-            <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10, alignItems:"center"}}>
+            <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:88, borderRadius: 10, alignItems:"center"}}>
 
               <CardItem style={{flexDirection: 'column', alignItems: 'center', marginTop: 50 }} >
                   <FontAwesome name='user-circle-o' size={160} color={TINT_COLOR}/>                         
@@ -120,7 +120,11 @@ export default class Profile extends React.Component {
 
     renderLog() {
       return (
-        <ScrollView style={{ paddingTop: 50,marginBottom: -88, backgroundColor: BACKGROUND_COLOR}}>
+        <ImageBackground
+        source={require("../assets/background.png")}
+        style={{resizeMode: 'stretch'}}
+      >
+        <ScrollView style={{ paddingTop: 50}}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10}}>
                 <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
                   <Image
@@ -180,7 +184,7 @@ export default class Profile extends React.Component {
                     />
                   </CardItem>
 
-                  <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 50 }} >
+                  <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 30, marginTop: 20 }} >
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={styles.logoutButton}
@@ -194,6 +198,7 @@ export default class Profile extends React.Component {
                   
              </Card>
           </ScrollView>
+          </ImageBackground>
       );
     }
 

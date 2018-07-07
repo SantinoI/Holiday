@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableHighlight,
   TouchableOpacity,
+  ImageBackground,
   TextInput,
   Alert,
   ActivityIndicator,
@@ -94,22 +95,23 @@ export default class Favorites extends React.Component {
 
   renderLog() {
     return (
-      <View style={{flex:1, backgroundColor:BACKGROUND_COLOR, paddingBottom: 0}}>
-        <ScrollView style={{ backgroundColor: BACKGROUND_COLOR }}>
+     
+        <ScrollView style={{ }}>
           <FlatList
             data={this.state.cardList}
             renderItem={this.renderCard}
             keyExtractor={this._keyExtractor}
           />
         </ScrollView>
-      </View>
+
     );
   }
 
   renderNotLog() {
     return (
-      <ScrollView style={{ paddingTop: 50, backgroundColor: BACKGROUND_COLOR }}>
-        <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10, alignItems:"center"}}>
+     
+      <ScrollView style={{ paddingTop: 50}}>
+        <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:88, borderRadius: 10, alignItems:"center"}}>
 
           <CardItem style={{flexDirection: 'column', alignItems: 'center', marginTop: 50 }} >
             <Feather name="heart" size={160} color= {TINT_COLOR}/>                         
@@ -134,11 +136,20 @@ export default class Favorites extends React.Component {
 
         </Card>
        </ScrollView>
+      
+
     );
   }
 
   render() {
-    return this.state.logged ? this.renderLog() : this.renderNotLog();
+    return(
+    <ImageBackground
+        source={require("../assets/background.png")}
+        style={{resizeMode: 'stretch'}}
+      >
+    { this.state.logged ? this.renderLog() : this.renderNotLog()}
+    </ImageBackground>
+    )
   }
 }
 

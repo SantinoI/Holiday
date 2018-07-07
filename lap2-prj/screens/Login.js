@@ -3,7 +3,7 @@ import React from 'react';
 import {
   StyleSheet,
   Platform,
-  
+  ImageBackground,
   ScrollView,
   View,
   FlatList,
@@ -55,7 +55,7 @@ export default class Login extends React.Component {
   render() {
     return (
 
-      <Container style={{padding:25, backgroundColor : BACKGROUND_COLOR}}>
+      <Container style={{padding:25, }}>
         
           <Card style={{padding:30, borderRadius: 10}}>
                 
