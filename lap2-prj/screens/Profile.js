@@ -85,7 +85,7 @@ export default class Profile extends React.Component {
     renderNotLog() {
       return (
         <ImageBackground
-        source={require("../assets/background.png")}
+        source={require("../assets/background-user.png")}
         style={{resizeMode: 'stretch'}}
       >
         <ScrollView style={{ paddingTop: 50, }}>
@@ -121,7 +121,7 @@ export default class Profile extends React.Component {
     renderLog() {
       return (
         <ImageBackground
-        source={require("../assets/background.png")}
+        source={require("../assets/background-user.png")}
         style={{resizeMode: 'stretch'}}
       >
         <ScrollView style={{ paddingTop: 50}}>
@@ -213,7 +213,7 @@ export default class Profile extends React.Component {
 }
 
 Profile.navigationOptions = ({ navigation }) => {
-
+  header:null
   _onAccountPress = () => {
     var uid = firebase.auth().currentUser;
     if (uid) {

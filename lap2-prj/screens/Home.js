@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   TextInput,
+  Image,
   ImageBackground,
   StatusBar,
   Dimensions,
@@ -163,11 +164,18 @@ export default class Home extends React.Component {
     }
     return (
       <ImageBackground
-          source={require("../assets/background.png")}
+          source={require("../assets/palm.png")}
           style={{resizeMode: 'stretch'}}
         >
       <ScrollView >
         <View style={styles.searchContainer}>
+          <View>
+            <Image
+              style={{width: 200, height: 200}}
+              source={require("../assets/logo-round2.png")}
+            />
+          </View>
+          
           <View style = {styles.buttonContainer} >
             <TouchableOpacity
                     style={this.state.searchOption === "Città" ? (styles.searchOptionSelect) : styles.searchOption}
@@ -268,7 +276,8 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "column",
     alignItems: "center",
-    marginTop: Dimensions.get("window").height / 2 - 150
+    //marginTop: Dimensions.get("window").height / 2 - 150
+    marginTop: 80
   },
   buttonContainer: {
 
@@ -307,7 +316,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 10,
     marginRight: 10,
-    borderRadius: 30
+    borderRadius: 30,
+    backgroundColor: BACKGROUND_COLOR,
   },
 
   searchOptionSelect: {
@@ -318,6 +328,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginRight: 10,
     borderRadius: 30,
+    borderWidth: 1,
+    borderColor: "#bde26c",
     backgroundColor: TINT_COLOR,
   },
   optionText: {
@@ -333,13 +345,18 @@ const styles = StyleSheet.create({
     marginTop: (Dimensions.get("window").height / 2 - 200)*110/100,
     marginBottom: 0,
     alignItems: "center",
-    borderColor: "red"
+    backgroundColor: TINT_COLOR,
+    borderWidth: 1,
+    borderColor: "#b4fb7f"
   },
 
   noResultText: {
-    color: TINT_COLOR,
+    color: BACKGROUND_COLOR,
     marginTop: '50%',
     fontSize: 20,
-    textAlign: 'center'
+    textAlign: 'center',
+    backgroundColor: TINT_COLOR,
+    borderWidth: 1,
+    borderColor: "#bde26c",
   }
 });
