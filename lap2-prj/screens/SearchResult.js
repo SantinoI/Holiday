@@ -43,7 +43,7 @@ _loadDatabase = async => {
           eventList.on("value", snap => {
             var eventi = [];
             snap.forEach(child => {
-              if (child.val().Localita.Provincia == this.state.text) {
+              if (child.val().Localita.Provincia.includes(this.state.text)) {
                 eventi.push({
                   IDevento: child.val().IDevento,
                   agenzia: child.val().Agenzia,
@@ -73,7 +73,7 @@ _loadDatabase = async => {
         eventNameList.on("value", snap => {
           var eventi = [];
           snap.forEach(child => {
-            if (child.val().NomeEvento == this.state.text) {
+            if (child.val().NomeEvento.includes(this.state.text)) {
               eventi.push({
                 IDevento: child.val().IDevento,
                 agenzia: child.val().Agenzia,
@@ -103,7 +103,7 @@ _loadDatabase = async => {
         ManagerNameList.on("value", snap => {
           var eventi = [];
           snap.forEach(child => {
-            if (child.val().Agenzia == this.state.text) {
+            if (child.val().Agenzia.includes(this.state.text)) {
               eventi.push({
                 IDevento: child.val().IDevento,
                 agenzia: child.val().Agenzia,
