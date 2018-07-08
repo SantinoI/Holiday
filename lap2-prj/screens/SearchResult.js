@@ -160,12 +160,26 @@ _loadDatabase = async => {
       Orario: item.orario,
       Durata: item.durata,
       ImmagineAgenzia: item.immagineAgenzia,
-      ImmagineEvento: item.immagineEvento
+      ImmagineEvento: item.immagineEvento,
     };
     firebase
+    .database()
+    .ref("App/" + "Users/" + userId + "/" + "favorites/")
+    .push(newFavorite)
+    
+    /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
+    var id = firebase
       .database()
-      .ref("App/" + "Users/" + userId + "/" + "favorites")
-      .push(newFavorite);
+      .ref("App/" + "Users/" + userId + "/" + "favorites/")
+      .push(newFavorite).key;
+    
+      const setId ={
+        id: id
+      } 
+      firebase
+      .database()
+      .ref("App/" + "Users/" + userId + "/" + "favorites/" + id)
+      .update(setId);*/
   };
 
   renderCard = ({item}) => (

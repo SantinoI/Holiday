@@ -34,6 +34,9 @@ export default class EventPage extends React.Component {
   componentWillMount(){
     console.log(this.props.navigation.state.params.eventInfo)
   }
+
+ 
+
   render() {
     return (
       <Container style={{ backgroundColor : BACKGROUND_COLOR}}>
@@ -67,8 +70,7 @@ export default class EventPage extends React.Component {
                       <TouchableOpacity
                           style={styles.searchButton}
                           activeOpacity={0.5}
-                          onPress={() => this.props.navigation.navigate("BookingPage",
-                                                                         {eventInfo: this.props.navigation.state.params.eventInfo})}
+                          onPress={() => newBooking()}
                           title="Prenota"
                       >
                         <Text style={{textAlign:'center', color: "white" }}> Prenota adesso </Text>
