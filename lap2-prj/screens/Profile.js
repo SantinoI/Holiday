@@ -186,12 +186,8 @@ export default class Profile extends React.Component {
 
                   <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 30, marginTop: 20 }} >
                   <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        style={styles.logoutButton}
-                        activeOpacity={0.5}
-                        onPress={() => _onAccountPress()}>
-                    >
-                    <Text style={{textAlign:'center', color: "grey" }}> Esci </Text>
+                    <TouchableOpacity style={styles.logoutButton} onPress={() => firebase.auth().signOut()}>
+                      <Text style={{textAlign:'center', color: "grey" }}> Esci </Text>
                     </TouchableOpacity>
                   </View>
                 </CardItem>

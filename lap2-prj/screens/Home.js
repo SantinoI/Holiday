@@ -33,7 +33,7 @@ import * as firebase from "firebase";
 const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
 
-StatusBar.setHidden(true);
+StatusBar.setHidden(false);
 StatusBar.setBarStyle("light-content");
 
 
@@ -45,7 +45,7 @@ export default class Home extends React.Component {
     address: null,
     location: null,
     loading: true,
-    cardList: []/*       AGGIUNTA DELL'ARRAY NELLO STATE        */
+    cardList: [],/*       AGGIUNTA DELL'ARRAY NELLO STATE        */
   };
 
   _getLocationAsync = async () => {
@@ -103,9 +103,9 @@ export default class Home extends React.Component {
     //var location = "Messina";
 
     // Carico database in base all'utente
-    await this._loadDatabaseAsync(this.state.address[0].city);
+      await this._loadDatabaseAsync(this.state.address[0].city);
 
-    this.setState({loading: false})
+      this.setState({loading: false})
   }
 
   // Funzione che passa come parametro il contenuto della searchBar alla navigation quando viene premuto il button search
@@ -165,9 +165,10 @@ export default class Home extends React.Component {
     return (
       <ImageBackground
           source={require("../assets/palm.png")}
-          style={{resizeMode: 'stretch'}}
+          style={{width: '100%', height: '100%'}}
         >
       <ScrollView >
+        
         <View style={styles.searchContainer}>
           <View>
             <Image
@@ -191,7 +192,7 @@ export default class Home extends React.Component {
                     activeOpacity={0.5}
                     onPress={() => this._searchOption("Eventi")}
                   >
-                    <Text style={this.state.searchOption === "Eventi" ? (styles.optionTextSelect) : styles.optionText}>Eventi</Text>
+                    <Text style={this.state.searchOption === "Eventi" ? (styles.optionTextSelect) : styles.optionText}>Nome</Text>
               </TouchableOpacity>
 
             <TouchableOpacity
@@ -203,13 +204,12 @@ export default class Home extends React.Component {
             </TouchableOpacity>
 
           </View>
-
-          <SearchBar
-            inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
-            containerStyle={styles.searchBar}
-            placeholder={"Scrivi qui"}
-            onChangeText={value => this.setState({ text: value })}
-          />
+            <SearchBar
+              inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
+              containerStyle={styles.searchBar}
+              placeholder={"Scrivi qui"}
+              onChangeText={value => this.setState({ text: value })}
+            />
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -293,8 +293,10 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
+    marginTop: 20,
     flex: 1,
-    justifyContent: "center"
+    flexDirection: "row",
+    //justifyContent: 'space-between'
   },
 
   searchButton: {
@@ -308,25 +310,27 @@ const styles = StyleSheet.create({
     borderRadius: 30
   },
   searchOption: {
+    width: 120,
     paddingTop: 10,
     paddingBottom: 10,
     borderColor: TINT_COLOR,
     borderWidth: 1,
     padding: 15,
-    marginLeft: 10,
+    marginLeft: 2,
     marginBottom: 10,
-    marginRight: 10,
+    marginRight: 2,
     borderRadius: 30,
     backgroundColor: BACKGROUND_COLOR,
   },
 
   searchOptionSelect: {
+    width: 120,
     paddingTop: 10,
     paddingBottom: 10,
     padding: 15,
-    marginLeft: 10,
+    marginLeft: 2,
     marginBottom: 10,
-    marginRight: 10,
+    marginRight: 2,
     borderRadius: 30,
     borderWidth: 1,
     borderColor: "#bde26c",
