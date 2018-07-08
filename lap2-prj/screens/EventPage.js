@@ -31,7 +31,9 @@ const BACKGROUND_COLOR = "#d7e4e5";
 
 
 export default class EventPage extends React.Component {
-
+  componentWillMount(){
+    console.log(this.props.navigation.state.params.eventInfo)
+  }
   render() {
     return (
       <Container style={{ backgroundColor : BACKGROUND_COLOR}}>

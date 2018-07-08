@@ -16,12 +16,27 @@ import {
   Dimensions
 } from "react-native";
 
-import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container, Button } from 'native-base';
+import {
+  Content,
+  Card,
+  CardItem,
+  Thumbnail,
+  Left,
+  Body,
+  Right,
+  Container,
+  Button
+} from "native-base";
 
 import { Permissions, Location } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
-import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  Feather,
+  MaterialCommunityIcons,
+  SimpleLineIcons
+} from "@expo/vector-icons";
 import { TabNavigator } from "react-navigation";
 import { SearchBar } from "react-native-elements";
 
@@ -53,40 +68,51 @@ export default class Favorites extends React.Component {
     const user = firebase.auth().currentUser;
     if (user) {
       var uid = user.uid;
-      firebase
+      let eventList = firebase
         .database()
-        .ref("App/Users/" + uid + "/favorites")
-        .on("value", snap => {
-          let favoritelist = [];
-          snap.forEach(child => {
-            favoritelist.push({
-              IDevento: child.val().IDevento,
-              agenzia: child.val().Agenzia,
-              email: child.val().Email,
-              numero: child.val().Numero,
-              facebook: child.val().Facebook,
-              nomeEvento: child.val().NomeEvento,
-              //citta: child.val().Localita.Citta,
-              //provincia: child.val().Localita.Provincia,
-              descrizioneBreve: child.val().DescrizioneBreve,
-              descrizioneCompleta: child.val().DescrizioneCompleta,
-              prezzo: child.val().Prezzo,
-              difficolta: child.val().Difficolta,
-              data: child.val().Data,
-              orario: child.val().Orario,
-              durata: child.val().Durata,
-              immagineAgenzia: child.val().ImmagineAgenzia,
-              immagineEvento: child.val().ImmagineEvento
-            });
+        .ref("App/Users/" + uid + "/favorites");
+      eventList.on("value", snap => {
+        console.log(snap);
+        var eventi = [];
+        snap.forEach(child => {
+          eventi.push({
+            IDevento: child.val().IDevento,
+            agenzia: child.val().Agenzia,
+            email: child.val().Email,
+            numero: child.val().Numero,
+            facebook: child.val().Facebook,
+            nomeEvento: child.val().NomeEvento,
+            citta: child.val().Localita.Citta,
+            provincia: child.val().Localita.Provincia,
+            descrizioneBreve: child.val().DescrizioneBreve,
+            descrizioneCompleta: child.val().DescrizioneCompleta,
+            prezzo: child.val().Prezzo,
+            difficolta: child.val().Difficolta,
+            data: child.val().Data,
+            orario: child.val().Orario,
+            durata: child.val().Durata,
+            immagineAgenzia: child.val().ImmagineAgenzia,
+            immagineEvento: child.val().ImmagineEvento
           });
-          this.setState({ cardList: favoritelist });
         });
+        this.setState({ cardList: eventi });
+      });
     }
   };
-  renderCard = ({item}) => (
-    <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item})}
-     onManagerPress={() => this.props.navigation.navigate("ManagerPage", {ManagerInfo: item.agenzia})}/>
-  )
+  renderCard = ({ item }) => (
+    <EventCard
+      data={item}
+      onFavorite={() => this._favorite(item)}
+      onEventPress={() =>
+        this.props.navigation.navigate("EventPage", { eventInfo: item })
+      }
+      onManagerPress={() =>
+        this.props.navigation.navigate("ManagerPage", {
+          ManagerInfo: item.agenzia
+        })
+      }
+    />
+  );
 
   _keyExtractor = (item, index) => {
     item.id = index;
@@ -95,61 +121,86 @@ export default class Favorites extends React.Component {
 
   renderLog() {
     return (
-     
-        <ScrollView style={{ }}>
-          <FlatList
-            data={this.state.cardList}
-            renderItem={this.renderCard}
-            keyExtractor={this._keyExtractor}
-          />
-        </ScrollView>
-
+      <ScrollView style={{}}>
+        <FlatList
+          data={this.state.cardList}
+          renderItem={this.renderCard}
+          keyExtractor={this._keyExtractor}
+        />
+      </ScrollView>
     );
   }
 
   renderNotLog() {
     return (
-     
-      <ScrollView style={{ paddingTop: 50}}>
-        <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:88, borderRadius: 10, alignItems:"center"}}>
+      <ScrollView style={{ paddingTop: 50 }}>
+        <Card
+          style={{
+            marginTop: 50,
+            marginLeft: 10,
+            marginRight: 10,
+            marginBottom: 88,
+            borderRadius: 10,
+            alignItems: "center"
+          }}
+        >
+          <CardItem
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+              marginTop: 50
+            }}
+          >
+            <Feather name="heart" size={160} color={TINT_COLOR} />
+          </CardItem>
 
-          <CardItem style={{flexDirection: 'column', alignItems: 'center', marginTop: 50 }} >
-            <Feather name="heart" size={160} color= {TINT_COLOR}/>                         
-          </CardItem>            
+          <CardItem
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+              marginBottom: 50
+            }}
+          >
+            <Text style={{ fontSize: 24, textAlign: "center" }}>
+              {" "}
+              Effettua l'accesso per visualizzare i tuoi contenuti!{" "}
+            </Text>
+          </CardItem>
 
-            <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 50 }} >
-            <Text style={{fontSize: 24, textAlign: 'center'}}> Effettua l'accesso per visualizzare i tuoi contenuti! </Text>
-            </CardItem>
-
-            <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 50 }} >
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.loginButton}
-                    activeOpacity={0.5}
-                    onPress={() => this.props.navigation.navigate("Login")}
-                >
-                <Text style={{textAlign:'center', color: "white" }}> ACCEDI </Text>
-                </TouchableOpacity>
-              </View>
-            </CardItem>
-
-
+          <CardItem
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+              marginBottom: 50
+            }}
+          >
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.loginButton}
+                activeOpacity={0.5}
+                onPress={() => this.props.navigation.navigate("Login")}
+              >
+                <Text style={{ textAlign: "center", color: "white" }}>
+                  {" "}
+                  ACCEDI{" "}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </CardItem>
         </Card>
-       </ScrollView>
-      
-
+      </ScrollView>
     );
   }
 
   render() {
-    return(
-    <ImageBackground
+    return (
+      <ImageBackground
         source={require("../assets/background.png")}
-        style={{resizeMode: 'stretch'}}
+        style={{ resizeMode: "stretch" }}
       >
-    { this.state.logged ? this.renderLog() : this.renderNotLog()}
-    </ImageBackground>
-    )
+        {this.state.logged ? this.renderLog() : this.renderNotLog()}
+      </ImageBackground>
+    );
   }
 }
 
@@ -185,11 +236,11 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   loginButton: {
-    marginLeft: '10%',
-    marginRight: '10%',
+    marginLeft: "10%",
+    marginRight: "10%",
     width: 160,
     padding: 10,
     backgroundColor: TINT_COLOR,
-    borderRadius: 30,
-  },
+    borderRadius: 30
+  }
 });

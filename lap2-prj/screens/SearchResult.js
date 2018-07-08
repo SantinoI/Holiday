@@ -138,33 +138,35 @@ _loadDatabase = async => {
     await this._loadDatabase();
   }
 
-  uploadFavorite = (item) => {
+  uploadFavorite = item => {
     const userId = firebase.auth().currentUser.uid;
-    console.log(item)
-    var favorite = {
+    console.log(item);
+    const newFavorite = {
       IDevento: item.IDevento,
-      agenzia: item.Agenzia,
-      email: item.Email,
-      numero: item.Numero,
-      facebook: item.Facebook,
-      nomeEvento: item.NomeEvento,
-      descrizioneBreve: item.DescrizioneBreve,
-      descrizioneCompleta: item.DescrizioneCompleta,
-      prezzo: item.Prezzo,
-      difficolta: item.Difficolta,
-      data: item.Data,
-      orario: item.Orario,
-      durata: item.Durata,
-      immagineAgenzia: item.ImmagineAgenzia,
-      immagineEvento: item.ImmagineEvento,
-
-    }
-    var newFavoritesKey = firebase.database().ref().child('App/' +'Users/'+ userId + '/'+ 'favorites/').push().key;
-    var updates = {};
-    updates['App/' +'Users/'+ userId + '/'+ 'favorites/' + newFavoritesKey] = favorite;
-
-     firebase.database().ref().update(updates)
-  }
+      Agenzia: item.agenzia,
+      Email: item.email,
+      Numero: item.numero,
+      Facebook: item.facebook,
+      NomeEvento: item.nomeEvento,
+      DescrizioneBreve: item.descrizioneBreve,
+      DescrizioneCompleta: item.descrizioneCompleta,
+      Prezzo: item.prezzo,
+      Difficolta: item.difficolta,
+      Data: item.data,
+      Localita:{
+        Citta: item.citta,
+        Provincia: item.provincia
+      },
+      Orario: item.orario,
+      Durata: item.durata,
+      ImmagineAgenzia: item.immagineAgenzia,
+      ImmagineEvento: item.immagineEvento
+    };
+    firebase
+      .database()
+      .ref("App/" + "Users/" + userId + "/" + "favorites")
+      .push(newFavorite);
+  };
 
   renderCard = ({item}) => (
     <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item})}
