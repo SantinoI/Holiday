@@ -189,7 +189,7 @@ export default class Profile extends React.Component {
                     <TouchableOpacity
                         style={styles.logoutButton}
                         activeOpacity={0.5}
-                        onPress={() => _onAccountPress()}>
+                        onPress={() => firebase.auth().signOut()}>
                     >
                     <Text style={{textAlign:'center', color: "grey" }}> Esci </Text>
                     </TouchableOpacity>
@@ -213,13 +213,12 @@ export default class Profile extends React.Component {
 }
 
 Profile.navigationOptions = ({ navigation }) => {
-  header:null
-  _onAccountPress = () => {
-    var uid = firebase.auth().currentUser;
-    if (uid) {
-     firebase.auth().signOut()
-    }
-  };
+  // _onAccountPress = () => {
+  //   var uid = firebase.auth().currentUser;
+  //   if (uid) {
+  //    firebase.auth().signOut()
+  //   }
+  // };
 
   return {
       title: "Profile",

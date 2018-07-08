@@ -33,7 +33,7 @@ import * as firebase from "firebase";
 const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
 
-StatusBar.setHidden(true);
+StatusBar.setHidden(false);
 StatusBar.setBarStyle("light-content");
 
 
@@ -103,7 +103,9 @@ export default class Home extends React.Component {
     //var location = "Messina";
 
     // Carico database in base all'utente
-    await this._loadDatabaseAsync(this.state.address[0].city);
+    if (this.state.address != null)
+      console.log("null")
+      await this._loadDatabaseAsync(this.state.address[0].city);
 
     this.setState({loading: false})
   }
@@ -165,7 +167,7 @@ export default class Home extends React.Component {
     return (
       <ImageBackground
           source={require("../assets/palm.png")}
-          style={{resizeMode: 'stretch'}}
+          style={{width: '100%'}}
         >
       <ScrollView >
         <View style={styles.searchContainer}>
@@ -191,7 +193,7 @@ export default class Home extends React.Component {
                     activeOpacity={0.5}
                     onPress={() => this._searchOption("Eventi")}
                   >
-                    <Text style={this.state.searchOption === "Eventi" ? (styles.optionTextSelect) : styles.optionText}>Eventi</Text>
+                    <Text style={this.state.searchOption === "Eventi" ? (styles.optionTextSelect) : styles.optionText}>Nome</Text>
               </TouchableOpacity>
 
             <TouchableOpacity
@@ -293,8 +295,10 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
+    marginTop: 20,
     flex: 1,
-    justifyContent: "center"
+    flexDirection: "row",
+    //justifyContent: 'space-between'
   },
 
   searchButton: {
@@ -308,25 +312,27 @@ const styles = StyleSheet.create({
     borderRadius: 30
   },
   searchOption: {
+    width: 120,
     paddingTop: 10,
     paddingBottom: 10,
     borderColor: TINT_COLOR,
     borderWidth: 1,
     padding: 15,
-    marginLeft: 10,
+    marginLeft: 2,
     marginBottom: 10,
-    marginRight: 10,
+    marginRight: 2,
     borderRadius: 30,
     backgroundColor: BACKGROUND_COLOR,
   },
 
   searchOptionSelect: {
+    width: 120,
     paddingTop: 10,
     paddingBottom: 10,
     padding: 15,
-    marginLeft: 10,
+    marginLeft: 2,
     marginBottom: 10,
-    marginRight: 10,
+    marginRight: 2,
     borderRadius: 30,
     borderWidth: 1,
     borderColor: "#bde26c",
