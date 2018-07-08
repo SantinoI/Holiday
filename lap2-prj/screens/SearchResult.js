@@ -190,6 +190,10 @@ _loadDatabase = async => {
 
   render() {
     return (
+      <ImageBackground
+      source={require("../assets/background.png")}
+      style={{resizeMode: 'stretch', flex:1}}
+      >
         <View style={{paddingBottom: 0}}>
             <View style={styles.searchContainer}>
               <SearchBar
@@ -217,6 +221,7 @@ _loadDatabase = async => {
             </ScrollView>
             )}
         </View>
+      </ImageBackground>
     );
   }   
 }
