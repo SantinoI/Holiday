@@ -126,7 +126,7 @@ export default class Profile extends React.Component {
     renderCard = ({ item }) => {
       {console.log(item);}
       return (
-        <EventCard data={item} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item}) }/> // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
+        <EventCard data={item} onRemove={() => this._onRemove()} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item}) }/> // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
         // AI TEXT IN OUTPUT NEL FILE EVENTCARD
       );
     };
@@ -134,6 +134,17 @@ export default class Profile extends React.Component {
     _keyExtractor = (item, index) => {
       //item.id = index;
       return String(index);
+    };
+
+    _onRemove = item => {
+      let eventList = firebase.database().ref("App/Events");
+      eventList.on("value", snap => {
+        snap.forEach(child => {
+          if (child === item) {
+            child.val().remove();
+          };
+        });
+      });
     };
 
     renderNotLog() {

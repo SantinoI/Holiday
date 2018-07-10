@@ -64,20 +64,6 @@ export default class EventPage extends React.Component {
               <Text style={{fontSize: 24, textAlign: 'center'}}>{this.props.navigation.state.params.eventInfo.nomeEvento}</Text>
               </CardItem>
 
-              {/* BOTTONE PRENOTA ORA */}
-              <CardItem >
-                  <View style={styles.buttonContainer}>
-                      <TouchableOpacity
-                          style={styles.searchButton}
-                          activeOpacity={0.5}
-                          onPress={() => newBooking()}
-                          title="Prenota"
-                      >
-                        <Text style={{textAlign:'center', color: "white" }}> Prenota adesso </Text>
-                      </TouchableOpacity>
-                  </View>
-              </CardItem>
-
               {/* DATA CALENDARIO */}
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 5, borderRadius: 10}} >
                 <Left style={{}}>

@@ -52,6 +52,9 @@ export default App = createStackNavigator(
     RegisterPage: {
       screen: RegisterPage
     },
+    EventPage: {
+      screen: EventPage
+    },
     initialRouteName: "Profile",
     mode: "modal"
   }

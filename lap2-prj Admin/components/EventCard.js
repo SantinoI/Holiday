@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Image, TouchableOpacity, Dimensions, Text} from 'react-native';
 import { Content, Card, CardItem, Thumbnail, Left, Body, Right } from 'native-base';
-import { MaterialIcons, Feather } from "@expo/vector-icons";
+import { MaterialIcons, Feather, FontAwesome } from "@expo/vector-icons";
 
 
 
@@ -51,10 +51,8 @@ export default class EventCard extends Component {
           </Left>
 
           <Right style={{flex:0.2}}>
-            <TouchableOpacity onPress={this.props.onFavorite}>
-                   {this.props.data.favorite ? (
-                     <Feather name="heart" size={25} color="red"/>) : (
-                     <Feather name="heart" size={25} color="black"/>)}
+            <TouchableOpacity onPress={this.props.onRemove}>
+                <FontAwesome name="trash-o" size={25} color="black"/>
             </TouchableOpacity>
           </Right>
 
