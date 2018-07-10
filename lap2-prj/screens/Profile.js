@@ -84,11 +84,8 @@ export default class Profile extends React.Component {
 
     renderNotLog() {
       return (
-        <ImageBackground
-        source={require("../assets/background-user.png")}
-        style={{width:"100%", height:"100%"}}
-      >
-        <ScrollView style={{ paddingTop: 50, }}>
+
+        <ScrollView style={{ paddingTop: 50 , backgroundColor:BACKGROUND_COLOR}}>
             <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:88, borderRadius: 10, alignItems:"center"}}>
 
               <CardItem style={{flexDirection: 'column', alignItems: 'center', marginTop: 50 }} >
@@ -114,17 +111,13 @@ export default class Profile extends React.Component {
 
              </Card>
              </ScrollView>
-        </ImageBackground>
       );
     }
 
     renderLog() {
       return (
-        <ImageBackground
-        source={require("../assets/background-user.png")}
-        style={{height:'100%', width:'100%'}}
-      >
-        <ScrollView style={{ paddingTop: 50}}>
+
+        <ScrollView style={{ paddingTop: 50, backgroundColor:BACKGROUND_COLOR }}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10}}>
                 <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
                   <Image
@@ -194,16 +187,12 @@ export default class Profile extends React.Component {
                   
              </Card>
           </ScrollView>
-          </ImageBackground>
       );
     }
 
     render() {
       return(
-        //<View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex: 1}}>
-          this.state.logged ? (this.renderLog()) : this.renderNotLog()          
-        //</View>
-        
+          this.state.logged ? (this.renderLog()) : this.renderNotLog()           
       );
     }
 }

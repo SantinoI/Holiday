@@ -133,7 +133,7 @@ export default class Favorites extends React.Component {
 
   renderNotLog() {
     return (
-      <ScrollView style={{ paddingTop: 50 }}>
+      <ScrollView style={{ paddingTop: 50,  backgroundColor: BACKGROUND_COLOR }}>
         <Card
           style={{
             marginTop: 50,
@@ -194,12 +194,9 @@ export default class Favorites extends React.Component {
 
   render() {
     return (
-      <ImageBackground
-        source={require("../assets/background.png")}
-        style={{height:'100%', width:'100%'}}
-      >
-        {this.state.logged ? this.renderLog() : this.renderNotLog()}
-      </ImageBackground>
+      
+        this.state.logged ? this.renderLog() : this.renderNotLog()
+      
     );
   }
 }

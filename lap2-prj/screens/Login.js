@@ -74,39 +74,30 @@ export default class Login extends React.Component {
                     </Item>
                   </Form>
                 
-                  
-                  <View style={styles.buttonContainer}>
-                      <TouchableOpacity
+                      <Button rounded
+                          backgroundColor = {TINT_COLOR2}
                           loading = {this.state.isLoading}
                           raised
                           title="Login"
                           onPress={this._login}
-                          style={styles.searchButton}
+                          containerViewStyle={styles.buttonContainer}
                           activeOpacity={0.5}
-                      >
-                        <Text style={{textAlign:'center', color: "white" }}> Login </Text>
-                      </TouchableOpacity>
-                  </View>
-
-                  <View style={styles.buttonContainer}>
-                      <TouchableOpacity
-                          loading = {this.state.isLoading}
+                      />
+                  
+                      <Button rounded
+                          backgroundColor = {TINT_COLOR2}
                           raised
-                          title="Register"
+                          title="Registrati"
                           onPress={() => this.props.navigation.navigate("RegisterPage")}
-                          style={styles.searchButton}
+                          containerViewStyle={styles.buttonContainer}
                           activeOpacity={0.5}
-                      >
-                        <Text style={{textAlign:'center', color: "white" }}> Registrati </Text>
-                      </TouchableOpacity>
-                  </View>
-
+                      />
+                 
                   <View>
                     <Text>{this.state.error}</Text>
                   </View>
-                
-             </Card>
-             
+    
+             </Card> 
     </Container>
     );
   }
@@ -127,7 +118,8 @@ Login.navigationOptions = ({ navigation }) => {
 const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 35,
-    justifyContent: "center"
+    justifyContent: "center",
+    borderRadius: 30,
   },
 
   searchButton: { 
