@@ -206,11 +206,7 @@ _loadDatabase = async => {
 
   render() {
     return (
-      <ImageBackground
-      source={require("../assets/background.png")}
-      style={{height:'100%', width:'100%'}}
-      >
-        <View style={{paddingBottom: 0}}>
+        <View style={{paddingBottom: 88, backgroundColor: BACKGROUND_COLOR}}>
             <View style={styles.searchContainer}>
               <SearchBar
                   inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
@@ -237,7 +233,6 @@ _loadDatabase = async => {
             </ScrollView>
             )}
         </View>
-      </ImageBackground>
     );
   }   
 }
