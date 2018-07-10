@@ -134,8 +134,8 @@ export default class Home extends React.Component {
   };
 
   _keyExtractor = (item, index) => {
-    //item.id = index;
-    return String(index);
+    item.id = index;
+    String(index);
   };
 
   /* CALL BACK PER EVENT CARD */

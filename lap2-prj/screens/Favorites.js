@@ -115,8 +115,8 @@ export default class Favorites extends React.Component {
   );
 
   _keyExtractor = (item, index) => {
-    //item.id = index;
-    return String(index);
+    item.id = index;
+    String(index);
   };
 
   renderLog() {
