@@ -199,8 +199,8 @@ _loadDatabase = async => {
   };
 
   _keyExtractor = (item, index) => {
-    item.id = index;
-    String(index);
+    //item.id = index;
+    return String(index);
   };
 
 
@@ -208,7 +208,7 @@ _loadDatabase = async => {
     return (
       <ImageBackground
       source={require("../assets/background.png")}
-      style={{resizeMode: 'stretch', flex:1}}
+      style={{height:'100%', width:'100%'}}
       >
         <View style={{paddingBottom: 0}}>
             <View style={styles.searchContainer}>

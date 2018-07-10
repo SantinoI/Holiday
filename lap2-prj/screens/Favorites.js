@@ -115,8 +115,8 @@ export default class Favorites extends React.Component {
   );
 
   _keyExtractor = (item, index) => {
-    item.id = index;
-    String(index);
+    //item.id = index;
+    return String(index);
   };
 
   renderLog() {
@@ -196,7 +196,7 @@ export default class Favorites extends React.Component {
     return (
       <ImageBackground
         source={require("../assets/background.png")}
-        style={{ resizeMode: "stretch" }}
+        style={{height:'100%', width:'100%'}}
       >
         {this.state.logged ? this.renderLog() : this.renderNotLog()}
       </ImageBackground>

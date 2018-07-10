@@ -86,7 +86,7 @@ export default class Profile extends React.Component {
       return (
         <ImageBackground
         source={require("../assets/background-user.png")}
-        style={{resizeMode: 'stretch'}}
+        style={{width:"100%", height:"100%"}}
       >
         <ScrollView style={{ paddingTop: 50, }}>
             <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:88, borderRadius: 10, alignItems:"center"}}>
@@ -122,7 +122,7 @@ export default class Profile extends React.Component {
       return (
         <ImageBackground
         source={require("../assets/background-user.png")}
-        style={{resizeMode: 'stretch'}}
+        style={{height:'100%', width:'100%'}}
       >
         <ScrollView style={{ paddingTop: 50}}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10}}>
