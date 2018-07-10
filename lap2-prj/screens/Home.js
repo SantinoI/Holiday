@@ -165,14 +165,15 @@ export default class Home extends React.Component {
     return (
       <ImageBackground
           source={require("../assets/palm.png")}
-          style={{width: '100%', height: '100%'}}
+          style={{flex: 1, width: '100%', height: '100%'}}
         >
       <ScrollView >
         
         <View style={styles.searchContainer}>
           <View>
             <Image
-              style={{width: 200, height: 200}}
+              resizeMode='stretch'
+              style={{width: Dimensions.get("window").height/4, height: Dimensions.get("window").height/4}}
               source={require("../assets/logo-round2.png")}
             />
           </View>
@@ -235,12 +236,10 @@ export default class Home extends React.Component {
           this.state.cardList.length ? 
             (
             <View>
-              <View style={styles.scrolltext}>
-                <Text style={{ color: TINT_COLOR, fontSize: 20 }}>
+                <Text style={ styles.scrolltext}>
                   Scorri per i risultati nelle vicinanze
                 </Text>
-                <Feather name="chevron-up" size={24} color={TINT_COLOR} />
-              </View>
+              
               <View>
                 <FlatList // VISTUALIZZO LA FLATLIST
                   data={this.state.cardList}
@@ -267,7 +266,8 @@ Home.navigationOptions = ({ navigation }) => {
     title: "Home",
     headerStyle: {
       backgroundColor: BACKGROUND_COLOR,
-      borderBottomWidth: 0
+      borderBottomWidth: 0,
+      height: 0
     },
   };
 };
@@ -310,12 +310,10 @@ const styles = StyleSheet.create({
     borderRadius: 30
   },
   searchOption: {
-    width: 120,
-    paddingTop: 10,
-    paddingBottom: 10,
+    width: 90*110/100,
+    padding: 10,
     borderColor: TINT_COLOR,
     borderWidth: 1,
-    padding: 15,
     marginLeft: 2,
     marginBottom: 10,
     marginRight: 2,
@@ -324,10 +322,8 @@ const styles = StyleSheet.create({
   },
 
   searchOptionSelect: {
-    width: 120,
-    paddingTop: 10,
-    paddingBottom: 10,
-    padding: 15,
+    width: 90*110/100,
+    padding: 10,
     marginLeft: 2,
     marginBottom: 10,
     marginRight: 2,
@@ -337,30 +333,37 @@ const styles = StyleSheet.create({
     backgroundColor: TINT_COLOR,
   },
   optionText: {
+    fontSize: 11,
     color: TINT_COLOR,
     textAlign: "center"
   },
   optionTextSelect: {
+    fontSize: 11,
     color: "white",
     textAlign: "center"
   },
 
   scrolltext: {
-    marginTop: (Dimensions.get("window").height / 2 - 200)*110/100,
-    marginBottom: 0,
-    alignItems: "center",
-    backgroundColor: TINT_COLOR,
-    borderWidth: 1,
-    borderColor: "#b4fb7f"
+    textAlign: 'center',
+    overflow: 'hidden',
+    borderRadius: 30,
+    marginTop: 20,
+    padding: 10,
+    marginLeft: 30,
+    marginRight: 30,
+    backgroundColor: 'rgb(233,233,238)',
+    color: 'rgb(136,147,158)'
   },
 
   noResultText: {
-    color: BACKGROUND_COLOR,
-    marginTop: '50%',
-    fontSize: 20,
     textAlign: 'center',
-    backgroundColor: TINT_COLOR,
-    borderWidth: 1,
-    borderColor: "#bde26c",
+    overflow: 'hidden',
+    borderRadius: 30,
+    marginTop: 20,
+    padding: 10,
+    marginLeft: 30,
+    marginRight: 30,
+    backgroundColor: 'rgb(233,233,238)',
+    color: 'rgb(136,147,158)'
   }
 });
