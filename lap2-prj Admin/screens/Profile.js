@@ -189,7 +189,7 @@ export default class Profile extends React.Component {
         source={require("../assets/background-user.png")}
         style={{height:'100%', width:'100%'}}
       >
-        <ScrollView style={{ paddingTop: 50}}>
+        <ScrollView style={{ paddingTop: 50, marginBottom: 88}}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:10, borderRadius: 10}}>
                 <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
                   <Image
@@ -248,7 +248,7 @@ export default class Profile extends React.Component {
                     <View style={styles.scrolltext}>
                       <Feather name="chevron-up" size={24} color= {TINT_COLOR}/>
                     </View>
-                    <View>
+                    <View style={{paddingBottom: 50}}>
                       <FlatList // VISTUALIZZO LA FLATLIST
                         data={this.state.cardList}
                         renderItem={this.renderCard}
