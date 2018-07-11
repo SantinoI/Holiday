@@ -12,7 +12,7 @@ import {
   Dimensions,
   Image
 } from "react-native";
-import { Input, Label, Item, Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
+import { Button, Input, Label, Item, Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
 
 
 import DatePicker from 'react-native-datepicker'
@@ -21,8 +21,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
 import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons} from "@expo/vector-icons";
 import { TabNavigator } from "react-navigation";
-import { SearchBar, Button } from "react-native-elements";
-
+import { SearchBar } from "react-native-elements";
+import Icon from 'react-native-vector-icons/Feather';
 import EventCard from "../components/EventCard";
 
 import * as firebase from "firebase";
@@ -34,7 +34,10 @@ const BACKGROUND_COLOR = "#d7e4e5";
 export default class NewEventPage extends React.Component {
   state = {
     date:'',
-    time:''
+    time:'',
+    days:0,
+    price:0,
+    days: 0,
   }
 
 
@@ -96,7 +99,7 @@ export default class NewEventPage extends React.Component {
                 <Left style={{marginRight:0}}>
                     <Image style={{width:20, height: 20, marginRight:0}} source={require('../assets/calendar.png')}/>
                     <DatePicker
-                    style={{width: 130}}
+                    style={{width: 100*110/100}}
                     date={this.state.date}
                     mode="date"
                     locale={'it'}
@@ -123,7 +126,7 @@ export default class NewEventPage extends React.Component {
                 <Left>
                    <Image style={{width:20, height: 20, marginRight:0}} source={require('../assets/clock.png')}/>
                    <DatePicker
-                    style={{width: 130}}
+                    style={{width: 100*110/100}}
                     date={this.state.time}
                     mode="time"
                     locale={'it'}
@@ -150,25 +153,31 @@ export default class NewEventPage extends React.Component {
                  
     
               </CardItem>
-              
-              {/* ORARIO/I */}
-              <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
-                <Left style={{ }}>
-                    <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/clock.png')}/>
-                    <Text >{}</Text>
-                </Left>
-              </CardItem>
 
-              {/* TEMPO E DIFFICOLTA'*/}
+              {/* TEMPO E PREZZO'*/}
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
-                <Left style={{}}>
-                    <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/stopwatch.png')}/>
-                    <Text >{}</Text>
+                <Left style={{flexDirection: 'row'}}>
+                    <Image style={{width:20, height: 20, marginRight:0}} source={require('../assets/stopwatch.png')}/>
+                      <Button transparent
+                              onPress={() => this.setState({ days: this.state.days>0 ? this.state.days - 1 : 0 })}
+                              style={{marginLeft:10,width:50, height:50}}
+                      ><Icon style={{}} size={25} color={TINT_COLOR} name='minus-circle'/></Button>
+                      <Text style={{marginLeft: -13,marginRight:10}}>{this.state.days}</Text>
+                      <Button transparent
+                              onPress={() => this.setState({ days: this.state.days + 1 })}
+                              style={{width:50, height:50}}
+                      ><Icon style={{}} size={25} color={TINT_COLOR} name='plus-circle'/></Button>
                 </Left>
 
                 <Left style={{}}>
-                    <FontAwesome name='level-up' size={20}/>
-                    <Text style={{marginLeft: 10}}>{}</Text>
+                <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/money.png')}/>
+                     <Item floatingLabel style={{ marginTop: 0,width:100 }}>
+                       <Label style={{fontSize: 14, width:100}}>Prezzo</Label>
+                       <Input
+                       style={{fontSize:14}}
+                       onChangeText={text => this.setState({ price: text })}
+                      />
+                    </Item>                      
                 </Left>
               </CardItem>
 
@@ -176,7 +185,12 @@ export default class NewEventPage extends React.Component {
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
                 <Left style={{}}>
                     <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/money.png')}/>
-                    <Text >{}</Text>
+                    <Item floatingLabel style={{ marginTop: 0 }}>
+                       <Label style={{}}>Username</Label>
+                       <Input
+                       onChangeText={text => this.setState({ price: text })}
+                      />
+                    </Item>               
                 </Left>
               </CardItem>
 
@@ -188,28 +202,7 @@ export default class NewEventPage extends React.Component {
                 </Left>
               </CardItem>
 
-              {/* AGENZIA E EMAIL */}
-              {/* <CardItem  style={{flexDirection: 'column', flexWrap: 'wrap',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
-                <Body style={{flexDirection: 'row', margin: 5}}>
-                <SimpleLineIcons name='user' size={16}/>
-                <Text style={{marginLeft: 10}}>{}</Text>
-                </Body>
-
-                <Body style={{flexDirection: 'row', margin: 5}}>
-                   <MaterialCommunityIcons name='email-outline' size={16}/>
-                   <Text style={{marginLeft: 10}}>{}</Text>
-               </Body>
-
-               <Body style={{flexDirection: 'row', margin: 5}}>
-                   <Feather name='phone' size={16}/>
-                   <Text style={{marginLeft: 10}}>{}</Text>
-               </Body>
-
-               <Body style={{flexDirection: 'row', margin: 5}}>
-                    <MaterialCommunityIcons name='facebook' size={16}/>
-                    <Text style={{marginLeft: 10}}>{}</Text>
-               </Body>
-              </CardItem> */}
+              
             </Card>
         </ScrollView>
     </Container>
