@@ -12,9 +12,10 @@ import {
   Dimensions,
   Image
 } from "react-native";
-import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
+import { Input, Label, Item, Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
 
 
+import DatePicker from 'react-native-datepicker'
 import { Permissions, Location } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StackNavigator } from "react-navigation";
@@ -31,11 +32,35 @@ const BACKGROUND_COLOR = "#d7e4e5";
 
 
 export default class NewEventPage extends React.Component {
+  state = {
+    date:'',
+    time:''
+  }
+
+
   componentWillMount(){
     console.log()
   }
 
+  _getCurrentDate=()=>{
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    return  year+ '-' + month + '-' + date;
+   }
+
+   _getCurrentDay=()=>{
+     var day = new Date().getDate();
+     return day;}
+   _getCurrentMonth=()=>{
+     var month = new Date().getMonth() + 1;
+     return month;}
+   _getCurrentYear=()=>{
+     var year = new Date().getFullYear();
+     return year;}
+
  
+
 
   render() {
     return (
@@ -54,6 +79,7 @@ export default class NewEventPage extends React.Component {
               <CardItem >
                 <Left style={{flex:0.8, flexDirection: 'column', alignItems: 'flex-start' }}>
                 <Text style={{fontSize:10, fontStyle: 'italic'}}>{}, {}</Text>
+                
                 </Left>
                 <Right>
                 <Text style={{fontSize:10, fontStyle: 'italic'}}>Codice di riferimento: {}</Text>
@@ -64,12 +90,65 @@ export default class NewEventPage extends React.Component {
               <Text style={{fontSize: 24, textAlign: 'center'}}>{}</Text>
               </CardItem>
 
-              {/* DATA CALENDARIO */}
+              {/* GIORNO E ORARIO EVENTO */}
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 5, borderRadius: 10}} >
-                <Left style={{}}>
-                    <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/calendar.png')}/>
-                    <Text >{}</Text>
+                {/* Giorno */}
+                <Left style={{marginRight:0}}>
+                    <Image style={{width:20, height: 20, marginRight:0}} source={require('../assets/calendar.png')}/>
+                    <DatePicker
+                    style={{width: 130}}
+                    date={this.state.date}
+                    mode="date"
+                    locale={'it'}
+                    placeholder="Seleziona una data"
+                    format="YYYY-MM-DD"
+                    minDate={this._getCurrentDate()}
+                    maxDate={this._getCurrentYear()+1+'-'+this._getCurrentMonth()+'-'+this._getCurrentDay()}
+                    confirmBtnText="Conferma"
+                    cancelBtnText="Cancella"
+                    customStyles={{
+                      dateIcon: {
+                        display: 'none',
+                      },
+                      dateInput: {
+                        borderWidth: 0,
+                        marginRight: 0
+                      }
+              
+                    }}
+                    onDateChange={(date) => {this.setState({date: date})}}
+                  />
                 </Left>
+                {/* Orario */}
+                <Left>
+                   <Image style={{width:20, height: 20, marginRight:0}} source={require('../assets/clock.png')}/>
+                   <DatePicker
+                    style={{width: 130}}
+                    date={this.state.time}
+                    mode="time"
+                    locale={'it'}
+                    placeholder="Seleziona un orario"
+                    confirmBtnText="Conferma"
+                    cancelBtnText="Cancella"
+                    customStyles={{
+                      dateIcon: {
+                        display: 'none',
+                      },
+                      dateInput: {
+                        borderWidth: 0,
+                        marginRight: 0
+                      }
+              
+                    }}
+                    onDateChange={(time) => {this.setState({time: time})}}
+                  />
+                </Left>
+
+                {console.log(this.state.time)}
+
+                
+                 
+    
               </CardItem>
               
               {/* ORARIO/I */}
