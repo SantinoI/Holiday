@@ -11,7 +11,6 @@ import {
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createStackNavigator } from "react-navigation";
-import { TabNavigator } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation";
 
 import Login from "./screens/Login";
@@ -23,6 +22,7 @@ import Favorites from "./screens/Favorites";
 import Profile from "./screens/Profile";
 import RegisterPage from "./screens/RegisterPage";
 import SearchResult from "./screens/SearchResult";
+import BookingList from "./screens/BookingList";
 
 import * as firebase from "firebase";
 
@@ -40,46 +40,119 @@ firebase.initializeApp(config);
 
 !firebase.apps.length ? firebase.initializeApp(config) : null;
 
+const ProfileNavigator = createStackNavigator(
+  {
+    Profile: {screen: Profile},
+    EventPage: {screen: EventPage},
+    NewEventPage: {screen: NewEventPage},
+  },
+)
 
-export default App = createStackNavigator(
+const TabNav = createBottomTabNavigator(
+  {
+    ProfileNavigator: {screen: ProfileNavigator},
+    BookingList: {screen: BookingList},
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'ProfileNavigator') {
+          iconName = `home${focused ? '' : '-outline'}`;
+          return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
+        } else if (routeName === 'BookingList') {
+          iconName = `pencil-box${focused ? '' : '-outline'}`;
+          return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
+        }
+        
+      }
+    }),
+    tabBarOptions: {
+      activeTintColor: TINT_COLOR,
+      inactiveTintColor: 'gray',
+    },
+  } 
+)
+
+const RootNav = createStackNavigator(
   {
     Login: {
       screen: Login
     },
-    Profile: {
-      screen: Profile
-    },
     RegisterPage: {
       screen: RegisterPage
     },
-    EventPage: {
-      screen: EventPage
+    TabNav: {
+      screen: TabNav
     },
-    NewEventPage: {
-      screen: NewEventPage
-    },
-    initialRouteName: "Login",
+    // ProfileNavigator: {
+    //   screen: ProfileNavigator
+    // },
+    // Profile: {
+    //   screen: Profile
+    // },
+    // EventPage: {
+    //   screen: EventPage
+    // },
+    // NewEventPage: {
+    //   screen: NewEventPage
+    // },
+  },
+  {
+    headerMode:'none',
+    //initialRouteName: "none",
     mode: "modal"
   }
 );
 
-// const TabNavigator = createBottomTabNavigator (
 
-// )
 
-// const ProfileNavigator = createStackNavigator(
-//   {
-//     Profile: {
-//       screen: Profile
-//     },
-//     Login: {
-//       screen: Login
-//     },
-//     RegisterPage: {
-//       screen: RegisterPage
-//     },
-//   }
-// )
+
+export default class App extends React.Component {
+  state= {
+    logged:""
+  }
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged( user => {
+      if (user) {
+        this.setState({logged: true})
+      }
+      else {
+        this.setState({logged: false})
+      }
+    })
+
+  }
+
+  render() {
+    return (
+      this.state.logged ? (<TabNav/>) : (<RootNav/>)
+    )
+  }
+
+  // render() {
+  //   return (
+  //     <RootNav/>
+  //   )
+  // }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // export default createBottomTabNavigator(
 //   {
