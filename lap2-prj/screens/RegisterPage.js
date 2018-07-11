@@ -56,20 +56,24 @@ export default class RegisterPage extends React.Component {
     confirmEmail: "",
     password: "",
     confirmPassword: "",
-    error: ""
+    error: "",
+    profileImage: ""
   };
 
   upload_data_user = () => {
     const userId = firebase.auth().currentUser.uid;
     const data = {
-      username: this.state.username,
-      nome: this.state.nome,
-      cognome: this.state.cognome
+      ProfileImage: this.state.profileImage,
+      Username: this.state.username,
+      Nome: this.state.nome,
+      Cognome: this.state.cognome,
+      Email: this.state.email,
+      Uid: userId
     };
 
     firebase
       .database()
-      .ref("App/" + "Users/" + userId + "/" + "DatiPersonali")
+      .ref("App/" + "Users/" + userId)
       .update(data);
   };
 
@@ -157,7 +161,7 @@ export default class RegisterPage extends React.Component {
       .then(user => {
         this.setState({ isLoading: false });
         this.upload_data_user();
-        this.props.navigation.navigate("Home");
+        this.props.navigation.navigate("Profile");
       })
       .catch(error => {
         this.setState({ error: error.message, isLoading: false });
@@ -184,7 +188,7 @@ export default class RegisterPage extends React.Component {
         { format: "png" }
       );
       console.log(manipResult);
-      this.setState({ image: manipResult.uri });
+      this.setState({ profileImage: manipResult.uri });
     }
   };
 
@@ -222,7 +226,7 @@ export default class RegisterPage extends React.Component {
               source={
                 this.state.image
                   ? { uri: this.state.image }
-                  : require("../assets/image.png")
+                  : require("../assets/imagep.png")
               }
             />
           </TouchableOpacity>

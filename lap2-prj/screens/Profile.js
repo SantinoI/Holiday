@@ -4,6 +4,7 @@ import {
   Platform,
   Text,
   ImageBackground,
+  ActionSheetIOS,
   ScrollView,
   View,
   FlatList,
@@ -18,7 +19,7 @@ import {
 
 import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container, Button } from 'native-base';
 
-import { Permissions, Location } from "expo";
+import { Permissions, Location, ImagePicker, ImageManipulator, } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 import { TabNavigator } from "react-navigation";
@@ -47,7 +48,10 @@ LocaleConfig.defaultLocale = 'it';
 export default class Profile extends React.Component {
     state = {
       profileImage: null,
-      //logged: false
+      username:"",
+      nome:"",
+      cognome:"",
+      email:"",
     }
 
     _loadDatabase = async => {
@@ -57,12 +61,18 @@ export default class Profile extends React.Component {
         var uid = user.uid;
       
         this.setState({imageLoading: true})
-        firebase.database().ref("App/Users/" + uid + "/ProfileImage")
+        firebase.database().ref("App/Users/" + uid)
           .on("value", snap => {
-            let imageURL = snap.val()
             console.log(snap.val())
-            this.setState({ profileImage: imageURL });
+            this.setState({ profileImage: snap.val().ProfileImage});
+            this.setState({ username: snap.val().Username});
+            this.setState({ nome: snap.val().Nome});
+            this.setState({ cognome: snap.val().Cognome});
+            this.setState({ email: snap.val().Email});
           });
+        
+
+        
         this.setState({imageLoading: false})
       }
     }
@@ -81,6 +91,56 @@ export default class Profile extends React.Component {
         }
       })
     }
+
+  _updateProfileImage = () => {
+    const userId = firebase.auth().currentUser.uid;
+    firebase
+    .database()
+    .ref("App/" + "Users/" + userId)
+    .update({ProfileImage: this.state.profileImage})
+  }
+      //Apertura galleria per choosing foto profilo utente
+  _openPhotoGallery = async () => {
+    const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+    if (status !== "granted") {
+      const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (result.status !== "granted") {
+        alert("you need to authorized the app");
+        return;
+      }
+    }
+    let result = await ImagePicker.launchImageLibraryAsync();
+    if (!result.cancelled) {
+      console.log(result);
+      // Resize the image
+      const manipResult = await ImageManipulator.manipulate(
+        result.uri,
+        [{ resize: { width: 375 } }],
+        { format: "png" }
+      );
+      console.log(manipResult);
+      this.setState({ profileImage: manipResult.uri });
+      this._updateProfileImage();
+    }
+  };
+
+  _selectPhoto = () => {
+    console.log("show actions sheet");
+    if (Platform.OS === "ios") {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ["Camera", "Photo Gallery", "Cancel"],
+          cancelButtonIndex: 2,
+          title: "Scegli immagine da:"
+        },
+        buttonIndex => {
+          if (buttonIndex == 1) {
+            this._openPhotoGallery();
+          }
+        }
+      );
+    }
+  };
 
     renderNotLog() {
       return (
@@ -119,17 +179,17 @@ export default class Profile extends React.Component {
 
         <ScrollView style={{ paddingTop: 50, backgroundColor:BACKGROUND_COLOR }}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10}}>
-                <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
+                <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}} onPress={this._selectPhoto}>
                   <Image
                     resizeMode="cover"
                     rounded
                     style= {{borderRadius:80, width: 160, height: 160}}
-                    source = {  this.state.profileImage ? { uri: this.state.profileImage } : require("../assets/image.png")}
+                    source = {  this.state.profileImage ? { uri: this.state.profileImage } : require("../assets/imagep.png")}
                     />         
                 </TouchableOpacity>
 
                 <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
-                <Text style={{fontSize: 24, textAlign: 'center'}}> Nome Utente </Text>
+                <Text style={{fontSize: 24, textAlign: 'center'}}> {this.state.username} </Text>
                 </CardItem>
 
                 {/* AGENZIA E EMAIL */}
@@ -138,23 +198,14 @@ export default class Profile extends React.Component {
 
                   <Body style={{flexDirection: 'row', margin: 5}}>
                   <SimpleLineIcons name='user' size={16}/>
-                  <Text style={{marginLeft: 10}}>nome cognome</Text>
+                  <Text style={{marginLeft: 10}}>{this.state.nome} {this.state.cognome}</Text>
                   </Body>
 
                   <Body style={{flexDirection: 'row', margin: 5}}>
                     <MaterialCommunityIcons name='email-outline' size={16}/>
-                    <Text style={{marginLeft: 10}}>email</Text>
+                    <Text style={{marginLeft: 10}}>{this.state.email}</Text>
                 </Body>
 
-                <Body style={{flexDirection: 'row', margin: 5}}>
-                    <Feather name='phone' size={16}/>
-                    <Text style={{marginLeft: 10}}>numero</Text>
-                </Body>
-
-                <Body style={{flexDirection: 'row', margin: 5}}>
-                      <MaterialCommunityIcons name='facebook' size={16}/>
-                      <Text style={{marginLeft: 10}}>facebook</Text>
-                </Body>
                 </CardItem>                
 
                 <CardItem  style={{flexDirection: 'column', flexWrap: 'wrap',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
