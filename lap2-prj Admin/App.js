@@ -15,10 +15,10 @@ import { TabNavigator } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation";
 
 import Login from "./screens/Login";
-import BookingPage from "./screens/BookingPage";
 import Home from "./screens/Home";
 import ManagerPage from "./screens/ManagerPage";
 import EventPage from "./screens/EventPage";
+import NewEventPage from "./screens/NewEventPage";
 import Favorites from "./screens/Favorites";
 import Profile from "./screens/Profile";
 import RegisterPage from "./screens/RegisterPage";
@@ -43,11 +43,11 @@ firebase.initializeApp(config);
 
 export default App = createStackNavigator(
   {
-    Profile: {
-      screen: Profile
-    },
     Login: {
       screen: Login
+    },
+    Profile: {
+      screen: Profile
     },
     RegisterPage: {
       screen: RegisterPage
@@ -55,7 +55,10 @@ export default App = createStackNavigator(
     EventPage: {
       screen: EventPage
     },
-    initialRouteName: "Profile",
+    NewEventPage: {
+      screen: NewEventPage
+    },
+    initialRouteName: "Login",
     mode: "modal"
   }
 );

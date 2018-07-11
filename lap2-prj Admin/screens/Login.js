@@ -49,6 +49,15 @@ export default class Login extends React.Component {
 //   })
 // }
 
+componentWillMount() {
+  firebase.auth().onAuthStateChanged( user => {
+    if (user) {
+      this.props.navigation.navigate("Profile")
+    }
+  })
+
+}
+
   _login = () => {
     this.setState({isLoading: true});
     firebase

@@ -13,7 +13,8 @@ import {
   Alert,
   ActivityIndicator,
   Image,
-  Dimensions
+  Dimensions,
+  StatusBar
 } from "react-native";
 
 import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container, Button } from 'native-base';
@@ -24,25 +25,13 @@ import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "
 import { TabNavigator } from "react-navigation";
 import EventCard from "../components/EventCard";
 
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-
-
 import * as firebase from "firebase";
 
 const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
 
-
-import {LocaleConfig} from 'react-native-calendars';
-
-LocaleConfig.locales['it'] = {
-  monthNames: ['Gennaio','Febbraio','Marzo','Aprile',' Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
-  monthNamesShort: ['Gen.','Febr.','Mar.','Apr.','Mag.','Giu.','Lug.','Ago.','Sett.','Ott.','Nov.','Dic.'],
-  dayNames: ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'],
-  dayNamesShort: ['Dom.','Lun.','Mar.','Mer.','Gio.','Ven.','Sab.']
-};
-
-LocaleConfig.defaultLocale = 'it';
+StatusBar.setHidden(false);
+StatusBar.setBarStyle("light-content");
 
 export default class Profile extends React.Component {
     state = {
@@ -118,9 +107,11 @@ export default class Profile extends React.Component {
         }
         else {
           this.setState({logged: false})
+          this.props.navigation.navigate("Login")
 
         }
       })
+
     }
 
     renderCard = ({ item }) => {
@@ -277,25 +268,19 @@ export default class Profile extends React.Component {
 }
 
 Profile.navigationOptions = ({ navigation }) => {
-  _onAccountPress = () => {
-    var uid = firebase.auth().currentUser;
-    if (uid) {
-     firebase.auth().signOut()
-    }
-  };
 
   return {
-      title: "Profile",
+      title: "Profilo",
       headerStyle: {
         backgroundColor: "white",
         borderBottomWidth: 0
       },
-      
-      /*headerRight: (
-        <TouchableOpacity onPress={() => _onAccountPress()}>
-            <MaterialCommunityIcons style={{marginRight: 30}} name='exit-to-app' size={30} color={TINT_COLOR}/>
+      headerLeft: null,
+      headerRight: (
+        <TouchableOpacity onPress={() => navigation.navigate("NewEventPage")}>
+            <MaterialIcons style={{marginRight: 30}} name='add-circle-outline' size={30} color={TINT_COLOR}/>
         </TouchableOpacity>
-      )*/
+      )
     };
   };
 
