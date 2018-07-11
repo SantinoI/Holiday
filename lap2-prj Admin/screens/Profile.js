@@ -180,7 +180,7 @@ export default class Profile extends React.Component {
         source={require("../assets/background-user.png")}
         style={{height:'100%', width:'100%'}}
       >
-        <ScrollView style={{ paddingTop: 50, marginBottom: 88}}>
+        <ScrollView style={{ paddingTop: 50, marginBottom: 0}}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:10, borderRadius: 10}}>
                 <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
                   <Image
