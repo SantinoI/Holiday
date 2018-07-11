@@ -189,7 +189,7 @@ export default class NewEventPage extends React.Component {
               </CardItem>
 
               {/* AGENZIA E EMAIL */}
-              <CardItem  style={{flexDirection: 'column', flexWrap: 'wrap',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
+              {/* <CardItem  style={{flexDirection: 'column', flexWrap: 'wrap',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
                 <Body style={{flexDirection: 'row', margin: 5}}>
                 <SimpleLineIcons name='user' size={16}/>
                 <Text style={{marginLeft: 10}}>{}</Text>
@@ -209,7 +209,7 @@ export default class NewEventPage extends React.Component {
                     <MaterialCommunityIcons name='facebook' size={16}/>
                     <Text style={{marginLeft: 10}}>{}</Text>
                </Body>
-              </CardItem>
+              </CardItem> */}
             </Card>
         </ScrollView>
     </Container>

@@ -275,7 +275,9 @@ Profile.navigationOptions = ({ navigation }) => {
         backgroundColor: "white",
         borderBottomWidth: 0
       },
+
       headerLeft: null,
+
       headerRight: (
         <TouchableOpacity onPress={() => navigation.navigate("NewEventPage")}>
             <MaterialIcons style={{marginRight: 30}} name='add-circle-outline' size={30} color={TINT_COLOR}/>
