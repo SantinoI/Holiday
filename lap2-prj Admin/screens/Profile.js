@@ -7,6 +7,7 @@ import {
   ScrollView,
   View,
   FlatList,
+  ActionSheetIOS,
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
@@ -19,7 +20,7 @@ import {
 
 import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container, Button } from 'native-base';
 
-import { Permissions, Location } from "expo";
+import { Permissions, Location, ImagePicker, ImageManipulator, } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 import { TabNavigator } from "react-navigation";
@@ -39,6 +40,8 @@ export default class Profile extends React.Component {
       profileImage: null,
       username: "",
       Sede: "",
+      email:"",
+      numero:"",
       //logged: false
     }
 
@@ -49,26 +52,70 @@ export default class Profile extends React.Component {
         var uid = user.uid;
       
         this.setState({imageLoading: true})
-        // firebase.database().ref("App/Organizzatori/" + uid + "/ProfileImage")
-        //   .on("value", snap => {
-        //     let imageURL = snap.val()
-        //     console.log(snap.val())
-        //     this.setState({ profileImage: imageURL });
-        //   });
-        
-        let dati = firebase.database().ref("App/Organizzatori/" + uid + "/Dati");
+        let dati = firebase.database().ref("App/Organizzatori/" + uid);
           dati.on("value", snap => {
             console.log(snap.val())
-            this.setState({ username: snap.val().username });
-            this.setState({ sede: snap.val().sede });
-            this.setState({ numero: snap.val().numero });
-            this.setState({ email: snap.val().email });
+            this.setState({ profileImage: snap.val().ProfileImage });
+            this.setState({ username: snap.val().Username });
+            this.setState({ sede: snap.val().Sede });
+            this.setState({ numero: snap.val().Numero });
+            this.setState({ email: snap.val().Email });
 
           });
 
         this.setState({imageLoading: false})
       }
     }
+
+    _updateProfileImage = () => {
+      const userId = firebase.auth().currentUser.uid;
+      firebase
+      .database()
+      .ref("App/Organizzatori/" + userId)
+      .update({ProfileImage: this.state.profileImage})
+    }
+        //Apertura galleria per choosing foto profilo utente
+    _openPhotoGallery = async () => {
+      const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+      if (status !== "granted") {
+        const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (result.status !== "granted") {
+          alert("you need to authorized the app");
+          return;
+        }
+      }
+      let result = await ImagePicker.launchImageLibraryAsync();
+      if (!result.cancelled) {
+        console.log(result);
+        // Resize the image
+        const manipResult = await ImageManipulator.manipulate(
+          result.uri,
+          [{ resize: { width: 375 } }],
+          { format: "png" }
+        );
+        console.log(manipResult);
+        this.setState({ profileImage: manipResult.uri });
+        this._updateProfileImage();
+      }
+    };
+  
+    _selectPhoto = () => {
+      console.log("show actions sheet");
+      if (Platform.OS === "ios") {
+        ActionSheetIOS.showActionSheetWithOptions(
+          {
+            options: ["Camera", "Photo Gallery", "Cancel"],
+            cancelButtonIndex: 2,
+            title: "Scegli immagine da:"
+          },
+          buttonIndex => {
+            if (buttonIndex == 1) {
+              this._openPhotoGallery();
+            }
+          }
+        );
+      }
+    };
 
     _loadDatabase = () => {
       let eventList = firebase.database().ref("App/Events");
@@ -182,12 +229,12 @@ export default class Profile extends React.Component {
       >
         <ScrollView style={{ paddingTop: 50, marginBottom: 0}}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:10, borderRadius: 10}}>
-                <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}}>
+                <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}} onPress={this._selectPhoto}>
                   <Image
                     resizeMode="cover"
                     rounded
                     style= {{borderRadius:80, width: 160, height: 160}}
-                    source = {  this.state.profileImage ? { uri: this.state.profileImage } : require("../assets/image.png")}
+                    source = {  this.state.profileImage ? { uri: this.state.profileImage } : require("../assets/imagep.png")}
                     />         
                 </TouchableOpacity>
 

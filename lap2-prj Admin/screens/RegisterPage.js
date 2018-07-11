@@ -49,10 +49,10 @@ export default class RegisterPage extends React.Component {
   state = {
     correct: false,
     isLoading: false,
+    profileImage:"",
     username: "",
     sede: "",
     numero: "",
-    facebook: "",
     email: "",
     confirmEmail: "",
     password: "",
@@ -63,15 +63,17 @@ export default class RegisterPage extends React.Component {
   upload_data_user = () => {
     const userId = firebase.auth().currentUser.uid;
     const data = {
-      username: this.state.username,
-      sede: this.state.sede,
-      numero: this.state.numero,
-      email: this.state.email,
+      ProfileImage: this.state.profileImage,
+      Username: this.state.username,
+      Sede: this.state.sede,
+      Numero: this.state.numero,
+      Email: this.state.email,
+      Uid: userId
     };
 
     firebase
       .database()
-      .ref("App/" + "Organizzatori/" + userId + "/" + "Dati")
+      .ref("App/" + "Organizzatori/" + userId)
       .update(data);
   };
 
@@ -155,8 +157,8 @@ export default class RegisterPage extends React.Component {
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(user => {
-        this.upload_data_user();
         this.setState({ isLoading: false });
+        this.upload_data_user();
         this.props.navigation.navigate("Profile");
       })
       .catch(error => {
@@ -184,7 +186,7 @@ export default class RegisterPage extends React.Component {
         { format: "png" }
       );
       console.log(manipResult);
-      this.setState({ image: manipResult.uri });
+      this.setState({ profileImage: manipResult.uri });
     }
   };
 
@@ -221,8 +223,8 @@ export default class RegisterPage extends React.Component {
               style={{ borderRadius: 60, width: 120, height: 120 }}
               source={
                 this.state.image
-                  ? { uri: this.state.image }
-                  : require("../assets/image.png")
+                  ? { uri: this.state.profileImage }
+                  : require("../assets/imagep.png")
               }
             />
           </TouchableOpacity>

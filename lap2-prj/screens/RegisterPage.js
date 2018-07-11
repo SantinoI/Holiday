@@ -225,7 +225,7 @@ export default class RegisterPage extends React.Component {
               style={{ borderRadius: 60, width: 120, height: 120 }}
               source={
                 this.state.image
-                  ? { uri: this.state.image }
+                  ? { uri: this.state.profileImage }
                   : require("../assets/imagep.png")
               }
             />
