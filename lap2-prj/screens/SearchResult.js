@@ -133,9 +133,10 @@ _loadDatabase = async => {
   this.setState({loading: false})
 }
 
-  async componentWillMount(){
+  async componentDidMount(){
     //console.log(this.props.navigation.state.params.searchOption);
     await this._loadDatabase();
+
   }
 
   uploadFavorite = item => {
@@ -143,28 +144,11 @@ _loadDatabase = async => {
     console.log(item);
     const newFavorite = {
       IDevento: item.IDevento,
-      Agenzia: item.agenzia,
-      Email: item.email,
-      Numero: item.numero,
-      Facebook: item.facebook,
-      NomeEvento: item.nomeEvento,
-      DescrizioneBreve: item.descrizioneBreve,
-      DescrizioneCompleta: item.descrizioneCompleta,
-      Prezzo: item.prezzo,
-      Difficolta: item.difficolta,
-      Data: item.data,
-      Localita:{
-        Citta: item.citta,
-        Provincia: item.provincia
-      },
-      Orario: item.orario,
-      Durata: item.durata,
-      ImmagineAgenzia: item.immagineAgenzia,
-      ImmagineEvento: item.immagineEvento,
+      IDcliente: userId,
     };
     firebase
     .database()
-    .ref("App/" + "Users/" + userId + "/" + "favorites/")
+    .ref("App/Favorites")
     .push(newFavorite)
     
     /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 

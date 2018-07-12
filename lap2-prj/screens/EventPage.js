@@ -31,10 +31,55 @@ const BACKGROUND_COLOR = "#d7e4e5";
 
 
 export default class EventPage extends React.Component {
-  componentWillMount(){
+
+  state= {
+    booked: null
+  }
+
+  checkBooking = async () => {
+    firebase.database().ref("App/Prenotazioni")
+    .on("value", snap => {
+      snap.forEach(child => {
+        if ( (child.val().IDevento == this.props.navigation.state.params.eventInfo.IDevento) && (child.val().IDcliente == firebase.auth().currentUser.uid))
+          //console.log("ci siamo")
+          this.setState({booked: true});
+          //console.log(this.state.booked)
+      });
+    });
+  }
+
+  componentDidMount(){
+    this.setState({booked: false});
+    this.checkBooking();
     console.log(this.props.navigation.state.params.eventInfo)
   }
 
+  newBooking = () => {
+    const userId = firebase.auth().currentUser.uid;
+      const booking = {
+        IDcliente: userId,
+        IDevento: this.props.navigation.state.params.eventInfo.IDevento,
+        Stato: "ATTESA"
+      };
+      firebase
+      .database()
+      .ref("App/" + "Prenotazioni/")
+      .push(booking)
+      
+      /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
+      var id = firebase
+        .database()
+        .ref("App/" + "Users/" + userId + "/" + "favorites/")
+        .push(newFavorite).key;
+      
+        const setId ={
+          id: id
+        } 
+        firebase
+        .database()
+        .ref("App/" + "Users/" + userId + "/" + "favorites/" + id)
+        .update(setId);*/
+  }
  
 
   render() {
@@ -67,14 +112,24 @@ export default class EventPage extends React.Component {
               {/* BOTTONE PRENOTA ORA */}
               <CardItem >
                   <View style={styles.buttonContainer}>
-                      <TouchableOpacity
-                          style={styles.searchButton}
-                          activeOpacity={0.5}
-                          onPress={() => newBooking()}
-                          title="Prenota"
-                      >
-                        <Text style={{textAlign:'center', color: "white" }}> Prenota adesso </Text>
-                      </TouchableOpacity>
+                    {this.state.booked ? 
+                      ( <View style={{borderWidth: 1, borderRadius: 30, borderColor: TINT_COLOR,marginLeft: '10%', marginRight: '10%', padding: 10,}}>
+                          <Text style={{textAlign:'center', color: TINT_COLOR }}> Prenotazione Inviata </Text>
+                        </View>
+                      )
+                      :
+                      (
+                        <TouchableOpacity
+                            style={styles.searchButton}
+                            activeOpacity={0.5}
+                            onPress={() => this.newBooking()}
+                            title="Prenota"
+                        >
+                          <Text style={{textAlign:'center', color: "white" }}> Prenota adesso </Text>
+                        </TouchableOpacity>
+                      )
+                      
+                    }
                   </View>
               </CardItem>
 
