@@ -52,12 +52,13 @@ export default class Profile extends React.Component {
       nome:"",
       cognome:"",
       email:"",
+      bookingList: []
     }
 
-    _loadDatabase = async => {
+    _loadUserData = async => {
       const user = firebase.auth().currentUser;
       if (user) {
-        console.log(user.uid);
+        //console.log(user.uid);
         var uid = user.uid;
       
         this.setState({imageLoading: true})
@@ -77,11 +78,48 @@ export default class Profile extends React.Component {
       }
     }
 
+    _loadBookings = async request => {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        console.log(user.uid);
+        const uid = user.uid;
+        let eventList = firebase.database().ref("App/Events");
+        eventList.on("value", snap => {
+          var prenotazioni = [];
+          snap.forEach(child => {
+            console.log("Prenotazioni "+child.val().Prenotazioni);
+            if (child.val().Prenotazioni.Qa3GDN1xlRQCOtEJrGiQIXbc1th1 == uid) {
+              console.log("ci siamo");
+              prenotazioni.push({
+                IDevento: child.val().IDevento,
+                agenzia: child.val().Agenzia,
+                nomeEvento: child.val().NomeEvento,
+                citta: child.val().Localita.Citta,
+                provincia: child.val().Localita.Provincia,
+                descrizioneBreve: child.val().DescrizioneBreve,
+                descrizioneCompleta: child.val().DescrizioneCompleta,
+                prezzo: child.val().Prezzo,
+                difficolta: child.val().Difficolta,
+                data: child.val().Data,
+                orari: child.val().Orario,
+                durata: child.val.Durata,
+                immagineAgenzia: child.val().ImmagineAgenzia,
+                immagineEvento: child.val().ImmagineEvento
+              });
+            }
+          });
+          this.setState({ bookingList: prenotazioni });
+          console.log(this.state.bookingList);
+        });
+      }
+    };
+
     componentWillMount() {
       firebase.auth().onAuthStateChanged( user => {
         if (user) {
           this.setState({logged: true})
-          this._loadDatabase();
+          this._loadUserData();
+          this._loadBookings();
           //this.props.navigation.setParams({ logged: true })
         }
         else {
