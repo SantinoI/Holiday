@@ -29,12 +29,60 @@ import * as firebase from "firebase";
 const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
 
+class BookingState extends React.Component {
+  state = {
+    bookState: this.props.bookState,
+  }
+  render() {
+    if (this.state.bookState == "ATTESA")
+      return (
+        <View>
+          <View style={{borderWidth: 1, borderRadius: 30, borderColor: TINT_COLOR,marginLeft: '10%',marginRight: '10%', padding: 10,}}>
+            <Text style={{textAlign:'center', color: TINT_COLOR }}> Prenotazione Inviata </Text>
+          </View>
+
+          <TouchableOpacity
+            style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
+            activeOpacity={0.5}
+            onPress={() => this.props.onRemoveBooking()}
+            title="Prenota"
+          >          
+            <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
+          </TouchableOpacity>          
+        </View>
+          
+      );
+    else if (this.state.bookState == "ACCETTATA")
+      return (
+        <View>
+          <View style={{borderWidth: 1, borderRadius: 30, borderColor: "green",marginLeft: '10%',marginRight: '10%', padding: 10,}}>
+            <Text style={{textAlign:'center', color: "green" }}> Prenotazione ACCETTATA </Text>
+          </View>
+
+          <TouchableOpacity
+            style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
+            activeOpacity={0.5}
+            onPress={() => this.props.onRemoveBooking()}
+            title="Prenota"
+          >          
+            <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
+          </TouchableOpacity>          
+        </View>
+    );
+    else if (this.state.bookState == "RIFIUTATA")
+      return (
+          <View style={{borderWidth: 1, borderRadius: 30, borderColor: "red",marginLeft: '10%',marginRight: '10%', padding: 10,}}>
+            <Text style={{textAlign:'center', color: "red" }}> Prenotazione RIFUTATA </Text>
+          </View>
+    );
+  }
+}
 
 export default class EventPage extends React.Component {
 
   state= {
     booked: null,
-
+    bookingState: null,
   }
 
   checkBooking = () => {
@@ -45,6 +93,7 @@ export default class EventPage extends React.Component {
         if ((child.val().IDcliente == firebase.auth().currentUser.uid))
           //console.log("ci siamo")
           this.setState({booked: true});
+          this.setState({bookingState: child.val().Stato})
           //console.log(this.state.booked)
       });
     });
@@ -81,6 +130,7 @@ export default class EventPage extends React.Component {
       firebase.database()
       .ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni/"+userId)
       .update(booking)
+
     });
       /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
       var id = firebase
@@ -134,23 +184,13 @@ export default class EventPage extends React.Component {
               {/* BOTTONE PRENOTA ORA */}
               <CardItem >
                   <View style={styles.buttonContainer}>
-                    {this.state.booked ? 
+                    {this.state.booked ?              // Verifico se è stata effettuata la richiesta
                       ( <View>
-                          <View style={{borderWidth: 1, borderRadius: 30, borderColor: TINT_COLOR,marginLeft: '10%',marginRight: '10%', padding: 10,}}>
-                            <Text style={{textAlign:'center', color: TINT_COLOR }}> Prenotazione Inviata </Text>
-                          </View>
-                          <TouchableOpacity
-                            style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
-                            activeOpacity={0.5}
-                            onPress={() => this.removeBooking()}
-                            title="Prenota"
-                          >
-                            <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
-                          </TouchableOpacity>
+                          <BookingState bookState={this.state.bookingState} onRemoveBooking = {() => this.removeBooking()}/>
                       </View>
 
                       )
-                      :
+                      : // Se non è stata fatta visualizzo il pulsante di prenotazione
                       (
                         <TouchableOpacity
                             style={styles.searchButton}
@@ -165,6 +205,40 @@ export default class EventPage extends React.Component {
                     }
                   </View>
               </CardItem>
+              {/* <CardItem >
+                  <View style={styles.buttonContainer}>
+                    {this.state.booked ?              // Verifico se è stata effettuata la richiesta
+                      ( <View>
+                          <View style={{borderWidth: 1, borderRadius: 30, borderColor: TINT_COLOR,marginLeft: '10%',marginRight: '10%', padding: 10,}}>
+                            <Text style={{textAlign:'center', color: TINT_COLOR }}> Prenotazione Inviata </Text>
+                          </View>
+
+                          <TouchableOpacity
+                            style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
+                            activeOpacity={0.5}
+                            onPress={() => this.removeBooking()}
+                            title="Prenota"
+                          >
+                            <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
+                          </TouchableOpacity>
+                      </View>
+
+                      )
+                      : // Se non è stata fatta visualizzo il pulsante di prenotazione
+                      (
+                        <TouchableOpacity
+                            style={styles.searchButton}
+                            activeOpacity={0.5}
+                            onPress={() => this.newBooking()}
+                            title="Prenota"
+                        >
+                          <Text style={{textAlign:'center', color: "white" }}> Prenota adesso </Text>
+                        </TouchableOpacity>
+                      )
+                      
+                    }
+                  </View>
+              </CardItem> */}
 
               {/* DATA CALENDARIO */}
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 5, borderRadius: 10}} >
