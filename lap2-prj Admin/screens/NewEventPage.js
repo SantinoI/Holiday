@@ -181,18 +181,7 @@ export default class NewEventPage extends React.Component {
                 </Left>
               </CardItem>
 
-              {/* PREZZO */}
-              <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
-                <Left style={{}}>
-                    <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/money.png')}/>
-                    <Item floatingLabel style={{ marginTop: 0 }}>
-                       <Label style={{}}>Username</Label>
-                       <Input
-                       onChangeText={text => this.setState({ price: text })}
-                      />
-                    </Item>               
-                </Left>
-              </CardItem>
+              
 
               {/* DESCRIZIONE */}
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
