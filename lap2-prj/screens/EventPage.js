@@ -33,14 +33,16 @@ const BACKGROUND_COLOR = "#d7e4e5";
 export default class EventPage extends React.Component {
 
   state= {
-    booked: null
+    booked: null,
+
   }
 
-  checkBooking = async () => {
-    firebase.database().ref("App/Prenotazioni")
+  checkBooking = () => {
+    this.setState({booked: false});
+    firebase.database().ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni")
     .on("value", snap => {
       snap.forEach(child => {
-        if ( (child.val().IDevento == this.props.navigation.state.params.eventInfo.IDevento) && (child.val().IDcliente == firebase.auth().currentUser.uid))
+        if ((child.val().IDcliente == firebase.auth().currentUser.uid))
           //console.log("ci siamo")
           this.setState({booked: true});
           //console.log(this.state.booked)
@@ -49,23 +51,37 @@ export default class EventPage extends React.Component {
   }
 
   componentDidMount(){
-    this.setState({booked: false});
     this.checkBooking();
     console.log(this.props.navigation.state.params.eventInfo)
   }
 
   newBooking = () => {
+    const userData = {
+      username: "",
+      nome: "",
+      cognome: "",
+      email: "",
+    }
     const userId = firebase.auth().currentUser.uid;
+    firebase.database().ref("App/Users/" + userId).on("value", snap => {
+      console.log(snap.val())
+      userData.username = snap.val().Username;
+      userData.nome = snap.val().Nome;
+      userData.cognome = snap.val().Cognome
+      userData.email = snap.val().Email
+      console.log("userData")
+      console.log(userData)
+
       const booking = {
         IDcliente: userId,
-        IDevento: this.props.navigation.state.params.eventInfo.IDevento,
+        DatiUtente: userData,
         Stato: "ATTESA"
       };
-      firebase
-      .database()
-      .ref("App/" + "Prenotazioni/")
-      .push(booking)
-      
+
+      firebase.database()
+      .ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni/"+userId)
+      .update(booking)
+    });
       /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
       var id = firebase
         .database()
@@ -79,6 +95,12 @@ export default class EventPage extends React.Component {
         .database()
         .ref("App/" + "Users/" + userId + "/" + "favorites/" + id)
         .update(setId);*/
+  }
+
+  removeBooking() {
+    const userId = firebase.auth().currentUser.uid;
+    firebase.database().ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni/"+userId).remove();
+    this.setState({booked: false});
   }
  
 
@@ -98,10 +120,10 @@ export default class EventPage extends React.Component {
               {/* LOCALITA' E ID_EVENTO*/}
               <CardItem >
                 <Left style={{flex:0.8, flexDirection: 'column', alignItems: 'flex-start' }}>
-                <Text style={{fontSize:10, fontStyle: 'italic'}}>{this.props.navigation.state.params.eventInfo.citta}, {this.props.navigation.state.params.eventInfo.provincia}</Text>
+                  <Text style={{fontSize:10, fontStyle: 'italic'}}>{this.props.navigation.state.params.eventInfo.citta}, {this.props.navigation.state.params.eventInfo.provincia}</Text>
                 </Left>
                 <Right>
-                <Text style={{fontSize:10, fontStyle: 'italic'}}>Codice di riferimento: {this.props.navigation.state.params.eventInfo.IDevento}</Text>
+                  <Text style={{fontSize:10, fontStyle: 'italic'}}>Codice di riferimento: {this.props.navigation.state.params.eventInfo.IDevento}</Text>
                 </Right>
               </CardItem>
 
@@ -113,9 +135,20 @@ export default class EventPage extends React.Component {
               <CardItem >
                   <View style={styles.buttonContainer}>
                     {this.state.booked ? 
-                      ( <View style={{borderWidth: 1, borderRadius: 30, borderColor: TINT_COLOR,marginLeft: '10%', marginRight: '10%', padding: 10,}}>
-                          <Text style={{textAlign:'center', color: TINT_COLOR }}> Prenotazione Inviata </Text>
-                        </View>
+                      ( <View>
+                          <View style={{borderWidth: 1, borderRadius: 30, borderColor: TINT_COLOR,marginLeft: '10%',marginRight: '10%', padding: 10,}}>
+                            <Text style={{textAlign:'center', color: TINT_COLOR }}> Prenotazione Inviata </Text>
+                          </View>
+                          <TouchableOpacity
+                            style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
+                            activeOpacity={0.5}
+                            onPress={() => this.removeBooking()}
+                            title="Prenota"
+                          >
+                            <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
+                          </TouchableOpacity>
+                      </View>
+
                       )
                       :
                       (
