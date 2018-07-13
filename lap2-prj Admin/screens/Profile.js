@@ -117,7 +117,7 @@ export default class Profile extends React.Component {
       }
     };
 
-    _loadDatabase = () => {
+    _loadDatabase  = async => {
       let eventList = firebase.database().ref("App/Events");
       eventList.on("value", snap => {
         var eventi = [];
