@@ -68,6 +68,7 @@ export default class Favorites extends React.Component {
     const user = firebase.auth().currentUser;
     if (user) {
       var uid = user.uid;
+      console.log(uid)
       let eventList = firebase
         .database()
         .ref("App/Users/" + uid + "/Favorites");
@@ -77,25 +78,26 @@ export default class Favorites extends React.Component {
         snap.forEach(child => {
           eventi.push({
             IDevento: child.val().IDevento,
-            agenzia: child.val().Agenzia,
-            email: child.val().Email,
-            numero: child.val().Numero,
-            facebook: child.val().Facebook,
-            nomeEvento: child.val().NomeEvento,
-            citta: child.val().Localita.Citta,
-            provincia: child.val().Localita.Provincia,
-            descrizioneBreve: child.val().DescrizioneBreve,
-            descrizioneCompleta: child.val().DescrizioneCompleta,
-            prezzo: child.val().Prezzo,
-            difficolta: child.val().Difficolta,
-            data: child.val().Data,
-            orario: child.val().Orario,
-            durata: child.val().Durata,
-            immagineAgenzia: child.val().ImmagineAgenzia,
-            immagineEvento: child.val().ImmagineEvento
+            agenzia: child.val().agenzia,
+            email: child.val().email,
+            numero: child.val().numero,
+            facebook: child.val().facebook,
+            nomeEvento: child.val().nomeEvento,
+            citta: child.val().Localita.citta,
+            provincia: child.val().Localita.provincia,
+            descrizioneBreve: child.val().descrizioneBreve,
+            descrizioneCompleta: child.val().descrizioneCompleta,
+            prezzo: child.val().prezzo,
+            difficolta: child.val().difficolta,
+            data: child.val().data,
+            orario: child.val().orario,
+            durata: child.val().durata,
+            immagineAgenzia: child.val().immagineAgenzia,
+            immagineEvento: child.val().immagineEvento
           });
         });
         this.setState({ cardList: eventi });
+        console.log(eventi);
       });
     }
   };
