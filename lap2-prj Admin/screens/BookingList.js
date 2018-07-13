@@ -71,13 +71,28 @@ export default class BookingList extends React.Component {
             immagineAgenzia: child.val().ImmagineAgenzia,
             immagineEvento: child.val().ImmagineEvento,
             idUtente: child.val().Prenotazioni.idUtente,
-            // cognomeUtente: child.val().Prenotazioni.DatiUtente.cognome,
+
+             //cognomeUtente: child.val().DatiUtente.cognome,
             // nomeUtente: child.val().Prenotazioni.DatiUtente.nome,
             // username: child.val().Prenotazioni.DatiUtente.username,
             // emailUtente: child.val().Prenotazioni.DatiUtente.email,
             // stato: child.val().Prenotazioni.STATO
 
           });
+          console.log("stato "+child.val().DescrizioneBreve);
+          let datautente = firebase.database().ref('/App/Events/Prenotazioni/'+firebase.auth().currentUser.uid+'/DatiUtente');
+          datautente.on("value", snap =>{
+            prenotazioni.push({
+              
+              cognomeUtente: child.val().cognome,
+              nomeUtente: child.val().nome,
+            // username: child.val().Prenotazioni.DatiUtente.username,
+            // emailUtente: child.val().Prenotazioni.DatiUtente.email,
+            // stato: child.val().Prenotazioni.STATO
+            })
+            console.log("cognome "+child.val.cognome);
+          })
+          
         }
       });
       this.setState({ bookinglist: prenotazioni })
