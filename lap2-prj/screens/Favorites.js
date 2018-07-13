@@ -70,7 +70,7 @@ export default class Favorites extends React.Component {
       var uid = user.uid;
       let eventList = firebase
         .database()
-        .ref("App/Users/" + uid + "/favorites");
+        .ref("App/Users/" + uid + "/Favorites");
       eventList.on("value", snap => {
         console.log(snap);
         var eventi = [];
@@ -121,7 +121,7 @@ export default class Favorites extends React.Component {
 
   renderLog() {
     return (
-      <ScrollView style={{}}>
+      <ScrollView style={{backgroundColor: BACKGROUND_COLOR}}>
         <FlatList
           data={this.state.cardList}
           renderItem={this.renderCard}

@@ -142,14 +142,33 @@ _loadDatabase = async => {
   uploadFavorite = item => {
     const userId = firebase.auth().currentUser.uid;
     console.log(item);
+    const Localita = {
+      citta: item.citta,
+      provincia: item.provincia
+    }
     const newFavorite = {
       IDevento: item.IDevento,
-      IDcliente: userId,
+      agenzia: item.agenzia,
+      email: item.email,
+      numero: item.numero,
+      nomeEvento: item.nomeEvento,
+      Localita: Localita,
+      //citta: item.citta,
+      //provincia: item.provincia,
+      descrizioneBreve: item.descrizioneBreve,
+      descrizioneCompleta: item.descrizioneCompleta,
+      prezzo: item.prezzo,
+      difficolta: item.difficolta,
+      data: item.data,
+      orario: item.orario,
+      //durata: item.Durata,
+      immagineAgenzia:item.immagineAgenzia,
+      immagineEvento: item.immagineEvento,
     };
     firebase
     .database()
-    .ref("App/Favorites")
-    .push(newFavorite)
+    .ref("App/Users/" + userId+ "/Favorites/" + item.IDevento)
+    .update(newFavorite)
     
     /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
     var id = firebase
