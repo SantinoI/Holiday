@@ -30,10 +30,10 @@ const todolist = [
 
 export default class BookingList extends React.Component {
   state = {
-    todolist: todolist || []
+    bookinglist: []
   };
   renderRow = ({ item }) => (
-    <BookingComponent data={item} onToggle = {() => this._toggle(item)}/>
+    <BookingComponent data={item} onSelect = {(selection) => this._onSelect(selection)}/>
   );
 
   _keyExtractor = (item, index) => {
@@ -45,31 +45,48 @@ export default class BookingList extends React.Component {
 //     checklistRef.push(todo);
 //   };
 
-  _toggle = (item) => {
-    const newTodoList = this.state.todolist.map(
-      currentTodo => (currentTodo === item ? {...currentTodo, done: !currentTodo.done} : currentTodo)
-    )
-    this.setState({todolist: newTodoList});
+  _onSelect = (selection) => {
+    return;
   }
 
-  componentDidMount() {
-    // const checklist = firebase.database().ref("checklist");
-    // checklist.on("value", snap => {
-    //   console.log(snap);
-    //   var elenco = [];
-    //   snap.forEach(child => { 
-    //     //if (child.val().text == "buy the milk"){
-    //       elenco.push({
-    //         done: child.val().done,
-    //         text: child.val().text,
-    //         shouldremind: child.val().shouldremind,
-    //       })
-    //     //}
-    //   })
-    //   console.log(elenco);
-    //   this.setState({todolist: elenco});
-    // })
-    // creo nei parametri della navigation onAdd
+  _loadDatabase = () => {
+    let eventList = firebase.database().ref("App/Events");
+    eventList.on("value", snap => {
+      var prenotazioni = [];
+      snap.forEach(child => {
+        if (child.val().IDorganizzatore == firebase.auth().currentUser.uid) {
+          prenotazioni.push({
+            IDevento: child.val().IDevento,
+            agenzia: child.val().Agenzia,
+            nomeEvento: child.val().NomeEvento,
+            citta: child.val().Localita.Citta,
+            provincia: child.val().Localita.Provincia,
+            descrizioneBreve: child.val().DescrizioneBreve,
+            descrizioneCompleta: child.val().DescrizioneCompleta,
+            prezzo: child.val().Prezzo,
+            difficolta: child.val().Difficolta,
+            data: child.val().Data,
+            orari: child.val().Orario,
+            durata: child.val.Durata,
+            immagineAgenzia: child.val().ImmagineAgenzia,
+            immagineEvento: child.val().ImmagineEvento,
+            idUtente: child.val().Prenotazioni.idUtente,
+            // cognomeUtente: child.val().Prenotazioni.DatiUtente.cognome,
+            // nomeUtente: child.val().Prenotazioni.DatiUtente.nome,
+            // username: child.val().Prenotazioni.DatiUtente.username,
+            // emailUtente: child.val().Prenotazioni.DatiUtente.email,
+            // stato: child.val().Prenotazioni.STATO
+
+          });
+        }
+      });
+      this.setState({ bookinglist: prenotazioni })
+    });
+  }
+
+  async componentWillMount() {
+    await this._loadDatabase();
+    console.log(this.state.bookinglist);
   }
 
 
@@ -77,7 +94,7 @@ export default class BookingList extends React.Component {
     return (
       <View style={styles.container}>
         <FlatList
-          data={this.state.todolist}
+          data={this.state.bookinglist}
           renderItem={this.renderRow}
           keyExtractor={this._keyExtractor}
         />
@@ -107,6 +124,7 @@ BookingList.navigationOptions = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 50,
     //alignItems: 'center',
     justifyContent: "center",
     // paddingTop: Constants.statusBarHeight,

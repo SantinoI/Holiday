@@ -3,7 +3,7 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableHighlight,
+  TouchableOpacity,
   FlatList
 } from "react-native";
 
@@ -13,30 +13,44 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 const TINT_COLOR = "rgb(4, 159, 239)";
 
 export default class BookingComponent extends React.Component {
+  state={
+    selected: false,
+  }
+
+  async componentWillMount() {
+    console.log(this.state.selected)
+  }
+
   render() {
     return (
       <View style={styles.row}>
-        <TouchableHighlight
-          onPress={this.props.onToggle}
-          underlayColor={TINT_COLOR}
-        >
-          {this.props.data.done ? (
-            <MaterialIcons name="check-box" size={24} color={TINT_COLOR} />
-          ) : (
-            <MaterialIcons name="check-box-outline-blank" size={24} />
-          )}
-        </TouchableHighlight>
+        <View>
+          <Text> Evento: {this.props.nomeEvento}</Text>
+          <Text> Utente richiedente: {this.props.username}</Text>
+          <Text> nome: {this.props.nomeUtente}   cognome:{this.props.cognomeUtente}</Text>
+          <Text> Email: {this.props.emailUtente}</Text>
+        </View>
 
-        <Text style={styles.text}> ciao </Text>
-        <TouchableHighlight >
-          <Ionicons
-            size={28}
-            color={TINT_COLOR}
-            name="ios-information-circle-outline"
-          />
-        </TouchableHighlight>
-        <MaterialIcons name="chevron-right" size={24} color="black" />
-      </View>
+        {this.state.selected == true ? 
+        (
+          <View style={styles.selectionDone}>
+              <Text style={{textAlign:'center', color: "grey" }}> Confermato </Text>
+          </View>
+        )
+        :
+        (
+          <View style={{alignItems: "flex-end"}}>
+          <TouchableOpacity style={styles.selectionButtonAccept} onPress={() => this.setState({selected: true})}>
+              <Text style={{textAlign:'center', color: "green" }}> accetta </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.selectionButtonDeny} onPress={() => this.setState({selected: true})}>
+            <Text style={{textAlign:'center', color: "red" }}> Rifiuta </Text>
+          </TouchableOpacity>
+        </View>
+        )
+      }
+    </View>
     );
   }
 }
@@ -44,7 +58,7 @@ export default class BookingComponent extends React.Component {
 const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
-    height: 50,
+    height: 100,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
     marginLeft: 10,
@@ -52,6 +66,42 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: 10,
     padding: 10
+  },
+  selectionButtonAccept: {
+    marginLeft: '5%',
+    marginRight: '5%',
+    width: 100,
+    //height: 30,
+    padding: 10,
+    marginTop: 5,
+    backgroundColor: "white",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor:"green"
+  },
+  selectionButtonDeny: {
+    marginLeft: '5%',
+    marginRight: '5%',
+    width: 100,
+    marginTop: 5,
+    //height: 30,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor:"red"
+  },
+  selectionDone: {
+    marginLeft: '5%',
+    marginRight: '5%',
+    width: 100,
+    marginTop: 5,
+    //height: 30,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor:"grey"
   },
 
   text: {
