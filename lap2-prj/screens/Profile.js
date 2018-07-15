@@ -64,7 +64,7 @@ export default class Profile extends React.Component {
         this.setState({imageLoading: true})
         firebase.database().ref("App/Users/" + uid)
           .on("value", snap => {
-            console.log(snap.val())
+            //console.log(snap.val())
             this.setState({ profileImage: snap.val().ProfileImage});
             this.setState({ username: snap.val().Username});
             this.setState({ nome: snap.val().Nome});
@@ -78,41 +78,86 @@ export default class Profile extends React.Component {
       }
     }
 
+    // _loadBookings = async request => {
+    //   const user = firebase.auth().currentUser;
+    //   if (user) {
+    //     console.log(user.uid);
+    //     let uid = user.uid;
+    //     //console.log(path)
+    //     let eventList = firebase.database().ref("App/Events");
+    //     eventList.on("value", snap => {
+    //       var prenotazioni = [];
+    //       snap.forEach(child => {
+    //         console.log(child.val());
+    //         //console.log(child.val().IDcliente);
+    //         if (child.val().IDcliente == uid) {
+    //           console.log("ci siamo");
+    //           prenotazioni.push({
+    //             // IDevento: child.val().IDevento,
+    //             // agenzia: child.val().Agenzia,
+    //             // nomeEvento: child.val().NomeEvento,
+    //             // citta: child.val().Localita.Citta,
+    //             // provincia: child.val().Localita.Provincia,
+    //             // descrizioneBreve: child.val().DescrizioneBreve,s
+    //             // descrizioneCompleta: child.val().DescrizioneCompleta,
+    //             // prezzo: child.val().Prezzo,
+    //             // difficolta: child.val().Difficolta,
+    //             // data: child.val().Data,
+    //             // orari: child.val().Orario,
+    //             // durata: child.val.Durata,
+    //             // immagineAgenzia: child.val().ImmagineAgenzia,
+    //             // immagineEvento: child.val().ImmagineEvento
+    //             stato: child.val().Stato
+    //           });
+
+    //         //}
+    //         }
+    //       });
+    //       prenotazioni = prenotazioni[1]
+
+    //       this.setState({ bookingList: prenotazioni });
+    //       console.log(this.state.bookingList);
+    //     });
+    //   }
+    // };
+
     _loadBookings = async request => {
       const user = firebase.auth().currentUser;
       if (user) {
         console.log(user.uid);
-        const uid = user.uid;
-        let eventList = firebase.database().ref("App/Events");
+        let uid = user.uid;
+        //console.log(path)
+        let eventList = firebase.database().ref("App/Prenotazioni");
         eventList.on("value", snap => {
           var prenotazioni = [];
           snap.forEach(child => {
-            console.log("Prenotazioni "+child.val().Prenotazioni);
-            if (child.val().Prenotazioni.Qa3GDN1xlRQCOtEJrGiQIXbc1th1 == uid) {
+            if (child.val().IDcliente == uid) {
               console.log("ci siamo");
               prenotazioni.push({
                 IDevento: child.val().IDevento,
-                agenzia: child.val().Agenzia,
-                nomeEvento: child.val().NomeEvento,
-                citta: child.val().Localita.Citta,
-                provincia: child.val().Localita.Provincia,
-                descrizioneBreve: child.val().DescrizioneBreve,
-                descrizioneCompleta: child.val().DescrizioneCompleta,
-                prezzo: child.val().Prezzo,
-                difficolta: child.val().Difficolta,
-                data: child.val().Data,
-                orari: child.val().Orario,
-                durata: child.val.Durata,
-                immagineAgenzia: child.val().ImmagineAgenzia,
-                immagineEvento: child.val().ImmagineEvento
+                agenzia: child.val().DatiOrganizzatore.Agenzia,
+                numero: child.val().DatiOrganizzatore.Numero,
+                nomeEvento: child.val().DatiEvento.NomeEvento,
+                citta: child.val().DatiEvento.localita.Citta,
+                provincia: child.val().DatiEvento.localita.Provincia,
+                descrizioneBreve: child.val().DatiEvento.DescrizioneBreve,
+                descrizioneCompleta: child.val().DatiEvento.DescrizioneCompleta,
+                prezzo: child.val().DatiEvento.Prezzo,
+                data: child.val().DatiEvento.Data,
+                orari: child.val().DatiEvento.Orario,
+                immagineAgenzia: child.val().DatiOrganizzatore.ImmagineAgenzia,
+                immagineEvento: child.val().DatiEvento.ImmagineEvento,
+                stato: child.val().Stato
               });
             }
           });
+
           this.setState({ bookingList: prenotazioni });
           console.log(this.state.bookingList);
         });
       }
     };
+
 
     componentWillMount() {
       firebase.auth().onAuthStateChanged( user => {

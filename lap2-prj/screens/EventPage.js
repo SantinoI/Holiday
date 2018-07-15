@@ -85,23 +85,41 @@ export default class EventPage extends React.Component {
     bookingState: null,
   }
 
+  // NUOVA FUNZIONE CHE DA PROBLEMI -> NON SETTA LO STATO, I VALORI VENGONO PRESI REGOLARMENTE
+  // FORSE C'è UN PROBLEMA DI CHIAMATE SICNRONE 
   checkBooking = () => {
     this.setState({booked: false});
-    firebase.database().ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni")
+    firebase.database().ref("App/Prenotazioni/")
     .on("value", snap => {
       snap.forEach(child => {
-        if ((child.val().IDcliente == firebase.auth().currentUser.uid))
-          //console.log("ci siamo")
-          this.setState({booked: true});
-          this.setState({bookingState: child.val().Stato})
-          //console.log(this.state.booked)
+        if ((child.val().IDcliente == firebase.auth().currentUser.uid) && (child.val().IDevento == this.props.navigation.state.params.eventInfo.IDevento)) {
+          console.log(child.val());
+             this.setState({booked: true});
+             this.setState({bookingState: child.val().Stato})
+          console.log(this.state.booked)
+          console.log(this.state.bookingState)
+        }
       });
     });
   }
 
-  componentDidMount(){
+// VECCHIA FUNZIONE FUNZIONANTE -> TUTTAVIA PRENDE I DATI DA UN POSTO CHE NOI NON USIAMO PIU
+  // checkBooking = () => {
+  //   this.setState({booked: false});
+  //   firebase.database().ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni")
+  //   .on("value", snap => {
+  //     snap.forEach(child => {
+  //       if ((child.val().IDcliente == firebase.auth().currentUser.uid))
+  //         //console.log("ci siamo")
+  //         this.setState({booked: true});
+  //         this.setState({bookingState: child.val().Stato})
+  //         //console.log(this.state.booked)
+  //     });
+  //   });
+  // }
+
+  componentWillMount(){     
     this.checkBooking();
-    console.log(this.props.navigation.state.params.eventInfo)
   }
 
   newBooking = () => {
@@ -111,41 +129,97 @@ export default class EventPage extends React.Component {
       cognome: "",
       email: "",
     }
+
+    const ManagerData = {
+      Agenzia:  this.props.navigation.state.params.eventInfo.agenzia,
+      ImmagineAgenzia: this.props.navigation.state.params.eventInfo.immagineAgenzia,
+      Numero: this.props.navigation.state.params.eventInfo.numero,
+    }
+
+    const Localita = {
+      Citta:  this.props.navigation.state.params.eventInfo.citta,
+      Provincia:  this.props.navigation.state.params.eventInfo.provincia,
+    }
+    const eventData = {
+      NomeEvento: this.props.navigation.state.params.eventInfo.nomeEvento,
+      Agenzia: this.props.navigation.state.params.eventInfo.agenzia,
+      Data: this.props.navigation.state.params.eventInfo.data,
+      DescrizioneBreve: this.props.navigation.state.params.eventInfo.descrizioneBreve,
+      DescrizioneCompleta: this.props.navigation.state.params.eventInfo.descrizioneCompleta,
+      Email: this.props.navigation.state.params.eventInfo.email,
+      ImmagineEvento: this.props.navigation.state.params.eventInfo.immagineEvento,
+      Prezzo: this.props.navigation.state.params.eventInfo.prezzo,
+      localita: Localita
+    }
     const userId = firebase.auth().currentUser.uid;
     firebase.database().ref("App/Users/" + userId).on("value", snap => {
-      console.log(snap.val())
+      //console.log(snap.val())
       userData.username = snap.val().Username;
       userData.nome = snap.val().Nome;
       userData.cognome = snap.val().Cognome
       userData.email = snap.val().Email
-      console.log("userData")
-      console.log(userData)
+      // console.log("userData")
+      // console.log(userData)
 
       const booking = {
+        //IDorganizzatore: this.props.navigation.state.params.IDorganizzatore,
         IDcliente: userId,
+        IDevento: this.props.navigation.state.params.eventInfo.IDevento,
         DatiUtente: userData,
+        DatiEvento: eventData,
+        DatiOrganizzatore: ManagerData,
         Stato: "ATTESA"
       };
 
       firebase.database()
-      .ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni/"+userId)
-      .update(booking)
+      .ref("App/Prenotazioni/")
+      .push(booking)
 
     });
-      /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
-      var id = firebase
-        .database()
-        .ref("App/" + "Users/" + userId + "/" + "favorites/")
-        .push(newFavorite).key;
-      
-        const setId ={
-          id: id
-        } 
-        firebase
-        .database()
-        .ref("App/" + "Users/" + userId + "/" + "favorites/" + id)
-        .update(setId);*/
   }
+
+  // newBooking = () => {
+  //   const userData = {
+  //     username: "",
+  //     nome: "",
+  //     cognome: "",
+  //     email: "",
+  //   }
+  //   const userId = firebase.auth().currentUser.uid;
+  //   firebase.database().ref("App/Users/" + userId).on("value", snap => {
+  //     console.log(snap.val())
+  //     userData.username = snap.val().Username;
+  //     userData.nome = snap.val().Nome;
+  //     userData.cognome = snap.val().Cognome
+  //     userData.email = snap.val().Email
+  //     console.log("userData")
+  //     console.log(userData)
+
+  //     const booking = {
+  //       IDcliente: userId,
+  //       DatiUtente: userData,
+  //       Stato: "ATTESA"
+  //     };
+
+  //     firebase.database()
+  //     .ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni/"+userId)
+  //     .update(booking)
+
+  //   });
+  //     /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
+  //     var id = firebase
+  //       .database()
+  //       .ref("App/" + "Users/" + userId + "/" + "favorites/")
+  //       .push(newFavorite).key;
+      
+  //       const setId ={
+  //         id: id
+  //       } 
+  //       firebase
+  //       .database()
+  //       .ref("App/" + "Users/" + userId + "/" + "favorites/" + id)
+  //       .update(setId);*/
+  // }
 
   removeBooking() {
     const userId = firebase.auth().currentUser.uid;
@@ -184,7 +258,7 @@ export default class EventPage extends React.Component {
               {/* BOTTONE PRENOTA ORA */}
               <CardItem >
                   <View style={styles.buttonContainer}>
-                    {this.state.booked ?              // Verifico se è stata effettuata la richiesta
+                    {this.state.booked != "NESSUNA" ?              // Verifico se è stata effettuata la richiesta
                       ( <View>
                           <BookingState bookState={this.state.bookingState} onRemoveBooking = {() => this.removeBooking()}/>
                       </View>
