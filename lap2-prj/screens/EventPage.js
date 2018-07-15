@@ -5,91 +5,34 @@ import {
   Text,
   ScrollView,
   View,
-  FlatList,
-  TouchableHighlight,
   TouchableOpacity,
-  TextInput,
-  Dimensions,
   Image
 } from "react-native";
-import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
+import { Card, CardItem, Left, Body, Right, Container } from 'native-base';
+import BookingButton from '../components/BookingButton'
 
 
-import { Permissions, Location } from "expo";
-import { MaterialIcons } from "@expo/vector-icons";
-import { StackNavigator } from "react-navigation";
 import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons} from "@expo/vector-icons";
-import { TabNavigator } from "react-navigation";
-import { SearchBar, Button } from "react-native-elements";
 
-import EventCard from "../components/EventCard";
 
 import * as firebase from "firebase";
 
 const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
 
-class BookingState extends React.Component {
-  state = {
-    bookState: this.props.bookState,
-  }
-  render() {
-    if (this.state.bookState == "ATTESA")
-      return (
-        <View>
-          <View style={{borderWidth: 1, borderRadius: 30, borderColor: TINT_COLOR,marginLeft: '10%',marginRight: '10%', padding: 10,}}>
-            <Text style={{textAlign:'center', color: TINT_COLOR }}> Prenotazione Inviata </Text>
-          </View>
-
-          <TouchableOpacity
-            style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
-            activeOpacity={0.5}
-            onPress={() => this.props.onRemoveBooking()}
-            title="Prenota"
-          >          
-            <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
-          </TouchableOpacity>          
-        </View>
-          
-      );
-    else if (this.state.bookState == "ACCETTATA")
-      return (
-        <View>
-          <View style={{borderWidth: 1, borderRadius: 30, borderColor: "green",marginLeft: '10%',marginRight: '10%', padding: 10,}}>
-            <Text style={{textAlign:'center', color: "green" }}> Prenotazione ACCETTATA </Text>
-          </View>
-
-          <TouchableOpacity
-            style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
-            activeOpacity={0.5}
-            onPress={() => this.props.onRemoveBooking()}
-            title="Prenota"
-          >          
-            <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
-          </TouchableOpacity>          
-        </View>
-    );
-    else if (this.state.bookState == "RIFIUTATA")
-      return (
-          <View style={{borderWidth: 1, borderRadius: 30, borderColor: "red",marginLeft: '10%',marginRight: '10%', padding: 10,}}>
-            <Text style={{textAlign:'center', color: "red" }}> Prenotazione RIFUTATA </Text>
-          </View>
-    );
-  }
-}
 
 export default class EventPage extends React.Component {
 
   state= {
-    booked: null,
-    bookingState: null,
+    booked: false,
+    bookingState: "",
   }
 
   // NUOVA FUNZIONE CHE DA PROBLEMI -> NON SETTA LO STATO, I VALORI VENGONO PRESI REGOLARMENTE
   // FORSE C'è UN PROBLEMA DI CHIAMATE SICNRONE 
-  checkBooking = () => {
+  /*checkBooking = () => {
     this.setState({booked: false});
-    firebase.database().ref("App/Prenotazioni/")
+    firebase.database().ref("App/Prenotazioni")
     .on("value", snap => {
       snap.forEach(child => {
         if ((child.val().IDcliente == firebase.auth().currentUser.uid) && (child.val().IDevento == this.props.navigation.state.params.eventInfo.IDevento)) {
@@ -101,7 +44,7 @@ export default class EventPage extends React.Component {
         }
       });
     });
-  }
+  }*/
 
 // VECCHIA FUNZIONE FUNZIONANTE -> TUTTAVIA PRENDE I DATI DA UN POSTO CHE NOI NON USIAMO PIU
   // checkBooking = () => {
@@ -118,9 +61,24 @@ export default class EventPage extends React.Component {
   //   });
   // }
 
-  componentWillMount(){     
-    this.checkBooking();
-  }
+checkBooking = async =>{
+  uid = firebase.auth().currentUser.uid
+  idEvento = this.props.navigation.state.params.eventInfo.IDevento
+  firebase.database().ref('App/Prenotazioni')
+    .on("value", snap =>{
+      snap.forEach(child => {
+        if(child.val().IDcliente == uid && child.val().IDevento == idEvento){
+          this.setState({booked: true, bookingState: child.val().Stato}, this.forceUpdate())
+          
+        }
+      })
+    }
+  )
+}
+
+componentWillMount(){
+  this.checkBooking()
+}
 
   newBooking = () => {
     const userData = {
@@ -178,48 +136,6 @@ export default class EventPage extends React.Component {
     });
   }
 
-  // newBooking = () => {
-  //   const userData = {
-  //     username: "",
-  //     nome: "",
-  //     cognome: "",
-  //     email: "",
-  //   }
-  //   const userId = firebase.auth().currentUser.uid;
-  //   firebase.database().ref("App/Users/" + userId).on("value", snap => {
-  //     console.log(snap.val())
-  //     userData.username = snap.val().Username;
-  //     userData.nome = snap.val().Nome;
-  //     userData.cognome = snap.val().Cognome
-  //     userData.email = snap.val().Email
-  //     console.log("userData")
-  //     console.log(userData)
-
-  //     const booking = {
-  //       IDcliente: userId,
-  //       DatiUtente: userData,
-  //       Stato: "ATTESA"
-  //     };
-
-  //     firebase.database()
-  //     .ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni/"+userId)
-  //     .update(booking)
-
-  //   });
-  //     /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
-  //     var id = firebase
-  //       .database()
-  //       .ref("App/" + "Users/" + userId + "/" + "favorites/")
-  //       .push(newFavorite).key;
-      
-  //       const setId ={
-  //         id: id
-  //       } 
-  //       firebase
-  //       .database()
-  //       .ref("App/" + "Users/" + userId + "/" + "favorites/" + id)
-  //       .update(setId);*/
-  // }
 
   removeBooking() {
     const userId = firebase.auth().currentUser.uid;
@@ -258,9 +174,10 @@ export default class EventPage extends React.Component {
               {/* BOTTONE PRENOTA ORA */}
               <CardItem >
                   <View style={styles.buttonContainer}>
-                    {this.state.booked != "NESSUNA" ?              // Verifico se è stata effettuata la richiesta
+                    
+                    {this.state.booked ?              // Verifico se è stata effettuata la richiesta
                       ( <View>
-                          <BookingState bookState={this.state.bookingState} onRemoveBooking = {() => this.removeBooking()}/>
+                          <BookingButton bookState={this.state.bookingState} onRemoveBooking = {() => this.removeBooking()}/>
                       </View>
 
                       )
@@ -279,40 +196,7 @@ export default class EventPage extends React.Component {
                     }
                   </View>
               </CardItem>
-              {/* <CardItem >
-                  <View style={styles.buttonContainer}>
-                    {this.state.booked ?              // Verifico se è stata effettuata la richiesta
-                      ( <View>
-                          <View style={{borderWidth: 1, borderRadius: 30, borderColor: TINT_COLOR,marginLeft: '10%',marginRight: '10%', padding: 10,}}>
-                            <Text style={{textAlign:'center', color: TINT_COLOR }}> Prenotazione Inviata </Text>
-                          </View>
-
-                          <TouchableOpacity
-                            style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
-                            activeOpacity={0.5}
-                            onPress={() => this.removeBooking()}
-                            title="Prenota"
-                          >
-                            <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
-                          </TouchableOpacity>
-                      </View>
-
-                      )
-                      : // Se non è stata fatta visualizzo il pulsante di prenotazione
-                      (
-                        <TouchableOpacity
-                            style={styles.searchButton}
-                            activeOpacity={0.5}
-                            onPress={() => this.newBooking()}
-                            title="Prenota"
-                        >
-                          <Text style={{textAlign:'center', color: "white" }}> Prenota adesso </Text>
-                        </TouchableOpacity>
-                      )
-                      
-                    }
-                  </View>
-              </CardItem> */}
+             
 
               {/* DATA CALENDARIO */}
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 5, borderRadius: 10}} >
@@ -412,3 +296,85 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
 });
+
+
+
+  // newBooking = () => {
+  //   const userData = {
+  //     username: "",
+  //     nome: "",
+  //     cognome: "",
+  //     email: "",
+  //   }
+  //   const userId = firebase.auth().currentUser.uid;
+  //   firebase.database().ref("App/Users/" + userId).on("value", snap => {
+  //     console.log(snap.val())
+  //     userData.username = snap.val().Username;
+  //     userData.nome = snap.val().Nome;
+  //     userData.cognome = snap.val().Cognome
+  //     userData.email = snap.val().Email
+  //     console.log("userData")
+  //     console.log(userData)
+
+  //     const booking = {
+  //       IDcliente: userId,
+  //       DatiUtente: userData,
+  //       Stato: "ATTESA"
+  //     };
+
+  //     firebase.database()
+  //     .ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni/"+userId)
+  //     .update(booking)
+
+  //   });
+  //     /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
+  //     var id = firebase
+  //       .database()
+  //       .ref("App/" + "Users/" + userId + "/" + "favorites/")
+  //       .push(newFavorite).key;
+      
+  //       const setId ={
+  //         id: id
+  //       } 
+  //       firebase
+  //       .database()
+  //       .ref("App/" + "Users/" + userId + "/" + "favorites/" + id)
+  //       .update(setId);*/
+  // }
+
+
+
+   /* <CardItem >
+                  <View style={styles.buttonContainer}>
+                    {this.state.booked ?              // Verifico se è stata effettuata la richiesta
+                      ( <View>
+                          <View style={{borderWidth: 1, borderRadius: 30, borderColor: TINT_COLOR,marginLeft: '10%',marginRight: '10%', padding: 10,}}>
+                            <Text style={{textAlign:'center', color: TINT_COLOR }}> Prenotazione Inviata </Text>
+                          </View>
+
+                          <TouchableOpacity
+                            style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
+                            activeOpacity={0.5}
+                            onPress={() => this.removeBooking()}
+                            title="Prenota"
+                          >
+                            <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
+                          </TouchableOpacity>
+                      </View>
+
+                      )
+                      : // Se non è stata fatta visualizzo il pulsante di prenotazione
+                      (
+                        <TouchableOpacity
+                            style={styles.searchButton}
+                            activeOpacity={0.5}
+                            onPress={() => this.newBooking()}
+                            title="Prenota"
+                        >
+                          <Text style={{textAlign:'center', color: "white" }}> Prenota adesso </Text>
+                        </TouchableOpacity>
+                      )
+                      
+                    }
+                  </View>
+              </CardItem> */
