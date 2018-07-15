@@ -38,6 +38,7 @@ export default class NewEventPage extends React.Component {
     days:0,
     price:0,
     days: 0,
+    image: null
   }
 
 
@@ -72,14 +73,62 @@ export default class NewEventPage extends React.Component {
           <Card style={{ marginLeft: 10, marginRight: 10, borderRadius: 10}}>
           
               {/* IMMAGINE EVENTO */}
-              <CardItem cardBody style={{borderRadius: 10}}>
-                {/* <Image  style={{ borderRadius:10, height: 200, width: null, flex: 1}}
-                        source={{uri: this.props.navigation.state.params.eventInfo.immagineEvento}}
-                /> */}
+              <CardItem style={{borderRadius: 10, marginTop: 10,paddingTop:10, padding: 10}}>
+                <Image  style={{ borderRadius:10, height: 200, width: null, flex: 1}}
+                        source = {  this.state.image ? { uri: this.state.image } :
+                                                                require("../assets/selectImage.png")}/>
+              </CardItem>
+
+              {/* Nome Evento */}
+              <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 5, marginBottom: 5, borderRadius: 10}} >
+                <Left style={{}}>
+                    {/* <Image style={{width:23, height: 23, marginRight:10}} source={require('../assets/description.png')}/> */}
+                    <Item floatingLabel style={{ marginTop: 0 }}>
+                       <Label style={{fontSize: 14, textAlign: 'center'}}>Inserisci Nome Evento</Label>
+                       <Input
+                       style={{fontSize:14, textAlign: 'center'}}
+                       onChangeText={text => this.setState({ price: text })}
+                      />
+                    </Item>     
+                </Left>
+              </CardItem>
+
+              {/* Nome Evento */}
+              <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 5, marginBottom: 5, borderRadius: 10}} >
+                <Left style={{}}>
+                    {/* <Image style={{width:23, height: 23, marginRight:10}} source={require('../assets/description.png')}/> */}
+                    <Item floatingLabel style={{ marginTop: 0 }}>
+                       <Label style={{fontSize: 13, textAlign: 'center'}}>Regione</Label>
+                       <Input
+                       style={{fontSize:14, textAlign: 'center'}}
+                       onChangeText={text => this.setState({ price: text })}
+                      />
+                    </Item>     
+                </Left>
+                <Left style={{}}>
+                    {/* <Image style={{width:23, height: 23, marginRight:10}} source={require('../assets/description.png')}/> */}
+                    <Item floatingLabel style={{ marginTop: 0 }}>
+                       <Label style={{fontSize: 13, textAlign: 'center'}}>Provincia</Label>
+                       <Input
+                       style={{fontSize:14, textAlign: 'center'}}
+                       onChangeText={text => this.setState({ price: text })}
+                      />
+                    </Item>     
+                </Left>
+                <Left style={{}}>
+                    {/* <Image style={{width:23, height: 23, marginRight:10}} source={require('../assets/description.png')}/> */}
+                    <Item floatingLabel style={{ marginTop: 0 }}>
+                       <Label style={{fontSize: 13, textAlign: 'center'}}>Città</Label>
+                       <Input
+                       style={{fontSize:14, textAlign: 'center'}}
+                       onChangeText={text => this.setState({ price: text })}
+                      />
+                    </Item>     
+                </Left>
               </CardItem>
 
               {/* LOCALITA' E ID_EVENTO*/}
-              <CardItem >
+              {/* <CardItem >
                 <Left style={{flex:0.8, flexDirection: 'column', alignItems: 'flex-start' }}>
                 <Text style={{fontSize:10, fontStyle: 'italic'}}>{}, {}</Text>
                 
@@ -91,19 +140,19 @@ export default class NewEventPage extends React.Component {
 
               <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
               <Text style={{fontSize: 24, textAlign: 'center'}}>{}</Text>
-              </CardItem>
+              </CardItem> */}
 
               {/* GIORNO E ORARIO EVENTO */}
-              <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 5, borderRadius: 10}} >
+              <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginTop: 5, marginBottom: 5, borderRadius: 10}} >
                 {/* Giorno */}
                 <Left style={{marginRight:0}}>
-                    <Image style={{width:20, height: 20, marginRight:0}} source={require('../assets/calendar.png')}/>
+                    <Image style={{width:20, height: 20, marginRight:-15}} source={require('../assets/calendar.png')}/>
                     <DatePicker
                     style={{width: 100*110/100}}
                     date={this.state.date}
                     mode="date"
                     locale={'it'}
-                    placeholder="Seleziona una data"
+                    placeholder="Data"
                     format="YYYY-MM-DD"
                     minDate={this._getCurrentDate()}
                     maxDate={this._getCurrentYear()+1+'-'+this._getCurrentMonth()+'-'+this._getCurrentDay()}
@@ -115,7 +164,11 @@ export default class NewEventPage extends React.Component {
                       },
                       dateInput: {
                         borderWidth: 0,
-                        marginRight: 0
+                        marginRight: 0,
+                      },
+                      dateText: {
+                        textAlign: 'center',
+                        fontSize: 13
                       }
               
                     }}
@@ -124,13 +177,13 @@ export default class NewEventPage extends React.Component {
                 </Left>
                 {/* Orario */}
                 <Left>
-                   <Image style={{width:20, height: 20, marginRight:0}} source={require('../assets/clock.png')}/>
+                   <Image style={{width:20, height: 20, marginRight:-15}} source={require('../assets/clock.png')}/>
                    <DatePicker
                     style={{width: 100*110/100}}
                     date={this.state.time}
                     mode="time"
                     locale={'it'}
-                    placeholder="Seleziona un orario"
+                    placeholder="Orario"
                     confirmBtnText="Conferma"
                     cancelBtnText="Cancella"
                     customStyles={{
@@ -140,6 +193,10 @@ export default class NewEventPage extends React.Component {
                       dateInput: {
                         borderWidth: 0,
                         marginRight: 0
+                      },
+                      dateText: {
+                        textAlign: 'center',
+                        fontSize: 13
                       }
               
                     }}
@@ -147,15 +204,22 @@ export default class NewEventPage extends React.Component {
                   />
                 </Left>
 
-                {console.log(this.state.time)}
-
-                
-                 
-    
+                <Left style={{}}>
+                <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/money.png')}/>
+                     <Item floatingLabel style={{ marginTop: 0,width:70 }}>
+                       <Label style={{fontSize: 14, width:70}}>Prezzo</Label>
+                       <Input
+                       style={{fontSize:14}}
+                       onChangeText={text => this.setState({ price: text })}
+                      />
+                    </Item>                      
+                </Left>
               </CardItem>
 
               {/* TEMPO E PREZZO'*/}
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
+                {/* 
+                COUNTER PER PACCHETTI DI PIU' GIORNI, TO DO NEXT
                 <Left style={{flexDirection: 'row'}}>
                     <Image style={{width:20, height: 20, marginRight:0}} source={require('../assets/stopwatch.png')}/>
                       <Button transparent
@@ -167,14 +231,16 @@ export default class NewEventPage extends React.Component {
                               onPress={() => this.setState({ days: this.state.days + 1 })}
                               style={{width:50, height:50}}
                       ><Icon style={{}} size={25} color={TINT_COLOR} name='plus-circle'/></Button>
-                </Left>
-
+                </Left> */}
+                {/* DESCRIZIONE BREVE*/}
                 <Left style={{}}>
-                <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/money.png')}/>
-                     <Item floatingLabel style={{ marginTop: 0,width:100 }}>
-                       <Label style={{fontSize: 14, width:100}}>Prezzo</Label>
+                <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/description.png')}/>
+                     <Item floatingLabel style={{ width: 270}}>
+                       <Label style={{fontSize: 13, }}>Descrizione Breve</Label>
                        <Input
-                       style={{fontSize:14}}
+                        multiline
+      
+                       style={{ width: 50,fontSize:14, marginBottom: 20}}
                        onChangeText={text => this.setState({ price: text })}
                       />
                     </Item>                      
@@ -182,12 +248,21 @@ export default class NewEventPage extends React.Component {
               </CardItem>
 
               
-
-              {/* DESCRIZIONE */}
+                
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
-                <Left style={{}}>
-                    <Image style={{width:23, height: 23, marginRight:10}} source={require('../assets/description.png')}/>
-                    <Text style={{paddingRight: 20}}>{}</Text>
+
+               {/* DESCRIZIONE Lunga*/}
+               <Left style={{}}>
+                <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/description.png')}/>
+                     <Item floatingLabel style={{ width: 270}}>
+                       <Label style={{fontSize: 13, }}>Descrizione Dettagliata</Label>
+                       <Input
+                        multiline={true}
+      
+                       style={{ height: 100, width: 50,fontSize:14, marginBottom: 20}}
+                       onChangeText={text => this.setState({ price: text })}
+                      />
+                    </Item>                      
                 </Left>
               </CardItem>
 
