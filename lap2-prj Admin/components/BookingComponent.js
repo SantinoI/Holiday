@@ -14,11 +14,10 @@ const TINT_COLOR = "rgb(4, 159, 239)";
 
 export default class BookingComponent extends React.Component {
   state={
-    selected: false,
+    selected: null,
   }
 
   async componentWillMount() {
-    console.log(this.state.selected)
   }
 
   render() {
@@ -40,11 +39,11 @@ export default class BookingComponent extends React.Component {
         :
         (
           <View style={{alignItems: "flex-end"}}>
-          <TouchableOpacity style={styles.selectionButtonAccept} onPress={() => this.setState({selected: true})}>
+          <TouchableOpacity style={styles.selectionButtonAccept} onPress={() => this.props.onSelect("ACCETTATA")}>
               <Text style={{textAlign:'center', color: "green" }}> accetta </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.selectionButtonDeny} onPress={() => this.setState({selected: true})}>
+          <TouchableOpacity style={styles.selectionButtonDeny} onPress={() => this.props.onSelect("RIFIUTATA")}>
             <Text style={{textAlign:'center', color: "red" }}> Rifiuta </Text>
           </TouchableOpacity>
         </View>

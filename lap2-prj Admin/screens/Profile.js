@@ -42,7 +42,7 @@ export default class Profile extends React.Component {
       Sede: "",
       email:"",
       numero:"",
-      //logged: false
+      logged: null,
     }
 
     _loadProfileInfo = () => {
