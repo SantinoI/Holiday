@@ -89,6 +89,9 @@ const ProfileNavigator = createStackNavigator(
     Bookings: {
       screen: Bookings
     },
+    EventPage: {
+      screen: EventPage
+    },
     Login: {
       screen: Login
     },
