@@ -13,6 +13,8 @@ import BookingComponent from "../components/BookingComponent";
 import * as firebase from "firebase";
 
 const TINT_COLOR = "rgb(4, 159, 239)";
+const BACKGROUND_COLOR = "#d7e4e5";
+
 
 StatusBar.setBarStyle("light-content");
 
@@ -37,7 +39,7 @@ export default class BookingList extends React.Component {
     var eventContactsRef = firebase.database().ref('App/Prenotazioni');
     var query = eventContactsRef.orderByChild('IDcliente').equalTo(item.IDcliente);
     query.on('child_added', function(snapshot) {
-      if (napshot.val().IDevento == item.IDevento) {
+      if (snapshot.val().IDevento == item.IDevento) {
           snapshot.ref.update({Stato: selezione});
       }
     })
@@ -126,6 +128,6 @@ const styles = StyleSheet.create({
     //alignItems: 'center',
     justifyContent: "center",
     // paddingTop: Constants.statusBarHeight,
-    backgroundColor: "white"
+    backgroundColor: BACKGROUND_COLOR
   }
 });
