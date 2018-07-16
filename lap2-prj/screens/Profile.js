@@ -52,7 +52,10 @@ export default class Profile extends React.Component {
       nome:"",
       cognome:"",
       email:"",
-      bookingList: []
+      bookingList: [],
+      //dates: ["2018-05-23", "2018-05-20", "2018-05-27"],
+      dates: null,
+      marked: false
     }
 
     _loadUserData = async => {
@@ -124,19 +127,24 @@ export default class Profile extends React.Component {
     _loadBookings = async request => {
       const user = firebase.auth().currentUser;
       if (user) {
-        console.log(user.uid);
+        //console.log(user.uid);
         let uid = user.uid;
         //console.log(path)
         let eventList = firebase.database().ref("App/Prenotazioni");
         eventList.on("value", snap => {
+          //var date = [];
           var prenotazioni = [];
           snap.forEach(child => {
             if (child.val().IDcliente == uid) {
-              console.log("ci siamo");
+              //console.log("ci siamo");
+              //date.push(child.val().DatiEvento.Data)
+
               prenotazioni.push({
                 IDevento: child.val().IDevento,
                 agenzia: child.val().DatiOrganizzatore.Agenzia,
                 numero: child.val().DatiOrganizzatore.Numero,
+                immagineAgenzia: child.val().DatiOrganizzatore.ImmagineAgenzia,
+
                 nomeEvento: child.val().DatiEvento.NomeEvento,
                 citta: child.val().DatiEvento.localita.Citta,
                 provincia: child.val().DatiEvento.localita.Provincia,
@@ -144,27 +152,76 @@ export default class Profile extends React.Component {
                 descrizioneCompleta: child.val().DatiEvento.DescrizioneCompleta,
                 prezzo: child.val().DatiEvento.Prezzo,
                 data: child.val().DatiEvento.Data,
-                orari: child.val().DatiEvento.Orario,
-                immagineAgenzia: child.val().DatiOrganizzatore.ImmagineAgenzia,
+                orario: child.val().DatiEvento.Orario,
                 immagineEvento: child.val().DatiEvento.ImmagineEvento,
+
+                cognome: child.val().DatiUtente.cognome,
+                nome: child.val().DatiUtente.nome,
+                email: child.val().DatiUtente.email,
+                username: child.val().DatiUtente.username,
+
                 stato: child.val().Stato
               });
             }
           });
 
           this.setState({ bookingList: prenotazioni });
+          //this.setState({dates: date});
           console.log(this.state.bookingList);
+         // console.log(this.state.dates);
         });
       }
     };
 
+    _loadDays = () => {
 
-    componentWillMount() {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        let uid = user.uid;
+
+        let eventList = firebase.database().ref("App/Prenotazioni");
+        eventList.on("value", snap => {
+          var date = [];
+          var color = "";
+          snap.forEach(child => {
+            if (child.val().IDcliente == uid) {
+              //date.push(child.val().DatiEvento.Data)
+
+                if (child.val().Stato == "ATTESA") {
+                  color = "#f1c40f"
+                }
+                else if (child.val().Stato == "ACCETTATA") {
+                  color = "#2ecc71"
+                }
+                else if (child.val().Stato == "RIFIUTATA") {
+                  color = "#e74c3c"
+                }
+                date.push({
+                  data: child.val().DatiEvento.Data,
+                  selcolor: color,
+              });
+            }
+          }); 
+
+          var obj = {};
+            for (var i=0; i<date.length; i++) {
+              obj[date[i].data] = ({selected: true, marked: true, selectedColor: date[i].selcolor, });
+}
+
+          //var obj = date.reduce((c, v) => Object.assign(c, {[v]: {selected: true,marked: true, dotColor: "yellow"}}), {});
+
+          this.setState({dates: obj});
+          console.log(this.state.dates);
+        });
+      }
+    }
+    async componentWillMount() {
       firebase.auth().onAuthStateChanged( user => {
         if (user) {
           this.setState({logged: true})
           this._loadUserData();
           this._loadBookings();
+          this._loadDays();
           //this.props.navigation.setParams({ logged: true })
         }
         else {
@@ -295,26 +352,34 @@ export default class Profile extends React.Component {
                   <Text>Eventi in programma</Text>
                   <Calendar
                       style={styles.calendar}
-                      current={'2012-05-16'}
-                      minDate={'2012-05-10'}
-                      maxDate={'2012-05-29'}
+                      current={'2018-01-01'}
+                      minDate={'2018-01-01'}
+                      maxDate={'2019-12-31'}
                       firstDay={1}
-                      markedDates={{
-                        '2012-05-23': {selected: true, marked: true},
-                        '2012-05-24': {selected: true, marked: true, dotColor: 'green'},
-                        '2012-05-25': {marked: true, dotColor: 'red'},
-                        '2012-05-26': {marked: true},
-                        '2012-05-27': {disabled: true, activeOpacity: 0}
-                      }}
+                      markedDates={this.state.dates}
+                      onDayPress={(day) => {console.log(day)}}
                       // disabledByDefault={true}
                       hideArrows={false}
                     />
                   </CardItem>
 
+                <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.searchButton}
+                      activeOpacity={0.5}
+                      onPress={() => this.props.navigation.navigate("Bookings")}
+                      title="Trova Escursioni"
+                    >
+                      <Text style={{ color: "white" }}>Vai alle Prenotazioni</Text>
+                    </TouchableOpacity>
+                  </View>
+                </CardItem>
+
                   <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 30, marginTop: 20 }} >
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.logoutButton} onPress={() => firebase.auth().signOut()}>
-                      <Text style={{textAlign:'center', color: "grey" }}> Esci </Text>
+                      <Text style={{textAlign:'center', color: "grey" }}>Esci</Text>
                     </TouchableOpacity>
                   </View>
                 </CardItem>
@@ -332,7 +397,6 @@ export default class Profile extends React.Component {
 }
 
 Profile.navigationOptions = ({ navigation }) => {
-  header:null
   _onAccountPress = () => {
     var uid = firebase.auth().currentUser;
     if (uid) {
@@ -383,6 +447,18 @@ Profile.navigationOptions = ({ navigation }) => {
       borderWidth: 1,
       borderColor:"grey"
     },
+
+    searchButton: {
+      //marginTop: 20,
+      paddingTop: 15,
+      paddingBottom: 15,
+      padding: 30,
+      marginLeft: 30,
+      marginRight: 30,
+      backgroundColor: TINT_COLOR,
+      borderRadius: 30
+    },
+
     noResultText: {
       color: TINT_COLOR,
       marginTop: '50%',

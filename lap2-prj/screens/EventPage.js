@@ -26,7 +26,6 @@ export default class EventPage extends React.Component {
   state= {
     booked: false,
     bookingState: "",
-    IDevent: "",
   }
 
   // NUOVA FUNZIONE CHE DA PROBLEMI -> NON SETTA LO STATO, I VALORI VENGONO PRESI REGOLARMENTE
@@ -79,7 +78,6 @@ checkBooking = async =>{
 
 componentWillMount(){
   this.checkBooking()
-  this.setState({IDevent: this.props.navigation.state.params.eventInfo.IDevento })
 }
 
   newBooking = () => {
@@ -104,6 +102,7 @@ componentWillMount(){
       NomeEvento: this.props.navigation.state.params.eventInfo.nomeEvento,
       Agenzia: this.props.navigation.state.params.eventInfo.agenzia,
       Data: this.props.navigation.state.params.eventInfo.data,
+      Orario: this.props.navigation.state.params.eventInfo.orario,
       DescrizioneBreve: this.props.navigation.state.params.eventInfo.descrizioneBreve,
       DescrizioneCompleta: this.props.navigation.state.params.eventInfo.descrizioneCompleta,
       Email: this.props.navigation.state.params.eventInfo.email,
@@ -122,7 +121,7 @@ componentWillMount(){
       // console.log(userData)
 
       const booking = {
-        //IDorganizzatore: this.props.navigation.state.params.IDorganizzatore,
+        IDorganizzatore: this.props.navigation.state.params.eventInfo.IDorganizzatore,
         IDcliente: userId,
         IDevento: this.props.navigation.state.params.eventInfo.IDevento,
         DatiUtente: userData,
@@ -140,13 +139,10 @@ componentWillMount(){
 
 
   removeBooking() {
-     const userId = firebase.auth().currentUser.uid;
-     idevento = this.props.navigation.state.params.eventInfo.IDevento
-    // firebase.database().ref("App/Prenotazioni/").on("value", snap => {
-    //   console.log(snap);
-    // })
-    // uid = firebase.auth().currentUser.uid
-     var eventContactsRef = firebase.database().ref('App/Prenotazioni');
+    const uid = firebase.auth().currentUser.uid;
+    idevento = this.props.navigation.state.params.eventInfo.IDevento
+    
+    var eventContactsRef = firebase.database().ref('App/Prenotazioni');
     var query = eventContactsRef.orderByChild('IDcliente').equalTo(uid);
     query.on('child_added', function(snapshot) {
       var selection = snapshot.val();
@@ -156,7 +152,6 @@ componentWillMount(){
       }
     })
 
-    
     this.setState({booked: false});
   }
  

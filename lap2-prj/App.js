@@ -16,6 +16,7 @@ import { createBottomTabNavigator } from "react-navigation";
 
 import Login from "./screens/Login";
 import BookingPage from "./screens/BookingPage";
+import Bookings from "./screens/Bookings";
 import Home from "./screens/Home";
 import ManagerPage from "./screens/ManagerPage";
 import EventPage from "./screens/EventPage";
@@ -84,6 +85,9 @@ const ProfileNavigator = createStackNavigator(
   {
     Profile: {
       screen: Profile
+    },
+    Bookings: {
+      screen: Bookings
     },
     Login: {
       screen: Login

@@ -46,6 +46,7 @@ _loadDatabase = async => {
               if (child.val().Localita.Provincia.includes(this.state.text)) {
                 eventi.push({
                   IDevento: child.val().IDevento,
+                  IDorganizzatore: child.val().IDorganizzatore,
                   agenzia: child.val().Agenzia,
                   email: child.val().Email,
                   numero: child.val().Numero,
@@ -76,6 +77,7 @@ _loadDatabase = async => {
             if (child.val().NomeEvento.includes(this.state.text)) {
               eventi.push({
                 IDevento: child.val().IDevento,
+                IDorganizzatore: child.val().IDorganizzatore,
                 agenzia: child.val().Agenzia,
                 email: child.val().Email,
                 numero: child.val().Numero,
@@ -106,6 +108,7 @@ _loadDatabase = async => {
             if (child.val().Agenzia.includes(this.state.text)) {
               eventi.push({
                 IDevento: child.val().IDevento,
+                IDorganizzatore: child.val().IDorganizzatore,
                 agenzia: child.val().Agenzia,
                 email: child.val().Email,
                 numero: child.val().Numero,
