@@ -33,7 +33,7 @@ export default class BookingButton extends Component {
                     <TouchableOpacity
                         style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
                         activeOpacity={0.5}
-                        //onPress={() => this.props.onRemoveBooking()}
+                        onPress={() => this.props.onRemoveBooking()}
                         title="Prenota">          
                         <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
                     </TouchableOpacity>          
@@ -48,7 +48,7 @@ export default class BookingButton extends Component {
                     <TouchableOpacity
                         style={{marginTop:5, borderWidth: 1, borderRadius: 30, borderColor: "red", marginLeft: '10%',marginRight: '10%', padding: 10}}
                         activeOpacity={0.5}
-                        //onPress={() => this.props.onRemoveBooking()}
+                        onPress={() => this.props.onRemoveBooking()}
                         title="Prenota">          
                         <Text style={{textAlign:'center', color: "red" }}> Rimuovi richiesta Prenotazione </Text>
                     </TouchableOpacity>          

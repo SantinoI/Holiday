@@ -26,6 +26,7 @@ export default class EventPage extends React.Component {
   state= {
     booked: false,
     bookingState: "",
+    IDevent: "",
   }
 
   // NUOVA FUNZIONE CHE DA PROBLEMI -> NON SETTA LO STATO, I VALORI VENGONO PRESI REGOLARMENTE
@@ -78,6 +79,7 @@ checkBooking = async =>{
 
 componentWillMount(){
   this.checkBooking()
+  this.setState({IDevent: this.props.navigation.state.params.eventInfo.IDevento })
 }
 
   newBooking = () => {
@@ -138,8 +140,23 @@ componentWillMount(){
 
 
   removeBooking() {
-    const userId = firebase.auth().currentUser.uid;
-    firebase.database().ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni/"+userId).remove();
+     const userId = firebase.auth().currentUser.uid;
+     idevento = this.props.navigation.state.params.eventInfo.IDevento
+    // firebase.database().ref("App/Prenotazioni/").on("value", snap => {
+    //   console.log(snap);
+    // })
+    // uid = firebase.auth().currentUser.uid
+     var eventContactsRef = firebase.database().ref('App/Prenotazioni');
+    var query = eventContactsRef.orderByChild('IDcliente').equalTo(uid);
+    query.on('child_added', function(snapshot) {
+      var selection = snapshot.val();
+      if (selection.IDevento == idevento) {
+          console.log(selection);
+          snapshot.ref.remove();
+      }
+    })
+
+    
     this.setState({booked: false});
   }
  
