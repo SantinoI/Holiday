@@ -27,7 +27,7 @@ import * as firebase from "firebase";
 const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
 
-export default class Bookings extends React.Component {
+export default class SearchResult extends React.Component {
   state = {
     cardList: [],
     loading: false,
@@ -134,9 +134,9 @@ export default class Bookings extends React.Component {
   }   
 }
 
-Bookings.navigationOptions = ({ navigation }) => {
+SearchResult.navigationOptions = ({ navigation }) => {
   return {
-    title: "Prenotazioni",
+    title: "Risultati",
     headerStyle: {
       backgroundColor: BACKGROUND_COLOR,
       borderBottomWidth: 0
