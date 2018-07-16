@@ -14,23 +14,57 @@ const TINT_COLOR = "rgb(4, 159, 239)";
 
 export default class BookingComponent extends React.Component {
   state={
-    selected: null,
+    stato: this.props.data.stato,
   }
 
   async componentWillMount() {
+    //console.log(this.state.stato)
+  }
+
+  select = (selection) => {
+    this.props.onSelect(selection);
+    this.setState({stato: selection})
+  }
+
+  renderBookingComponentState = () => {
+    if (this.state.stato == "ATTESA") {
+      return (
+        <View style={{alignItems: "flex-end"}}>
+          <TouchableOpacity style={styles.selectionButtonAccept} onPress={() => this.select("ACCETTATA")}>
+              <Text style={{textAlign:'center', color: "green" }}> accetta </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.selectionButtonDeny} onPress={() => this.select("RIFIUTATA")}>
+            <Text style={{textAlign:'center', color: "red" }}> Rifiuta </Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    else if(this.state.stato == "ACCETTATA") {
+      <View style={styles.selectionDone}>
+        <Text style={{textAlign:'center', color: "grey" }}>ACCETTATA</Text>
+      </View>
+    }
+    else if(this.state.stato == "RIFIUTATA") {
+      <View style={styles.selectionDone}>
+        <Text style={{textAlign:'center', color: "grey" }}>RIFIUTATA</Text>
+      </View>
+    }
   }
 
   render() {
     return (
       <View style={styles.row}>
         <View>
-          <Text> Evento: {this.props.nomeEvento}</Text>
-          <Text> Utente richiedente: {this.props.username}</Text>
-          <Text> nome: {this.props.nomeUtente}   cognome:{this.props.cognomeUtente}</Text>
-          <Text> Email: {this.props.emailUtente}</Text>
+          <Text> Evento: {this.props.data.nomeEvento}</Text>
+          <Text> Utente richiedente: {this.props.data.username}</Text>
+          <Text> nome: {this.props.data.nome}   cognome:{this.props.data.cognome}</Text>
+          <Text> Email: {this.props.data.email}</Text>
         </View>
 
-        {this.state.selected == true ? 
+        {this.renderBookingComponentState()}
+
+        {/* {this.state.stato == "ATTESA" ? 
         (
           <View style={styles.selectionDone}>
               <Text style={{textAlign:'center', color: "grey" }}> Confermato </Text>
@@ -48,7 +82,7 @@ export default class BookingComponent extends React.Component {
           </TouchableOpacity>
         </View>
         )
-      }
+      } */}
     </View>
     );
   }
