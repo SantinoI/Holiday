@@ -405,7 +405,7 @@ Profile.navigationOptions = ({ navigation }) => {
   };
 
   return {
-      title: "Profile",
+      title: "Profilo",
       headerStyle: {
         backgroundColor: BACKGROUND_COLOR,
         borderBottomWidth: 0
