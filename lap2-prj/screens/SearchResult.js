@@ -54,6 +54,7 @@ _loadDatabase = async => {
                   nomeEvento: child.val().NomeEvento,
                   citta: child.val().Localita.Citta,
                   provincia: child.val().Localita.Provincia,
+                  regione: child.val().Localita.Regione,
                   descrizioneBreve: child.val().DescrizioneBreve,
                   descrizioneCompleta: child.val().DescrizioneCompleta,
                   prezzo: child.val().Prezzo,
@@ -234,8 +235,10 @@ _loadDatabase = async => {
                   data={this.state.cardList}
                   renderItem={this.renderCard}
                   keyExtractor={this._keyExtractor}
-                />) :
-                (<Text style={styles.noResultText}>Nessun risultato, cerca altro</Text>)}
+                  
+                />
+              ) :
+                (<Text style={styles.noResultText}>Nessun risultato, cerca altro :(</Text>)}
             </ScrollView>
             )}
         </View>
@@ -272,6 +275,7 @@ const styles = StyleSheet.create({
     color: TINT_COLOR,
     marginTop: '50%',
     fontSize: 20,
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom: '70%'
   }
 });

@@ -115,7 +115,7 @@ export default class EventPage extends React.Component {
                     <Text>{this.props.navigation.state.params.eventInfo.descrizioneBreve}</Text>
               </CardItem>
 
-              {/* DESCRIZIONE BREVE*/}
+              {/* DESCRIZIONE LUNGA*/}
               <CardItem  style={{marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
                     <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/description.png')}/>
                     <Text>{this.props.navigation.state.params.eventInfo.descrizioneCompleta}</Text>
