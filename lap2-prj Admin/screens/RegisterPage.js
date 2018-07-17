@@ -15,7 +15,7 @@ import {
   Alert
 } from "react-native";
 
-import { ImagePicker, ImageManipulator, Permissions } from "expo";
+import { ImagePicker, ImageManipulator } from "expo";
 
 import { Button, FormLabel, FormInput } from "react-native-elements";
 import {
