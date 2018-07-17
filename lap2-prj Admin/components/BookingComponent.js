@@ -19,15 +19,33 @@ const BACKGROUND_COLOR = "#d7e4e5";
 export default class BookingComponent extends React.Component {
   state={
     stato: this.props.data.stato,
+    destToken: "",
   }
 
   async componentWillMount() {
     //console.log(this.state.stato)
   }
 
+
   select = (selection) => {
     this.props.onSelect(selection);
     this.setState({stato: selection})
+  }
+
+  onAccept = () =>  {
+    var destToken
+    var destinatario = firebase
+      .database()
+      .ref(
+        "App/Organizzatori/" +
+          this.props.navigation.state.params.eventInfo.IDorganizzatore
+      )
+      .on("value", snap => {
+        destToken = snap.val().ExpoToken;
+        this.setState({ destToken: destToken }, () =>
+          this._sendNotification(this.state.destToken, payload)
+        );
+      });
   }
 
   renderBookingComponentState = () => {

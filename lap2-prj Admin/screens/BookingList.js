@@ -15,6 +15,8 @@ import * as firebase from "firebase";
 const TINT_COLOR = "rgb(4, 159, 239)";
 const BACKGROUND_COLOR = "#d7e4e5";
 
+const PUSH_ENDPOINT = "https://exp.host/--/api/v2/push/send";
+
 
 StatusBar.setBarStyle("light-content");
 
@@ -35,6 +37,26 @@ export default class BookingList extends React.Component {
     checklistRef.push(todo);
   };
 
+  _sendNotification = (destToken, payload) => {
+    fetch(PUSH_ENDPOINT, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        to: destToken,
+        title: payload.title,
+        body: payload.message,
+        data: { payload },
+        sound: "default"
+      })
+    })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+  };
+
   _onSelect = (item, selezione) => {
     var eventContactsRef = firebase.database().ref('App/Prenotazioni');
     var query = eventContactsRef.orderByChild('IDcliente').equalTo(item.IDcliente);
@@ -43,6 +65,31 @@ export default class BookingList extends React.Component {
           snapshot.ref.update({Stato: selezione});
       }
     })
+
+    console.log(item);
+    let payload;
+    if (selezione == "ACCETTATA") {
+      payload = {
+        message: item.agenzia +" ha accettato la tua prenotazione all'evento: " + item.nomeEvento,
+        title: "Prenotazione Accettata"
+      };
+    }
+    else if (selezione == "RIFIUTATA") {
+      payload = {
+        message: item.agenzia +" ha rifiutato la tua prenotazione all'evento: " + item.nomeEvento,
+        title: "Prenotazione Rifiutata"
+      };
+    }
+    var destToken
+    var destinatario = firebase
+      .database()
+      .ref("App/Users/" + item.IDcliente)
+      .on("value", snap => {
+        destToken = snap.val().ExpoToken;
+        this.setState({ destToken: destToken }, () =>
+          this._sendNotification(this.state.destToken, payload)
+        );
+      });
 
   }
 
