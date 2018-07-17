@@ -328,7 +328,7 @@ Profile.navigationOptions = ({ navigation }) => {
       headerLeft: null,
 
       headerRight: (
-        <TouchableOpacity onPress={() => navigation.navigate("NewEventPage")}>
+        <TouchableOpacity  onPress={() => navigation.navigate("NewEventPage", {userInfo: this.state})}>
             <MaterialIcons style={{marginRight: 30}} name='add-circle-outline' size={30} color={TINT_COLOR}/>
         </TouchableOpacity>
       )

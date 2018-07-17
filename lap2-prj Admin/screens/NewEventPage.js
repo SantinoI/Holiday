@@ -4,16 +4,19 @@ import {
   Platform,
   Text,
   ScrollView,
+  ActionSheetIOS,
   View,
   FlatList,
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
   Dimensions,
-  Image
+  Image,
+  Alert
 } from "react-native";
 import { Button, Input, Label, Item, Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
 
+import { ImagePicker, ImageManipulator } from "expo";
 
 import DatePicker from 'react-native-datepicker'
 import { Permissions, Location } from "expo";
@@ -33,12 +36,23 @@ const BACKGROUND_COLOR = "#d7e4e5";
 
 export default class NewEventPage extends React.Component {
   state = {
-    date:'',
-    time:'',
-    days:0,
-    price:0,
-    days: 0,
-    image: null
+      image: null,
+      nomeEvento: '',
+      regione: '',
+      provincia: '',
+      citta: '',
+      data: '',
+      orario: '',
+      prezzo: '',
+      descrizioneBreve: '',
+      descrizioneCompleta: '',
+      isLoading: false,
+      profileImage: this.props.profileImage,
+      username: this.props.username,
+      sede: this.props.Sede,
+      email: this.props.email,
+      numero: this.props.numero,
+
   }
 
 
@@ -46,6 +60,122 @@ export default class NewEventPage extends React.Component {
     console.log()
   }
 
+  //FUNZIONE PER CARICARE DATI
+  upload_event_data = () => {
+
+    // crea un id per il nuovo evento
+    var id = firebase
+    .database()
+    .ref("App/" + "Events/")
+    .push(data).key;    
+    
+    const data = {
+      EventImage: this.state.image,
+      NomeEvento: this.state.nomeEvento,
+      Regione: this.state.regione,
+      Provincia: this.state.provincia,
+      Citta: this.state.citta,
+      Data: this.state.data,
+      Orario: this.state.orario,
+      Prezzo: this.state.prezzo,
+      DescrizioneBreve: this.state.descrizioneBreve,
+      DescrizioneCompleta: this.state.descrizioneCompleta,
+    };
+
+    firebase
+      .database()
+      .ref("App/" + "Events/" + id)
+      .update(data);
+  };
+    
+
+  //FUNZIONE DI CONTROLLO
+  _upLoad = () => {
+    //controlli sulla compilazione di tutti i campi
+    if (
+      !(
+        //this.state.image &&
+        this.state.nomeEvento &&
+        this.state.regione &&
+        this.state.provincia &&
+        this.state.citta &&
+        this.state.data &&
+        this.state.orario &&
+        this.state.prezzo &&
+        this.state.descrizioneBreve &&
+        this.state.descrizioneCompleta
+      )
+    ) {
+      Alert.alert(
+        "Riempi i campi vuoti per poterti registrare",
+        "",
+        [
+          {
+            text: "Cancella",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          }
+        ],
+        { cancelable: false }
+      );
+      return;
+    }
+  
+    this.setState({ isLoading: true });
+
+      
+        this.setState({ isLoading: false });
+        this.upload_event_data();
+        this.props.navigation.navigate("Profile");
+      
+      
+  };
+
+  //FUNZIONE PER CARICARE IMMAGINE [non funziona]
+    //Apertura galleria per choosing foto profilo utente
+    _openPhotoGallery = async () => {
+      const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+      if (status !== "granted") {
+        const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (result.status !== "granted") {
+          alert("you need to authorized the app");
+          return;
+        }
+      }
+      let result = await ImagePicker.launchImageLibraryAsync();
+      if (!result.cancelled) {
+        console.log(result);
+        // Resize the image
+        const manipResult = await ImageManipulator.manipulate(
+          result.uri,
+          [{ resize: { width: 375 } }],
+          { format: "png" }
+        );
+        console.log(manipResult);
+        this.setState({ eventImage: manipResult.uri });
+      }
+    };
+  
+    _selectPhoto = () => {
+      console.log("show actions sheet");
+      if (Platform.OS === "ios") {
+        ActionSheetIOS.showActionSheetWithOptions(
+          {
+            options: ["Camera", "Photo Gallery", "Cancel"],
+            cancelButtonIndex: 2,
+            title: "Scegli immagine da:"
+          },
+          buttonIndex => {
+            if (buttonIndex == 1) {
+              this._openPhotoGallery();
+            }
+          }
+        );
+      }
+    };
+
+
+    // FUNZIONI PER OTTENERE DATA CORRENTE
   _getCurrentDate=()=>{
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
@@ -74,9 +204,15 @@ export default class NewEventPage extends React.Component {
           
               {/* IMMAGINE EVENTO */}
               <CardItem style={{borderRadius: 10, marginTop: 10,paddingTop:10, padding: 10}}>
+              <TouchableOpacity
+                style={{  marginBottom: 20, alignSelf: "center" }}
+                onPress={this._selectPhoto}
+               >
                 <Image  style={{ borderRadius:10, height: 200, width: null, flex: 1}}
                         source = {  this.state.image ? { uri: this.state.image } :
-                                                                require("../assets/selectImage.png")}/>
+                                                              require("../assets/selectImage.png")}/>
+               </TouchableOpacity>
+
               </CardItem>
 
               {/* Nome Evento */}
@@ -87,12 +223,11 @@ export default class NewEventPage extends React.Component {
                        <Label style={{fontSize: 14, textAlign: 'center'}}>Inserisci Nome Evento</Label>
                        <Input
                        style={{fontSize:14, textAlign: 'center'}}
-                       onChangeText={text => this.setState({ price: text })}
+                       onChangeText={text => this.setState({ nomeEvento: text })}
                       />
                     </Item>     
                 </Left>
               </CardItem>
-
               {/* Nome Evento */}
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 5, marginBottom: 5, borderRadius: 10}} >
                 <Left style={{}}>
@@ -101,7 +236,7 @@ export default class NewEventPage extends React.Component {
                        <Label style={{fontSize: 13, textAlign: 'center'}}>Regione</Label>
                        <Input
                        style={{fontSize:14, textAlign: 'center'}}
-                       onChangeText={text => this.setState({ price: text })}
+                       onChangeText={text => this.setState({ regione: text })}
                       />
                     </Item>     
                 </Left>
@@ -111,7 +246,7 @@ export default class NewEventPage extends React.Component {
                        <Label style={{fontSize: 13, textAlign: 'center'}}>Provincia</Label>
                        <Input
                        style={{fontSize:14, textAlign: 'center'}}
-                       onChangeText={text => this.setState({ price: text })}
+                       onChangeText={text => this.setState({ provincia: text })}
                       />
                     </Item>     
                 </Left>
@@ -121,11 +256,13 @@ export default class NewEventPage extends React.Component {
                        <Label style={{fontSize: 13, textAlign: 'center'}}>Città</Label>
                        <Input
                        style={{fontSize:14, textAlign: 'center'}}
-                       onChangeText={text => this.setState({ price: text })}
+                       onChangeText={text => this.setState({ citta: text })}
                       />
                     </Item>     
                 </Left>
               </CardItem>
+
+              {console.log(this.state.sede)}
 
               {/* LOCALITA' E ID_EVENTO*/}
               {/* <CardItem >
@@ -149,7 +286,7 @@ export default class NewEventPage extends React.Component {
                     <Image style={{width:20, height: 20, marginRight:-15}} source={require('../assets/calendar.png')}/>
                     <DatePicker
                     style={{width: 100*110/100}}
-                    date={this.state.date}
+                    date={this.state.data}
                     mode="date"
                     locale={'it'}
                     placeholder="Data"
@@ -172,7 +309,7 @@ export default class NewEventPage extends React.Component {
                       }
               
                     }}
-                    onDateChange={(date) => {this.setState({date: date})}}
+                    onDateChange={(date) => {this.setState({data: date})}}
                   />
                 </Left>
                 {/* Orario */}
@@ -180,7 +317,7 @@ export default class NewEventPage extends React.Component {
                    <Image style={{width:20, height: 20, marginRight:-15}} source={require('../assets/clock.png')}/>
                    <DatePicker
                     style={{width: 100*110/100}}
-                    date={this.state.time}
+                    date={this.state.orario}
                     mode="time"
                     locale={'it'}
                     placeholder="Orario"
@@ -200,7 +337,7 @@ export default class NewEventPage extends React.Component {
                       }
               
                     }}
-                    onDateChange={(time) => {this.setState({time: time})}}
+                    onDateChange={(time) => {this.setState({orario: time})}}
                   />
                 </Left>
 
@@ -210,7 +347,7 @@ export default class NewEventPage extends React.Component {
                        <Label style={{fontSize: 14, width:70}}>Prezzo</Label>
                        <Input
                        style={{fontSize:14}}
-                       onChangeText={text => this.setState({ price: text })}
+                       onChangeText={text => this.setState({ prezzo: text })}
                       />
                     </Item>                      
                 </Left>
@@ -241,7 +378,7 @@ export default class NewEventPage extends React.Component {
                         multiline
       
                        style={{ width: 50,fontSize:14, marginBottom: 20}}
-                       onChangeText={text => this.setState({ price: text })}
+                       onChangeText={text => this.setState({ descrizioneBreve: text })}
                       />
                     </Item>                      
                 </Left>
@@ -260,19 +397,34 @@ export default class NewEventPage extends React.Component {
                         multiline={true}
       
                        style={{ height: 100, width: 50,fontSize:14, marginBottom: 20}}
-                       onChangeText={text => this.setState({ price: text })}
+                       onChangeText={text => this.setState({ descrizioneCompleta: text })}
                       />
                     </Item>                      
                 </Left>
               </CardItem>
 
+              <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              loading={this.state.isLoading}
+              raised
+              title="Register"
+              onPress={this._upLoad}
+              style={styles.searchButton}
+              activeOpacity={0.5}
+            >
+              <Text style={{ textAlign: "center", color: "white" }}>Carica Evento</Text>
+            </TouchableOpacity>
+          </View>
+
               
             </Card>
+          
         </ScrollView>
+        
     </Container>
     );
-  }   
-}
+  };
+};
 
 NewEventPage.navigationOptions = ({ navigation }) => {
   return {
