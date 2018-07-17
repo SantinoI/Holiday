@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
-import { Image, TouchableOpacity, Dimensions, Text} from 'react-native';
-import { Content, Card, CardItem, Thumbnail, Left, Body, Right } from 'native-base';
+import {
+  StyleSheet,
+  Platform,
+  Text,
+  ScrollView,
+  View,
+  FlatList,
+  TouchableHighlight,
+  TouchableOpacity,
+  TextInput,
+  Dimensions,
+  Image
+} from "react-native";
+import { Button, Input, Label, Item, Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
 import { MaterialIcons, Feather, FontAwesome } from "@expo/vector-icons";
 
+const TINT_COLOR = "#39b9c3";
+const BACKGROUND_COLOR = "#d7e4e5";
 
 
 export default class EventCard extends Component {

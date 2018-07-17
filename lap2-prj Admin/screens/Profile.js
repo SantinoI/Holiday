@@ -127,8 +127,10 @@ export default class Profile extends React.Component {
               IDevento: child.val().IDevento,
               agenzia: child.val().Agenzia,
               nomeEvento: child.val().NomeEvento,
+              
               citta: child.val().Localita.Citta,
               provincia: child.val().Localita.Provincia,
+              regione: child.val().Localita.Regione,
               descrizioneBreve: child.val().DescrizioneBreve,
               descrizioneCompleta: child.val().DescrizioneCompleta,
               prezzo: child.val().Prezzo,

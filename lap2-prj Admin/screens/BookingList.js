@@ -61,6 +61,7 @@ export default class BookingList extends React.Component {
             immagineAgenzia: child.val().DatiOrganizzatore.ImmagineAgenzia,
 
             nomeEvento: child.val().DatiEvento.NomeEvento,
+            regione: child.val().DatiEvento.localita.Regione,
             citta: child.val().DatiEvento.localita.Citta,
             provincia: child.val().DatiEvento.localita.Provincia,
             descrizioneBreve: child.val().DatiEvento.DescrizioneBreve,
