@@ -9,6 +9,8 @@ import {
   TextInput
 } from "react-native";
 
+import { Permissions, Notifications } from 'expo';
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createStackNavigator } from "react-navigation";
 import { TabNavigator } from "react-navigation";
@@ -39,10 +41,8 @@ var config = {
 };
 firebase.initializeApp(config);
 
-!firebase.apps.length ? firebase.initializeApp(config) : null;
 
-
-const App = createStackNavigator(
+const Main = createStackNavigator(
   {
     Home: {
       screen: Home
@@ -101,9 +101,9 @@ const ProfileNavigator = createStackNavigator(
   }
 )
 
-export default createBottomTabNavigator(
+const TabNav = createBottomTabNavigator(
   {
-    Home: { screen: App},
+    Home: { screen: Main},
     Favorites: {screen: Favorite},
     Profile: {screen: ProfileNavigator},
   },
@@ -133,6 +133,46 @@ export default createBottomTabNavigator(
   }
 );
 
-//export default App;
-//return <MaterialCommunityIcons name={"home-outline"} size={40} color={TINT_COLOR} />;
-//return <Entypo name={"heart-outlined"} size={25} color={tintColor} />
+export default class App extends React.Component {
+
+  state= {
+    token: "",
+  };
+
+  registerForPushNotificationsAsync = async () => {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== 'granted') {
+      console.log("ciao")
+      return;
+    }
+    // Get the token that uniquely identifies this device
+    let token = await Notifications.getExpoPushTokenAsync();
+    this.setState({token})
+  } 
+
+  componentWillMount() {
+    this.registerForPushNotificationsAsync();
+  }
+
+  
+  render() {
+    return (
+      <TabNav/>
+    )
+  }
+
+}
