@@ -8,28 +8,31 @@ import {
   TouchableOpacity,
   Image
 } from "react-native";
-import { Card, CardItem, Left, Body, Right, Container } from 'native-base';
-import BookingButton from '../components/BookingButton'
+import { Card, CardItem, Left, Body, Right, Container } from "native-base";
+import BookingButton from "../components/BookingButton";
 
-
-import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons} from "@expo/vector-icons";
-
+import {
+  FontAwesome,
+  Feather,
+  MaterialCommunityIcons,
+  SimpleLineIcons
+} from "@expo/vector-icons";
 
 import * as firebase from "firebase";
 
 const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
 
+const PUSH_ENDPOINT = "https://exp.host/--/api/v2/push/send";
 
 export default class EventPage extends React.Component {
-
-  state= {
+  state = {
     booked: false,
-    bookingState: "",
-  }
+    bookingState: ""
+  };
 
   // NUOVA FUNZIONE CHE DA PROBLEMI -> NON SETTA LO STATO, I VALORI VENGONO PRESI REGOLARMENTE
-  // FORSE C'è UN PROBLEMA DI CHIAMATE SICNRONE 
+  // FORSE C'è UN PROBLEMA DI CHIAMATE SICNRONE
   /*checkBooking = () => {
     this.setState({booked: false});
     firebase.database().ref("App/Prenotazioni")
@@ -46,7 +49,7 @@ export default class EventPage extends React.Component {
     });
   }*/
 
-// VECCHIA FUNZIONE FUNZIONANTE -> TUTTAVIA PRENDE I DATI DA UN POSTO CHE NOI NON USIAMO PIU
+  // VECCHIA FUNZIONE FUNZIONANTE -> TUTTAVIA PRENDE I DATI DA UN POSTO CHE NOI NON USIAMO PIU
   // checkBooking = () => {
   //   this.setState({booked: false});
   //   firebase.database().ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni")
@@ -61,193 +64,314 @@ export default class EventPage extends React.Component {
   //   });
   // }
 
-checkBooking = async =>{
-  uid = firebase.auth().currentUser.uid
-  idEvento = this.props.navigation.state.params.eventInfo.IDevento
-  firebase.database().ref('App/Prenotazioni')
-    .on("value", snap =>{
-      snap.forEach(child => {
-        if(child.val().IDcliente == uid && child.val().IDevento == idEvento){
-          this.setState({booked: true, bookingState: child.val().Stato}, this.forceUpdate())
-          
-        }
-      })
-    }
-  )
-}
+  checkBooking = async => {
+    uid = firebase.auth().currentUser.uid;
+    idEvento = this.props.navigation.state.params.eventInfo.IDevento;
+    firebase
+      .database()
+      .ref("App/Prenotazioni")
+      .on("value", snap => {
+        snap.forEach(child => {
+          if (
+            child.val().IDcliente == uid &&
+            child.val().IDevento == idEvento
+          ) {
+            this.setState(
+              { booked: true, bookingState: child.val().Stato },
+              this.forceUpdate()
+            );
+          }
+        });
+      });
+  };
 
-componentWillMount(){
-  this.checkBooking()
-}
+  componentWillMount() {
+    this.checkBooking();
+  }
+
+  _sendNotification = destToken => {
+    var message = this.props.navigation.state.params.eventInfo.username + "ha effettuato una prenotazione al tuo evento" + this.props.navigation.state.params.eventInfo.nomeEvento;
+    fetch(PUSH_ENDPOINT, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        to: destToken,
+        title: "Nuova Prenotazione",
+        body: message,
+        //data: { message: message},
+        sound: "default"
+      })
+    })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+  };
 
   newBooking = () => {
     const userData = {
       username: "",
       nome: "",
       cognome: "",
-      email: "",
-    }
+      email: ""
+    };
 
     const ManagerData = {
-      Agenzia:  this.props.navigation.state.params.eventInfo.agenzia,
-      ImmagineAgenzia: this.props.navigation.state.params.eventInfo.immagineAgenzia,
-      Numero: this.props.navigation.state.params.eventInfo.numero,
-    }
+      Agenzia: this.props.navigation.state.params.eventInfo.agenzia,
+      ImmagineAgenzia: this.props.navigation.state.params.eventInfo
+        .immagineAgenzia,
+      Numero: this.props.navigation.state.params.eventInfo.numero
+    };
 
     const Localita = {
-      Citta:  this.props.navigation.state.params.eventInfo.citta,
-      Provincia:  this.props.navigation.state.params.eventInfo.provincia,
-    }
+      Citta: this.props.navigation.state.params.eventInfo.citta,
+      Provincia: this.props.navigation.state.params.eventInfo.provincia
+    };
     const eventData = {
       NomeEvento: this.props.navigation.state.params.eventInfo.nomeEvento,
       Agenzia: this.props.navigation.state.params.eventInfo.agenzia,
       Data: this.props.navigation.state.params.eventInfo.data,
       Orario: this.props.navigation.state.params.eventInfo.orario,
-      DescrizioneBreve: this.props.navigation.state.params.eventInfo.descrizioneBreve,
-      DescrizioneCompleta: this.props.navigation.state.params.eventInfo.descrizioneCompleta,
+      DescrizioneBreve: this.props.navigation.state.params.eventInfo
+        .descrizioneBreve,
+      DescrizioneCompleta: this.props.navigation.state.params.eventInfo
+        .descrizioneCompleta,
       Email: this.props.navigation.state.params.eventInfo.email,
-      ImmagineEvento: this.props.navigation.state.params.eventInfo.immagineEvento,
+      ImmagineEvento: this.props.navigation.state.params.eventInfo
+        .immagineEvento,
       Prezzo: this.props.navigation.state.params.eventInfo.prezzo,
       localita: Localita
-    }
+    };
     const userId = firebase.auth().currentUser.uid;
-    firebase.database().ref("App/Users/" + userId).on("value", snap => {
-      //console.log(snap.val())
-      userData.username = snap.val().Username;
-      userData.nome = snap.val().Nome;
-      userData.cognome = snap.val().Cognome
-      userData.email = snap.val().Email
-      // console.log("userData")
-      // console.log(userData)
+    firebase
+      .database()
+      .ref("App/Users/" + userId)
+      .on("value", snap => {
+        //console.log(snap.val())
+        userData.username = snap.val().Username;
+        userData.nome = snap.val().Nome;
+        userData.cognome = snap.val().Cognome;
+        userData.email = snap.val().Email;
+        // console.log("userData")
+        // console.log(userData)
 
-      const booking = {
-        IDorganizzatore: this.props.navigation.state.params.eventInfo.IDorganizzatore,
-        IDcliente: userId,
-        IDevento: this.props.navigation.state.params.eventInfo.IDevento,
-        DatiUtente: userData,
-        DatiEvento: eventData,
-        DatiOrganizzatore: ManagerData,
-        Stato: "ATTESA"
-      };
+        const booking = {
+          IDorganizzatore: this.props.navigation.state.params.eventInfo
+            .IDorganizzatore,
+          IDcliente: userId,
+          IDevento: this.props.navigation.state.params.eventInfo.IDevento,
+          DatiUtente: userData,
+          DatiEvento: eventData,
+          DatiOrganizzatore: ManagerData,
+          Stato: "ATTESA"
+        };
 
-      firebase.database()
-      .ref("App/Prenotazioni/")
-      .push(booking)
+        firebase
+          .database()
+          .ref("App/Prenotazioni/")
+          .push(booking);
+      });
 
-    });
-  }
-
+      var destToken;
+      var destinatario = firebase.database().ref("App/Organizzatori/" + this.props.navigation.state.params.eventInfo.IDorganizzatore)
+      .on("value", snap => {
+        destToken = snap.val().ExpoToken
+        console.log(snap.val().ExpoToken)
+      })
+      this._sendNotification(destToken);
+  };
 
   removeBooking() {
     const uid = firebase.auth().currentUser.uid;
-    idevento = this.props.navigation.state.params.eventInfo.IDevento
-    
-    var eventContactsRef = firebase.database().ref('App/Prenotazioni');
-    var query = eventContactsRef.orderByChild('IDcliente').equalTo(uid);
-    query.on('child_added', function(snapshot) {
+    idevento = this.props.navigation.state.params.eventInfo.IDevento;
+
+    var eventContactsRef = firebase.database().ref("App/Prenotazioni");
+    var query = eventContactsRef.orderByChild("IDcliente").equalTo(uid);
+    query.on("child_added", function(snapshot) {
       var selection = snapshot.val();
       if (selection.IDevento == idevento) {
-          console.log(selection);
-          snapshot.ref.remove();
+        console.log(selection);
+        snapshot.ref.remove();
       }
-    })
+    });
 
-    this.setState({booked: false});
+    this.setState({ booked: false });
   }
- 
 
   render() {
     return (
-      <Container style={{ backgroundColor : BACKGROUND_COLOR}}>
+      <Container style={{ backgroundColor: BACKGROUND_COLOR }}>
         <ScrollView>
-          <Card style={{ marginLeft: 10, marginRight: 10, borderRadius: 10}}>
-          
-              {/* IMMAGINE EVENTO */}
-              <CardItem cardBody style={{borderRadius: 10}}>
-                <Image  style={{ borderRadius:10, height: 200, width: null, flex: 1}}
-                        source={{uri: this.props.navigation.state.params.eventInfo.immagineEvento}}
-                />
-              </CardItem>
+          <Card style={{ marginLeft: 10, marginRight: 10, borderRadius: 10 }}>
+            {/* IMMAGINE EVENTO */}
+            <CardItem cardBody style={{ borderRadius: 10 }}>
+              <Image
+                style={{ borderRadius: 10, height: 200, width: null, flex: 1 }}
+                source={{
+                  uri: this.props.navigation.state.params.eventInfo
+                    .immagineEvento
+                }}
+              />
+            </CardItem>
 
-              {/* LOCALITA' E ID_EVENTO*/}
-              <CardItem >
-                <Left style={{flex:0.8, flexDirection: 'column', alignItems: 'flex-start' }}>
-                  <Text style={{fontSize:10, fontStyle: 'italic'}}>{this.props.navigation.state.params.eventInfo.citta}, {this.props.navigation.state.params.eventInfo.provincia}</Text>
-                </Left>
-                <Right>
-                  <Text style={{fontSize:10, fontStyle: 'italic'}}>Codice di riferimento: {this.props.navigation.state.params.eventInfo.IDevento}</Text>
-                </Right>
-              </CardItem>
+            {/* LOCALITA' E ID_EVENTO*/}
+            <CardItem>
+              <Left
+                style={{
+                  flex: 0.8,
+                  flexDirection: "column",
+                  alignItems: "flex-start"
+                }}
+              >
+                <Text style={{ fontSize: 10, fontStyle: "italic" }}>
+                  {this.props.navigation.state.params.eventInfo.citta},{" "}
+                  {this.props.navigation.state.params.eventInfo.provincia}
+                </Text>
+              </Left>
+              <Right>
+                <Text style={{ fontSize: 10, fontStyle: "italic" }}>
+                  Codice di riferimento:{" "}
+                  {this.props.navigation.state.params.eventInfo.IDevento}
+                </Text>
+              </Right>
+            </CardItem>
 
-              <CardItem style={{flexDirection: 'column', alignItems: 'center' }} >
-              <Text style={{fontSize: 24, textAlign: 'center'}}>{this.props.navigation.state.params.eventInfo.nomeEvento}</Text>
-              </CardItem>
+            <CardItem style={{ flexDirection: "column", alignItems: "center" }}>
+              <Text style={{ fontSize: 24, textAlign: "center" }}>
+                {this.props.navigation.state.params.eventInfo.nomeEvento}
+              </Text>
+            </CardItem>
 
-              {/* BOTTONE PRENOTA ORA */}
-              <CardItem >
-                  <View style={styles.buttonContainer}>
-                    
-                    {this.state.booked ?              // Verifico se è stata effettuata la richiesta
-                      ( <View>
-                          <BookingButton bookState={this.state.bookingState} onRemoveBooking = {() => this.removeBooking()}/>
-                      </View>
-
-                      )
-                      : // Se non è stata fatta visualizzo il pulsante di prenotazione
-                      (
-                        <TouchableOpacity
-                            style={styles.searchButton}
-                            activeOpacity={0.5}
-                            onPress={() => this.newBooking()}
-                            title="Prenota"
-                        >
-                          <Text style={{textAlign:'center', color: "white" }}> Prenota adesso </Text>
-                        </TouchableOpacity>
-                      )
-                      
-                    }
+            {/* BOTTONE PRENOTA ORA */}
+            <CardItem>
+              <View style={styles.buttonContainer}>
+                {this.state.booked ? ( // Verifico se è stata effettuata la richiesta
+                  <View>
+                    <BookingButton
+                      bookState={this.state.bookingState}
+                      onRemoveBooking={() => this.removeBooking()}
+                    />
                   </View>
-              </CardItem>
-             
+                ) : (
+                  // Se non è stata fatta visualizzo il pulsante di prenotazione
+                  <TouchableOpacity
+                    style={styles.searchButton}
+                    activeOpacity={0.5}
+                    onPress={() => this.newBooking()}
+                    title="Prenota"
+                  >
+                    <Text style={{ textAlign: "center", color: "white" }}>
+                      {" "}
+                      Prenota adesso{" "}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </CardItem>
 
-             {/* Location */}
-             <CardItem  style={{ marginLeft: 10, marginRight: 5, marginBottom: 5, borderRadius: 10}} >
-                <Left style={{flexDirection: 'column', justifyContent: 'center', marginLeft: 10, marginRight: 5, marginBottom: 5, borderRadius: 10}}>              
-                   <Text style={{fontSize: 12, color: 'gray'}}>Regione</Text>
-                   <Text style={{fontSize: 16, textAlign: 'center'}}>{this.props.navigation.state.params.eventInfo.regione}</Text>                  
-                </Left>
-                <Left style={{flexDirection: 'column', justifyContent: 'center',  marginLeft: 10, marginRight: 5, marginBottom: 5, borderRadius: 10}} >              
-                   <Text style={{fontSize: 12, color: 'gray'}}>Provincia</Text>
-                   <Text style={{fontSize: 16, textAlign: 'center'}}>{this.props.navigation.state.params.eventInfo.provincia}</Text>   
-                </Left>
-                <Left style={{flexDirection: 'column', justifyContent: 'center', marginLeft: 10, marginRight: 5, marginBottom: 5, borderRadius: 10}}>
-                   <Text style={{fontSize: 12, color: 'gray'}}>Città</Text>
-                   <Text style={{fontSize: 16, textAlign: 'center'}}>{this.props.navigation.state.params.eventInfo.citta}</Text>   
-                </Left>
-              </CardItem>
+            {/* Location */}
+            <CardItem
+              style={{
+                marginLeft: 10,
+                marginRight: 5,
+                marginBottom: 5,
+                borderRadius: 10
+              }}
+            >
+              <Left
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  marginLeft: 10,
+                  marginRight: 5,
+                  marginBottom: 5,
+                  borderRadius: 10
+                }}
+              >
+                <Text style={{ fontSize: 12, color: "gray" }}>Regione</Text>
+                <Text style={{ fontSize: 16, textAlign: "center" }}>
+                  {this.props.navigation.state.params.eventInfo.regione}
+                </Text>
+              </Left>
+              <Left
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  marginLeft: 10,
+                  marginRight: 5,
+                  marginBottom: 5,
+                  borderRadius: 10
+                }}
+              >
+                <Text style={{ fontSize: 12, color: "gray" }}>Provincia</Text>
+                <Text style={{ fontSize: 16, textAlign: "center" }}>
+                  {this.props.navigation.state.params.eventInfo.provincia}
+                </Text>
+              </Left>
+              <Left
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  marginLeft: 10,
+                  marginRight: 5,
+                  marginBottom: 5,
+                  borderRadius: 10
+                }}
+              >
+                <Text style={{ fontSize: 12, color: "gray" }}>Città</Text>
+                <Text style={{ fontSize: 16, textAlign: "center" }}>
+                  {this.props.navigation.state.params.eventInfo.citta}
+                </Text>
+              </Left>
+            </CardItem>
 
-              {/* GIORNO ORARIO PREZZO EVENTO */}
-              <CardItem  style={{ marginLeft: 10, marginRight: 10, marginTop: 5, marginBottom: 5, borderRadius: 10}} >
-                {/* Orario */}
-                <Left style={{flexDirection: 'row', justifyContent: 'center'}}>
-                   <Image style={{width:20, height: 20, marginRight: 0}} source={require('../assets/clock.png')}/>
-                    <Text style={{fontSize: 13, textAlign: 'center'}}>{this.props.navigation.state.params.eventInfo.orario}</Text> 
-                </Left>
-              
-                {/* Giorno */}
-                <Left style={{marginRight: 5}}>
-                    <Image style={{width:20, height: 20, marginRight: 0}} source={require('../assets/calendar.png')}/>
-                    <Text style={{fontSize: 13, textAlign: 'center'}}>{this.props.navigation.state.params.eventInfo.data}</Text> 
-                </Left>
-            
-                {/* Prezzo */}
-                <Left style={{flexDirection: 'row', justifyContent: 'center'}}>
-                <Image style={{width:20, height: 20, marginRight:0}} source={require('../assets/money.png')}/>
-                    <Text style={{fontSize: 13, textAlign: 'center'}}>{this.props.navigation.state.params.eventInfo.prezzo}</Text>                     
-                </Left>
-              </CardItem>
+            {/* GIORNO ORARIO PREZZO EVENTO */}
+            <CardItem
+              style={{
+                marginLeft: 10,
+                marginRight: 10,
+                marginTop: 5,
+                marginBottom: 5,
+                borderRadius: 10
+              }}
+            >
+              {/* Orario */}
+              <Left style={{ flexDirection: "row", justifyContent: "center" }}>
+                <Image
+                  style={{ width: 20, height: 20, marginRight: 0 }}
+                  source={require("../assets/clock.png")}
+                />
+                <Text style={{ fontSize: 13, textAlign: "center" }}>
+                  {this.props.navigation.state.params.eventInfo.orario}
+                </Text>
+              </Left>
 
-              {/* <CardItem  style={{marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
+              {/* Giorno */}
+              <Left style={{ marginRight: 5 }}>
+                <Image
+                  style={{ width: 20, height: 20, marginRight: 0 }}
+                  source={require("../assets/calendar.png")}
+                />
+                <Text style={{ fontSize: 13, textAlign: "center" }}>
+                  {this.props.navigation.state.params.eventInfo.data}
+                </Text>
+              </Left>
+
+              {/* Prezzo */}
+              <Left style={{ flexDirection: "row", justifyContent: "center" }}>
+                <Image
+                  style={{ width: 20, height: 20, marginRight: 0 }}
+                  source={require("../assets/money.png")}
+                />
+                <Text style={{ fontSize: 13, textAlign: "center" }}>
+                  {this.props.navigation.state.params.eventInfo.prezzo}
+                </Text>
+              </Left>
+            </CardItem>
+
+            {/* <CardItem  style={{marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
                 COUNTER PER PACCHETTI DI PIU' GIORNI, TO DO NEXT
                 <Left style={{flexDirection: 'row'}}>
                     <Image style={{width:20, height: 20, marginRight:0}} source={require('../assets/stopwatch.png')}/>
@@ -262,45 +386,91 @@ componentWillMount(){
                       ><Icon style={{}} size={25} color={TINT_COLOR} name='plus-circle'/></Button>
                 </Left>  */}
 
-              {/* DESCRIZIONE BREVE*/}
-              <CardItem  style={{marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
-                    <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/description.png')}/>
-                    <Text>{this.props.navigation.state.params.eventInfo.descrizioneBreve}</Text>
-              </CardItem>
+            {/* DESCRIZIONE BREVE*/}
+            <CardItem
+              style={{
+                marginLeft: 10,
+                marginRight: 10,
+                marginBottom: 5,
+                borderRadius: 10
+              }}
+            >
+              <Image
+                style={{ width: 20, height: 20, marginRight: 10 }}
+                source={require("../assets/description.png")}
+              />
+              <Text>
+                {this.props.navigation.state.params.eventInfo.descrizioneBreve}
+              </Text>
+            </CardItem>
 
-              {/* DESCRIZIONE LUNGA*/}
-              <CardItem  style={{marginLeft: 10, marginRight: 10, marginBottom: 5, borderRadius: 10}} >
-                    <Image style={{width:20, height: 20, marginRight:10}} source={require('../assets/description.png')}/>
-                    <Text>{this.props.navigation.state.params.eventInfo.descrizioneCompleta}</Text>
-              </CardItem>
+            {/* DESCRIZIONE LUNGA*/}
+            <CardItem
+              style={{
+                marginLeft: 10,
+                marginRight: 10,
+                marginBottom: 5,
+                borderRadius: 10
+              }}
+            >
+              <Image
+                style={{ width: 20, height: 20, marginRight: 10 }}
+                source={require("../assets/description.png")}
+              />
+              <Text>
+                {
+                  this.props.navigation.state.params.eventInfo
+                    .descrizioneCompleta
+                }
+              </Text>
+            </CardItem>
 
-              {/* AGENZIA E EMAIL */}
-              <CardItem  style={{flexDirection: 'column', flexWrap: 'wrap',borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 10, marginBottom: 10, borderRadius: 10}} >
-                <Body style={{flexDirection: 'row', margin: 5}}>
-                <SimpleLineIcons name='user' size={16}/>
-                <Text style={{marginLeft: 10}}>{this.props.navigation.state.params.eventInfo.agenzia}</Text>
-                </Body>
+            {/* AGENZIA E EMAIL */}
+            <CardItem
+              style={{
+                flexDirection: "column",
+                flexWrap: "wrap",
+                borderColor: BACKGROUND_COLOR,
+                borderWidth: 1,
+                marginLeft: 10,
+                marginRight: 10,
+                marginBottom: 10,
+                borderRadius: 10
+              }}
+            >
+              <Body style={{ flexDirection: "row", margin: 5 }}>
+                <SimpleLineIcons name="user" size={16} />
+                <Text style={{ marginLeft: 10 }}>
+                  {this.props.navigation.state.params.eventInfo.agenzia}
+                </Text>
+              </Body>
 
-                <Body style={{flexDirection: 'row', margin: 5}}>
-                   <MaterialCommunityIcons name='email-outline' size={16}/>
-                   <Text style={{marginLeft: 10}}>{this.props.navigation.state.params.eventInfo.email}</Text>
-               </Body>
+              <Body style={{ flexDirection: "row", margin: 5 }}>
+                <MaterialCommunityIcons name="email-outline" size={16} />
+                <Text style={{ marginLeft: 10 }}>
+                  {this.props.navigation.state.params.eventInfo.email}
+                </Text>
+              </Body>
 
-               <Body style={{flexDirection: 'row', margin: 5}}>
-                   <Feather name='phone' size={16}/>
-                   <Text style={{marginLeft: 10}}>{this.props.navigation.state.params.eventInfo.numero}</Text>
-               </Body>
+              <Body style={{ flexDirection: "row", margin: 5 }}>
+                <Feather name="phone" size={16} />
+                <Text style={{ marginLeft: 10 }}>
+                  {this.props.navigation.state.params.eventInfo.numero}
+                </Text>
+              </Body>
 
-               <Body style={{flexDirection: 'row', margin: 5}}>
-                    <MaterialCommunityIcons name='facebook' size={16}/>
-                    <Text style={{marginLeft: 10}}>{this.props.navigation.state.params.eventInfo.facebook}</Text>
-               </Body>
-              </CardItem>
-            </Card>
+              <Body style={{ flexDirection: "row", margin: 5 }}>
+                <MaterialCommunityIcons name="facebook" size={16} />
+                <Text style={{ marginLeft: 10 }}>
+                  {this.props.navigation.state.params.eventInfo.facebook}
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
         </ScrollView>
-    </Container>
+      </Container>
     );
-  }   
+  }
 }
 
 EventPage.navigationOptions = ({ navigation }) => {
@@ -309,7 +479,7 @@ EventPage.navigationOptions = ({ navigation }) => {
     headerStyle: {
       backgroundColor: BACKGROUND_COLOR,
       borderBottomWidth: 0
-    },
+    }
   };
 };
 
@@ -320,62 +490,58 @@ const styles = StyleSheet.create({
   },
 
   searchButton: {
-    marginLeft: '10%',
-    marginRight: '10%',
+    marginLeft: "10%",
+    marginRight: "10%",
     padding: 10,
     backgroundColor: TINT_COLOR,
-    borderRadius: 30,
-  },
+    borderRadius: 30
+  }
 });
 
+// newBooking = () => {
+//   const userData = {
+//     username: "",
+//     nome: "",
+//     cognome: "",
+//     email: "",
+//   }
+//   const userId = firebase.auth().currentUser.uid;
+//   firebase.database().ref("App/Users/" + userId).on("value", snap => {
+//     console.log(snap.val())
+//     userData.username = snap.val().Username;
+//     userData.nome = snap.val().Nome;
+//     userData.cognome = snap.val().Cognome
+//     userData.email = snap.val().Email
+//     console.log("userData")
+//     console.log(userData)
 
+//     const booking = {
+//       IDcliente: userId,
+//       DatiUtente: userData,
+//       Stato: "ATTESA"
+//     };
 
-  // newBooking = () => {
-  //   const userData = {
-  //     username: "",
-  //     nome: "",
-  //     cognome: "",
-  //     email: "",
-  //   }
-  //   const userId = firebase.auth().currentUser.uid;
-  //   firebase.database().ref("App/Users/" + userId).on("value", snap => {
-  //     console.log(snap.val())
-  //     userData.username = snap.val().Username;
-  //     userData.nome = snap.val().Nome;
-  //     userData.cognome = snap.val().Cognome
-  //     userData.email = snap.val().Email
-  //     console.log("userData")
-  //     console.log(userData)
+//     firebase.database()
+//     .ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni/"+userId)
+//     .update(booking)
 
-  //     const booking = {
-  //       IDcliente: userId,
-  //       DatiUtente: userData,
-  //       Stato: "ATTESA"
-  //     };
+//   });
+//     /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE
+//     var id = firebase
+//       .database()
+//       .ref("App/" + "Users/" + userId + "/" + "favorites/")
+//       .push(newFavorite).key;
 
-  //     firebase.database()
-  //     .ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni/"+userId)
-  //     .update(booking)
+//       const setId ={
+//         id: id
+//       }
+//       firebase
+//       .database()
+//       .ref("App/" + "Users/" + userId + "/" + "favorites/" + id)
+//       .update(setId);*/
+// }
 
-  //   });
-  //     /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
-  //     var id = firebase
-  //       .database()
-  //       .ref("App/" + "Users/" + userId + "/" + "favorites/")
-  //       .push(newFavorite).key;
-      
-  //       const setId ={
-  //         id: id
-  //       } 
-  //       firebase
-  //       .database()
-  //       .ref("App/" + "Users/" + userId + "/" + "favorites/" + id)
-  //       .update(setId);*/
-  // }
-
-
-
-   /* <CardItem >
+/* <CardItem >
                   <View style={styles.buttonContainer}>
                     {this.state.booked ?              // Verifico se è stata effettuata la richiesta
                       ( <View>
