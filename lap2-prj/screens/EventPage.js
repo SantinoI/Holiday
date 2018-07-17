@@ -28,44 +28,14 @@ const PUSH_ENDPOINT = "https://exp.host/--/api/v2/push/send";
 export default class EventPage extends React.Component {
   state = {
     booked: false,
-    bookingState: ""
+    bookingState: "",
+    destToken: "",
+    logged: false
   };
-
-  // NUOVA FUNZIONE CHE DA PROBLEMI -> NON SETTA LO STATO, I VALORI VENGONO PRESI REGOLARMENTE
-  // FORSE C'è UN PROBLEMA DI CHIAMATE SICNRONE
-  /*checkBooking = () => {
-    this.setState({booked: false});
-    firebase.database().ref("App/Prenotazioni")
-    .on("value", snap => {
-      snap.forEach(child => {
-        if ((child.val().IDcliente == firebase.auth().currentUser.uid) && (child.val().IDevento == this.props.navigation.state.params.eventInfo.IDevento)) {
-          console.log(child.val());
-             this.setState({booked: true});
-             this.setState({bookingState: child.val().Stato})
-          console.log(this.state.booked)
-          console.log(this.state.bookingState)
-        }
-      });
-    });
-  }*/
-
-  // VECCHIA FUNZIONE FUNZIONANTE -> TUTTAVIA PRENDE I DATI DA UN POSTO CHE NOI NON USIAMO PIU
-  // checkBooking = () => {
-  //   this.setState({booked: false});
-  //   firebase.database().ref("App/Events/"+this.props.navigation.state.params.eventInfo.IDevento+"/Prenotazioni")
-  //   .on("value", snap => {
-  //     snap.forEach(child => {
-  //       if ((child.val().IDcliente == firebase.auth().currentUser.uid))
-  //         //console.log("ci siamo")
-  //         this.setState({booked: true});
-  //         this.setState({bookingState: child.val().Stato})
-  //         //console.log(this.state.booked)
-  //     });
-  //   });
-  // }
 
   checkBooking = async => {
     uid = firebase.auth().currentUser.uid;
+
     idEvento = this.props.navigation.state.params.eventInfo.IDevento;
     firebase
       .database()
@@ -85,12 +55,36 @@ export default class EventPage extends React.Component {
       });
   };
 
-  componentWillMount() {
-    this.checkBooking();
-  }
+  _loadUserData = () => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      this.setState({logged: true})
+      var uid = user.uid;
+      firebase
+        .database()
+        .ref("App/Users/" + uid)
+        .on("value", snap => {
+          userData = {};
+          this.setState({
+            username: snap.val().Username,
+            nome: snap.val().Nome,
+            cognome: snap.val().Cognome,
+            email: snap.val().Email
+          });
+        });
+      this.setState;
+    }
+  };
 
-  _sendNotification = destToken => {
-    var message = this.props.navigation.state.params.eventInfo.username + "ha effettuato una prenotazione al tuo evento" + this.props.navigation.state.params.eventInfo.nomeEvento;
+  componentWillMount() {
+    const user = firebase.auth().currentUser;
+    if(user){
+      this.checkBooking();
+      this._loadUserData();
+    }
+}
+
+  _sendNotification = (destToken, payload) => {
     fetch(PUSH_ENDPOINT, {
       method: "POST",
       headers: {
@@ -100,9 +94,9 @@ export default class EventPage extends React.Component {
       },
       body: JSON.stringify({
         to: destToken,
-        title: "Nuova Prenotazione",
-        body: message,
-        //data: { message: message},
+        title: payload.title,
+        body: payload.message,
+        data: { payload },
         sound: "default"
       })
     })
@@ -110,7 +104,7 @@ export default class EventPage extends React.Component {
       .catch(error => console.log(error));
   };
 
-  newBooking = () => {
+  newBooking = async () => {
     const userData = {
       username: "",
       nome: "",
@@ -174,13 +168,26 @@ export default class EventPage extends React.Component {
           .push(booking);
       });
 
-      var destToken;
-      var destinatario = firebase.database().ref("App/Organizzatori/" + this.props.navigation.state.params.eventInfo.IDorganizzatore)
+    let payload = {
+      message:
+        this.state.username +
+        " ha aggiunto una prenotazione al tuo evento" +
+        this.props.navigation.state.params.eventInfo.nomeEvento,
+      title: "Nuova Prenotazione"
+    };
+    var destToken, operazione;
+    var destinatario = firebase
+      .database()
+      .ref(
+        "App/Organizzatori/" +
+          this.props.navigation.state.params.eventInfo.IDorganizzatore
+      )
       .on("value", snap => {
-        destToken = snap.val().ExpoToken
-        console.log(snap.val().ExpoToken)
-      })
-      this._sendNotification(destToken);
+        destToken = snap.val().ExpoToken;
+        this.setState({ destToken: destToken }, () =>
+          this._sendNotification(this.state.destToken, payload)
+        );
+      });
   };
 
   removeBooking() {
@@ -194,10 +201,32 @@ export default class EventPage extends React.Component {
       if (selection.IDevento == idevento) {
         console.log(selection);
         snapshot.ref.remove();
+        idevento = null;
       }
     });
-
     this.setState({ booked: false });
+
+    let payload = {
+      message:
+        this.state.username +
+        " ha rimosso una prenotazione al tuo evento" +
+        this.props.navigation.state.params.eventInfo.nomeEvento,
+      title: "Prenotazione rimossa"
+    };
+
+    var destToken, operazione;
+    var destinatario = firebase
+      .database()
+      .ref(
+        "App/Organizzatori/" +
+          this.props.navigation.state.params.eventInfo.IDorganizzatore
+      )
+      .on("value", snap => {
+        destToken = snap.val().ExpoToken;
+        this.setState({ destToken: destToken }, () =>
+          this._sendNotification(this.state.destToken, payload)
+        );
+      });
   }
 
   render() {
@@ -245,6 +274,8 @@ export default class EventPage extends React.Component {
             </CardItem>
 
             {/* BOTTONE PRENOTA ORA */}
+            {this.state.logged ? 
+            (
             <CardItem>
               <View style={styles.buttonContainer}>
                 {this.state.booked ? ( // Verifico se è stata effettuata la richiesta
@@ -270,7 +301,23 @@ export default class EventPage extends React.Component {
                 )}
               </View>
             </CardItem>
+            ) :
+            (
+            <CardItem>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.searchButton}
+                  activeOpacity={0.5}
+                  title="Prenota"
+                  onPress={() => this.props.navigation.navigate("Login")}
+                >
+                  <Text style={{ textAlign: "center", color: "white" }}>{" "}Accedi per prenotare{" "}</Text>
+                </TouchableOpacity>
 
+            </View>
+          </CardItem>
+            )
+            }
             {/* Location */}
             <CardItem
               style={{
