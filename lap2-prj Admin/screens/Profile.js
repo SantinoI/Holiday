@@ -229,6 +229,15 @@ export default class Profile extends React.Component {
         source={require("../assets/background-user.png")}
         style={{height:'100%', width:'100%'}}
       >
+      <TouchableOpacity  onPress={() => this.props.navigation.navigate("NewEventPage", {profileImage: this.state.profileImage,
+                                                                                        username: this.state.username,
+                                                                                        sede: this.state.Sede,
+                                                                                        email: this.state.email,
+                                                                                        numero: this.state.numero})}>
+            <MaterialIcons style={{marginRight: 30}} name='add-circle-outline' size={30} color={'white'}/>
+      </TouchableOpacity>
+
+      
         <ScrollView style={{ paddingTop: 50, marginBottom: 0}}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:10, borderRadius: 10}}>
                 <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}} onPress={this._selectPhoto}>
@@ -327,11 +336,7 @@ Profile.navigationOptions = ({ navigation }) => {
 
       headerLeft: null,
 
-      headerRight: (
-        <TouchableOpacity  onPress={() => navigation.navigate("NewEventPage", {userInfo: this.state})}>
-            <MaterialIcons style={{marginRight: 30}} name='add-circle-outline' size={30} color={TINT_COLOR}/>
-        </TouchableOpacity>
-      )
+      headerRight: null
     };
   };
 

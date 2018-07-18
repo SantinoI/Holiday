@@ -47,12 +47,6 @@ export default class NewEventPage extends React.Component {
       descrizioneBreve: '',
       descrizioneCompleta: '',
       isLoading: false,
-      profileImage: this.props.profileImage,
-      username: this.props.username,
-      sede: this.props.Sede,
-      email: this.props.email,
-      numero: this.props.numero,
-
   }
 
 
@@ -69,17 +63,25 @@ export default class NewEventPage extends React.Component {
     .ref("App/" + "Events/")
     .push(data).key;    
     
-    const data = {
-      EventImage: this.state.image,
-      NomeEvento: this.state.nomeEvento,
+    const localita = {
       Regione: this.state.regione,
       Provincia: this.state.provincia,
       Citta: this.state.citta,
+     }
+    const data = {
+      EventImage: this.state.image,
+      NomeEvento: this.state.nomeEvento,
+      Localita: localita,
       Data: this.state.data,
       Orario: this.state.orario,
       Prezzo: this.state.prezzo,
       DescrizioneBreve: this.state.descrizioneBreve,
       DescrizioneCompleta: this.state.descrizioneCompleta,
+      ImmagineAgenzia: this.props.navigation.state.params.profileImage,
+      Agenzia: this.props.navigation.state.params.username,
+      Sede: this.props.navigation.state.params.sede,
+      Email: this.props.navigation.state.params.email,
+      Numero: this.props.navigation.state.params.numero,
     };
 
     firebase
@@ -121,12 +123,20 @@ export default class NewEventPage extends React.Component {
       return;
     }
   
-    this.setState({ isLoading: true });
-
-      
-        this.setState({ isLoading: false });
-        this.upload_event_data();
-        this.props.navigation.navigate("Profile");
+     this.upload_event_data();
+     Alert.alert(
+      "Inserimento avvenuto con successo!",
+        "",
+        [
+           {
+            text: "Continua",
+             onPress: () => console.log("Evento creato"),
+             style: "cancel"
+           }
+         ],
+         { cancelable: false }
+       );
+     this.props.navigation.navigate("Profile");
       
       
   };
@@ -262,7 +272,7 @@ export default class NewEventPage extends React.Component {
                 </Left>
               </CardItem>
 
-              {console.log(this.state.sede)}
+              
 
               {/* LOCALITA' E ID_EVENTO*/}
               {/* <CardItem >
@@ -404,15 +414,14 @@ export default class NewEventPage extends React.Component {
               </CardItem>
 
               <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              loading={this.state.isLoading}
-              raised
-              title="Register"
-              onPress={this._upLoad}
-              style={styles.searchButton}
-              activeOpacity={0.5}
-            >
-              <Text style={{ textAlign: "center", color: "white" }}>Carica Evento</Text>
+                <TouchableOpacity
+                  loading={this.state.isLoading}
+                  raised
+                  onPress={this._upLoad}
+                  style={styles.searchButton}
+                  activeOpacity={0.5}
+                >
+               <Text style={{ textAlign: "center", color: "white" }}>Carica Evento</Text>
             </TouchableOpacity>
           </View>
 
@@ -439,7 +448,8 @@ NewEventPage.navigationOptions = ({ navigation }) => {
 const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
+    margin: 30
   },
 
   searchButton: {
