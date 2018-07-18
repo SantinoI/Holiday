@@ -104,6 +104,7 @@ export default class Favorites extends React.Component {
   renderCard = ({ item }) => (
     <EventCard
       data={item}
+      favorite={true}
       onFavorite={() => this._favorite(item)}
       onEventPress={() =>
         this.props.navigation.navigate("EventPage", { eventInfo: item })
