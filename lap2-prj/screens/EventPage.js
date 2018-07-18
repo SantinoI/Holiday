@@ -82,7 +82,7 @@ export default class EventPage extends React.Component {
       this.checkBooking();
       this._loadUserData();
     }
-}
+  }
 
   _sendNotification = (destToken, payload) => {
     fetch(PUSH_ENDPOINT, {
@@ -310,7 +310,7 @@ export default class EventPage extends React.Component {
                   activeOpacity={0.5}
                   title="Prenota"
                   //onPress={() => {this.props.navigation.navigate("Login"); this.forceUpdate()}}
-                  onPress={() => {this.props.navigation.navigate("Login"); this.forceUpdate()}}
+                  //onPress={() => {this.forceUpdate()}}
                 >
                   <Text style={{ textAlign: "center", color: "white" }}>{" "}Accedi per prenotare{" "}</Text>
                 </TouchableOpacity>

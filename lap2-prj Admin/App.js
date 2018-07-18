@@ -15,13 +15,15 @@ import { createBottomTabNavigator } from "react-navigation";
 
 
 import Login from "./screens/Login";
+import Home from "./screens/Home";
+import ManagerPage from "./screens/ManagerPage";
 import EventPage from "./screens/EventPage";
 import NewEventPage from "./screens/NewEventPage";
+import Favorites from "./screens/Favorites";
 import Profile from "./screens/Profile";
 import RegisterPage from "./screens/RegisterPage";
+import SearchResult from "./screens/SearchResult";
 import BookingList from "./screens/BookingList";
-
-import store from "./reducers"
 
 import * as firebase from "firebase";
 
@@ -137,3 +139,54 @@ export default class App extends React.Component {
   // }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// export default createBottomTabNavigator(
+//   {
+//     Home: { screen: App},
+//     Favorites: {screen: Favorite},
+//     Profile: {screen: ProfileNavigator},
+//   },
+//   {
+//     navigationOptions: ({ navigation }) => ({
+//       tabBarIcon: ({ focused, tintColor }) => {
+//         const { routeName } = navigation.state;
+//         let iconName;
+//         if (routeName === 'Home') {
+//           iconName = `home${focused ? '' : '-outline'}`;
+//           return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
+//         } else if (routeName === 'Favorites') {
+//           iconName = `heart${focused ? '' : '-outline'}`;
+//           return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
+//         }
+//         else if (routeName === 'Profile') {
+//           iconName = `account${focused ? '' : '-outline'}`;
+//           return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
+//         }
+        
+//       }
+//     }),
+//     tabBarOptions: {
+//       activeTintColor: TINT_COLOR,
+//       inactiveTintColor: 'gray',
+//     },
+//   }
+// );
+
+//export default App;
+//return <MaterialCommunityIcons name={"home-outline"} size={40} color={TINT_COLOR} />;
+//return <Entypo name={"heart-outlined"} size={25} color={tintColor} />
