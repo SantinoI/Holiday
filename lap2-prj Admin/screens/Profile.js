@@ -67,6 +67,22 @@ export default class Profile extends React.Component {
       }
     }
 
+     //Carimecameno foto
+     _uploadImage = async localURI => {
+      const uid = firebase.auth().currentUser.uid;
+      const response = await fetch(localURI);
+      const blob = await response.blob();
+      const ref = firebase
+        .storage()
+        .ref("Users/" + uid +"/UserImages/"+ this.state.username )
+
+        const uploadStatus = await ref.put(blob);
+      // console.log(uploadStatus);
+      const downloadURL = await uploadStatus.ref.getDownloadURL();
+      console.log(downloadURL);
+      return downloadURL;
+    };
+
     _updateProfileImage = () => {
       const userId = firebase.auth().currentUser.uid;
       firebase
@@ -229,15 +245,6 @@ export default class Profile extends React.Component {
         source={require("../assets/background-user.png")}
         style={{height:'100%', width:'100%'}}
       >
-      <TouchableOpacity  onPress={() => this.props.navigation.navigate("NewEventPage", {profileImage: this.state.profileImage,
-                                                                                        username: this.state.username,
-                                                                                        sede: this.state.Sede,
-                                                                                        email: this.state.email,
-                                                                                        numero: this.state.numero})}>
-            <MaterialIcons style={{marginRight: 30}} name='add-circle-outline' size={30} color={'white'}/>
-      </TouchableOpacity>
-
-      
         <ScrollView style={{ paddingTop: 50, marginBottom: 0}}>
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:10, borderRadius: 10}}>
                 <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}} onPress={this._selectPhoto}>
@@ -272,8 +279,21 @@ export default class Profile extends React.Component {
                     <Text style={{marginLeft: 10}}>{this.state.numero}</Text>
                 </Body>
 
-                </CardItem>                
-
+                </CardItem>      
+                {/* Bottone inserisci nuovo evento */}
+                <CardItem style={{flexDirection: 'column', alignItems: 'center'}} >
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.newEventButton} onPress={() => this.props.navigation.navigate("NewEventPage", {profileImage: this.state.profileImage,
+                                                                                                                                   username: this.state.username,
+                                                                                                                                   sede: this.state.Sede,
+                                                                                                                                   email: this.state.email,
+                                                                                                                                   numero: this.state.numero})}>
+                      <Text style={{textAlign:'center', color: 'white' }}> Inserisci nuovo evento </Text>
+                    </TouchableOpacity>
+                  </View>
+                </CardItem>          
+                
+                {/* Bottone LOGOUT */}
                   <CardItem style={{flexDirection: 'column', alignItems: 'center', marginBottom: 30, marginTop: 20 }} >
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.logoutButton} onPress={() => firebase.auth().signOut()}>
@@ -282,7 +302,7 @@ export default class Profile extends React.Component {
                   </View>
                 </CardItem>
                   
-             </Card>
+          </Card>
 
             {this.state.loading ? 
               (
@@ -389,4 +409,14 @@ Profile.navigationOptions = ({ navigation }) => {
       borderWidth: 0,
       //borderColor: "grey",
     },
+    newEventButton: {
+      marginLeft: '10%',
+      marginRight: '10%',
+      width: 250,
+      padding: 10,
+      backgroundColor: TINT_COLOR,
+      borderRadius: 25,
+      borderWidth: 0.5,
+      borderColor:"yellow"
+    }
 });

@@ -36,7 +36,7 @@ const BACKGROUND_COLOR = "#d7e4e5";
 
 export default class NewEventPage extends React.Component {
   state = {
-      image: null,
+      image: '',
       nomeEvento: '',
       regione: '',
       provincia: '',
@@ -88,6 +88,8 @@ export default class NewEventPage extends React.Component {
       .database()
       .ref("App/" + "Events/" + id)
       .update(data);
+    
+    this._uploadImage(this.state.image);
   };
     
 
@@ -96,16 +98,16 @@ export default class NewEventPage extends React.Component {
     //controlli sulla compilazione di tutti i campi
     if (
       !(
-        //this.state.image &&
-        this.state.nomeEvento &&
-        this.state.regione &&
-        this.state.provincia &&
-        this.state.citta &&
-        this.state.data &&
-        this.state.orario &&
-        this.state.prezzo &&
-        this.state.descrizioneBreve &&
-        this.state.descrizioneCompleta
+        this.state.image 
+        //this.state.nomeEvento &&
+        // this.state.regione &&
+        // this.state.provincia &&
+        // this.state.citta &&
+        // this.state.data &&
+        // this.state.orario &&
+        // this.state.prezzo &&
+        // this.state.descrizioneBreve &&
+        // this.state.descrizioneCompleta
       )
     ) {
       Alert.alert(
@@ -130,7 +132,7 @@ export default class NewEventPage extends React.Component {
         [
            {
             text: "Continua",
-             onPress: () => console.log("Evento creato"),
+             onPress: () => console.log("Evento creato con successo!"),
              style: "cancel"
            }
          ],
@@ -142,13 +144,14 @@ export default class NewEventPage extends React.Component {
   };
 
   //FUNZIONE PER CARICARE IMMAGINE [non funziona]
-    //Apertura galleria per choosing foto profilo utente
+
+  //Apertura galleria per choosing foto profilo utente
     _openPhotoGallery = async () => {
       const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
       if (status !== "granted") {
         const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         if (result.status !== "granted") {
-          alert("you need to authorized the app");
+          alert("Consenti l'accesso alla galleria");
           return;
         }
       }
@@ -162,16 +165,15 @@ export default class NewEventPage extends React.Component {
           { format: "png" }
         );
         console.log(manipResult);
-        this.setState({ eventImage: manipResult.uri });
+        this.setState({ image: manipResult.uri });
       }
     };
   
     _selectPhoto = () => {
-      console.log("show actions sheet");
       if (Platform.OS === "ios") {
         ActionSheetIOS.showActionSheetWithOptions(
           {
-            options: ["Camera", "Photo Gallery", "Cancel"],
+            options: ["Fotocamera", "Galleria", "Cancella"],
             cancelButtonIndex: 2,
             title: "Scegli immagine da:"
           },
@@ -183,6 +185,23 @@ export default class NewEventPage extends React.Component {
         );
       }
     };
+
+    //Carimecameno foto
+    _uploadImage = async localURI => {
+      const uid = firebase.auth().currentUser.uid;
+      const response = await fetch(localURI);
+      const blob = await response.blob();
+      const ref = firebase
+        .storage()
+        .ref("Users/" + uid +"/EventsImages/"+ this.state.nomeEvento )
+
+        const uploadStatus = await ref.put(blob);
+      // console.log(uploadStatus);
+      const downloadURL = await uploadStatus.ref.getDownloadURL();
+      console.log(downloadURL);
+      //return downloadURL;
+    };
+    
 
 
     // FUNZIONI PER OTTENERE DATA CORRENTE
@@ -213,17 +232,16 @@ export default class NewEventPage extends React.Component {
           <Card style={{ marginLeft: 10, marginRight: 10, borderRadius: 10}}>
           
               {/* IMMAGINE EVENTO */}
-              <CardItem style={{borderRadius: 10, marginTop: 10,paddingTop:10, padding: 10}}>
               <TouchableOpacity
-                style={{  marginBottom: 20, alignSelf: "center" }}
+                style={{  alignSelf: "center" }}
                 onPress={this._selectPhoto}
+                
                >
-                <Image  style={{ borderRadius:10, height: 200, width: null, flex: 1}}
-                        source = {  this.state.image ? { uri: this.state.image } :
-                                                              require("../assets/selectImage.png")}/>
+                 <Image  style={{margin: 10, borderRadius:10, height: 200, width: 335}}
+                         source = {  this.state.image ?  { uri: this.state.image } :
+                                                           require("../assets/selectImage.png")}/>
                </TouchableOpacity>
 
-              </CardItem>
 
               {/* Nome Evento */}
               <CardItem  style={{borderColor: BACKGROUND_COLOR, borderWidth: 1, marginLeft: 10, marginRight: 5, marginBottom: 5, borderRadius: 10}} >

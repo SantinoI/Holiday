@@ -34,7 +34,7 @@ var config = {
   authDomain: "lap2-prj-v2.firebaseapp.com",
   databaseURL: "https://lap2-prj-v2.firebaseio.com",
   projectId: "lap2-prj-v2",
-  storageBucket: "",
+  storageBucket: "lap2-prj-v2.appspot.com",
   messagingSenderId: "565592150962"
 };
 firebase.initializeApp(config);
