@@ -232,6 +232,27 @@ export default class Profile extends React.Component {
       })
     }
 
+
+     //Carimecameno foto nello storage e nel DB
+     _uploadImage = async localURI => {
+      const uid = firebase.auth().currentUser.uid;
+      const response = await fetch(localURI);
+      const blob = await response.blob();
+     
+      const ref = firebase
+        .storage()
+        .ref("Users/" + uid +"/UserImages/"+ this.state.username )
+      const uploadStatus = await ref.put(blob);
+      const downloadURL = await uploadStatus.ref.getDownloadURL();
+     
+      firebase
+      .database()
+      .ref("App/Users/" + uid)
+      .update({ProfileImage: downloadURL})
+
+      this.setState({profileImage : downloadURL});
+    };
+
   _updateProfileImage = () => {
     const userId = firebase.auth().currentUser.uid;
     firebase
@@ -258,9 +279,7 @@ export default class Profile extends React.Component {
         [{ resize: { width: 375 } }],
         { format: "png" }
       );
-      console.log(manipResult);
-      this.setState({ profileImage: manipResult.uri });
-      this._updateProfileImage();
+      this._uploadImage(manipResult.uri);
     }
   };
 

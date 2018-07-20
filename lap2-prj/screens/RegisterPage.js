@@ -75,6 +75,9 @@ export default class RegisterPage extends React.Component {
       .database()
       .ref("App/" + "Users/" + userId)
       .update(data);
+
+    this._uploadImage(this.state.profileImage);
+
   };
   
   registerForPushNotificationsAsync = async () => {
@@ -188,7 +191,6 @@ export default class RegisterPage extends React.Component {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-
       .then(user => {
         this.setState({ isLoading: false });
         this.upload_data_user();
@@ -198,6 +200,26 @@ export default class RegisterPage extends React.Component {
       .catch(error => {
         this.setState({ error: error.message, isLoading: false });
       });
+  };
+
+  //Carimecameno foto nello storage e nel DB
+  _uploadImage = async localURI => {
+    const uid = firebase.auth().currentUser.uid;
+    const response = await fetch(localURI);
+    const blob = await response.blob();
+   
+    const ref = firebase
+      .storage()
+      .ref("Users/" + uid +"/UserImages/"+ this.state.username )
+    const uploadStatus = await ref.put(blob);
+    const downloadURL = await uploadStatus.ref.getDownloadURL();
+   
+    firebase
+    .database()
+    .ref("App/Users/" + uid)
+    .update({ProfileImage: downloadURL})
+    console.log("qi" + downloadURL)
+    this.setState({profileImage : downloadURL});
   };
 
   //Apertura galleria per choosing foto profilo utente
@@ -256,7 +278,7 @@ export default class RegisterPage extends React.Component {
               rounded
               style={{ borderRadius: 60, width: 120, height: 120 }}
               source={
-                this.state.image
+                this.state.profileImage
                   ? { uri: this.state.profileImage }
                   : require("../assets/imagep.png")
               }
