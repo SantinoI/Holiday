@@ -67,29 +67,26 @@ export default class Profile extends React.Component {
       }
     }
 
-     //Carimecameno foto
-     _uploadImage = async localURI => {
+    //Carimecameno foto nello storage e nel DB
+    _uploadImage = async localURI => {
       const uid = firebase.auth().currentUser.uid;
       const response = await fetch(localURI);
       const blob = await response.blob();
+     
       const ref = firebase
         .storage()
         .ref("Users/" + uid +"/UserImages/"+ this.state.username )
-
-        const uploadStatus = await ref.put(blob);
-      // console.log(uploadStatus);
+      const uploadStatus = await ref.put(blob);
       const downloadURL = await uploadStatus.ref.getDownloadURL();
-      console.log(downloadURL);
-      return downloadURL;
-    };
-
-    _updateProfileImage = () => {
-      const userId = firebase.auth().currentUser.uid;
+     
       firebase
       .database()
-      .ref("App/Organizzatori/" + userId)
-      .update({ProfileImage: this.state.profileImage})
-    }
+      .ref("App/Organizzatori/" + uid)
+      .update({ProfileImage: downloadURL})
+
+      this.setState({profileImage : downloadURL});
+    };
+
         //Apertura galleria per choosing foto profilo utente
     _openPhotoGallery = async () => {
       const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
@@ -109,9 +106,7 @@ export default class Profile extends React.Component {
           [{ resize: { width: 375 } }],
           { format: "png" }
         );
-        console.log(manipResult);
-        this.setState({ profileImage: manipResult.uri });
-        this._updateProfileImage();
+        this._uploadImage(manipResult.uri);
       }
     };
   
@@ -287,7 +282,7 @@ export default class Profile extends React.Component {
                                                                                                                                    username: this.state.username,
                                                                                                                                    sede: this.state.Sede,
                                                                                                                                    email: this.state.email,
-                                                                                                                                   numero: this.state.numero})}>
+                                                                                                                                   numero: this.state.numero})}>>
                       <Text style={{textAlign:'center', color: 'white' }}> Inserisci nuovo evento </Text>
                     </TouchableOpacity>
                   </View>
@@ -413,9 +408,11 @@ Profile.navigationOptions = ({ navigation }) => {
       marginLeft: '10%',
       marginRight: '10%',
       width: 250,
+      //height: 30,
       padding: 10,
       backgroundColor: TINT_COLOR,
       borderRadius: 25,
+      
       borderWidth: 0.5,
       borderColor:"yellow"
     }
