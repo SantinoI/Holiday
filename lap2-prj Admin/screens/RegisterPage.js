@@ -76,6 +76,8 @@ export default class RegisterPage extends React.Component {
       .database()
       .ref("App/" + "Organizzatori/" + userId)
       .update(data);
+    
+    this._uploadImage(this.state.profileImage);
   };
 
   registerForPushNotificationsAsync = async () => {
@@ -199,6 +201,26 @@ export default class RegisterPage extends React.Component {
       });
   };
 
+   //Carimecameno foto nello storage e nel DB
+   _uploadImage = async localURI => {
+    const uid = firebase.auth().currentUser.uid;
+    const response = await fetch(localURI);
+    const blob = await response.blob();
+   
+    const ref = firebase
+      .storage()
+      .ref("Users/" + uid +"/UserImages/"+ this.state.username )
+    const uploadStatus = await ref.put(blob);
+    const downloadURL = await uploadStatus.ref.getDownloadURL();
+   
+    firebase
+    .database()
+    .ref("App/Organizzatori/" + uid)
+    .update({ProfileImage: downloadURL})
+
+    this.setState({profileImage : downloadURL});
+  };
+
   //Apertura galleria per choosing foto profilo utente
   _openPhotoGallery = async () => {
     const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
@@ -218,7 +240,6 @@ export default class RegisterPage extends React.Component {
         [{ resize: { width: 375 } }],
         { format: "png" }
       );
-      console.log(manipResult);
       this.setState({ profileImage: manipResult.uri });
     }
   };
@@ -245,9 +266,10 @@ export default class RegisterPage extends React.Component {
     return (
       <Container style={{ padding: 25, backgroundColor: BACKGROUND_COLOR }}>
         <Card style={{ marginTop: 40, padding: 10, borderRadius: 10 }}>
+          
           {/* Immagine utente che rimane fissa in top */}
           <TouchableOpacity
-            style={{ marginTop: -75, marginBottom: 20, alignSelf: "center" }}
+            style={{ marginTop: -50, marginBottom: 20, alignSelf: "center" }}
             onPress={this._selectPhoto}
           >
             <Image
@@ -255,7 +277,7 @@ export default class RegisterPage extends React.Component {
               rounded
               style={{ borderRadius: 60, width: 120, height: 120 }}
               source={
-                this.state.image
+                this.state.profileImage
                   ? { uri: this.state.profileImage }
                   : require("../assets/imagep.png")
               }
