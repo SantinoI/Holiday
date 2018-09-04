@@ -57,7 +57,7 @@ export default class Profile extends React.Component {
             console.log(snap.val())
             this.setState({ profileImage: snap.val().ProfileImage });
             this.setState({ username: snap.val().Username });
-            this.setState({ sede: snap.val().Sede });
+            this.setState({ Sede: snap.val().Sede });
             this.setState({ numero: snap.val().Numero });
             this.setState({ email: snap.val().Email });
 
@@ -135,10 +135,10 @@ export default class Profile extends React.Component {
         snap.forEach(child => {
           if (child.val().IDorganizzatore === firebase.auth().currentUser.uid) {
             eventi.push({
-              IDevento: child.val().IDevento,
+              //IDevento: child.val().IDevento,
               agenzia: child.val().Agenzia,
               nomeEvento: child.val().NomeEvento,
-              
+              IDorganizzatore: child.val().IDorganizzatore,
               citta: child.val().Localita.Citta,
               provincia: child.val().Localita.Provincia,
               regione: child.val().Localita.Regione,
@@ -175,9 +175,10 @@ export default class Profile extends React.Component {
     }
 
     renderCard = ({ item }) => {
+      
       {console.log(item);}
       return (
-        <EventCard data={item} onRemove={() => this._onRemove()} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item}) }/> // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
+        <EventCard data={item} onRemove={() => this._onRemove(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item}) }/> // LA PROP DATA DOVREBBE PASSARE I PARAMETRI DELLA LIST IN QUESTOFILE
         // AI TEXT IN OUTPUT NEL FILE EVENTCARD
       );
     };
@@ -191,8 +192,9 @@ export default class Profile extends React.Component {
       let eventList = firebase.database().ref("App/Events");
       eventList.on("value", snap => {
         snap.forEach(child => {
-          if (child === item) {
-            child.val().remove();
+          if (child.val().NomeEvento == item.nomeEvento && child.val().IDorganizzatore == firebase.auth().currentUser.uid) {
+            console.log("Rimosso")
+            child.ref.remove();
           };
         });
       });
@@ -282,7 +284,8 @@ export default class Profile extends React.Component {
                                                                                                                                    username: this.state.username,
                                                                                                                                    sede: this.state.Sede,
                                                                                                                                    email: this.state.email,
-                                                                                                                                   numero: this.state.numero})}>>
+                                                                                                                                   numero: this.state.numero,
+                                                                                                                                   idOrganizzatore: firebase.auth().currentUser.uid})}>>
                       <Text style={{textAlign:'center', color: 'white' }}> Inserisci nuovo evento </Text>
                     </TouchableOpacity>
                   </View>

@@ -69,7 +69,7 @@ export default class NewEventPage extends React.Component {
       Citta: this.state.citta,
      }
     const data = {
-      EventImage: this.state.image,
+      ImagineEvento: this.state.image,
       NomeEvento: this.state.nomeEvento,
       Localita: localita,
       Data: this.state.data,
@@ -79,6 +79,7 @@ export default class NewEventPage extends React.Component {
       DescrizioneCompleta: this.state.descrizioneCompleta,
       ImmagineAgenzia: this.props.navigation.state.params.profileImage,
       Agenzia: this.props.navigation.state.params.username,
+      IDorganizzatore: this.props.navigation.state.params.idOrganizzatore,
       Sede: this.props.navigation.state.params.sede,
       Email: this.props.navigation.state.params.email,
       Numero: this.props.navigation.state.params.numero,
