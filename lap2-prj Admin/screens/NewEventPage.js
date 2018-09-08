@@ -61,7 +61,8 @@ export default class NewEventPage extends React.Component {
     var id = firebase
     .database()
     .ref("App/" + "Events/")
-    .push(data).key;    
+    .push(data);
+    var id_evento = id.key;
     
     const localita = {
       Regione: this.state.regione,
@@ -69,7 +70,8 @@ export default class NewEventPage extends React.Component {
       Citta: this.state.citta,
      }
     const data = {
-      ImagineEvento: this.state.image,
+      IDevento: id_evento,
+      ImmagineEvento: this.state.image,
       NomeEvento: this.state.nomeEvento,
       Localita: localita,
       Data: this.state.data,
@@ -87,7 +89,7 @@ export default class NewEventPage extends React.Component {
 
     firebase
       .database()
-      .ref("App/" + "Events/" + id)
+      .ref("App/" + "Events/" + id_evento)
       .update(data);
     
     this._uploadImage(this.state.image);

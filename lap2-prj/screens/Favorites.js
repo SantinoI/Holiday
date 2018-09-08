@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   StyleSheet,
   Platform,
@@ -40,7 +41,7 @@ import {
 import { TabNavigator } from "react-navigation";
 import { SearchBar } from "react-native-elements";
 
-import EventCard from "../components/EventCard";
+import EventCard from "../components/EventCardFav";
 
 import * as firebase from "firebase";
 
@@ -104,7 +105,10 @@ export default class Favorites extends React.Component {
   renderCard = ({ item }) => (
     <EventCard
       data={item}
-      onFavorite={() => this._favorite(item)}
+      onRemove={() => 
+        this._onRemove(item)
+      }
+
       onEventPress={() =>
         this.props.navigation.navigate("EventPage", { eventInfo: item })
       }
@@ -115,6 +119,21 @@ export default class Favorites extends React.Component {
       }
     />
   );
+
+  _onRemove = item => {
+    console.log("onRemove")
+    const uid = firebase.auth().currentUser.uid;
+    let eventList = firebase.database().ref("App/Users/" + uid + "/Favorites");
+    eventList.on("value", snap => {
+      snap.forEach(child => {
+        console.log("ehi")
+        if (child.val().IDevento === item.IDevento) {
+          console.log("Rimosso")
+          child.ref.remove();
+        };
+      });
+    });
+  };
 
   _keyExtractor = (item, index) => {
     //item.id = index;

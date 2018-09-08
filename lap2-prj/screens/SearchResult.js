@@ -10,7 +10,8 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
-  Dimensions
+  Dimensions,
+  Alert
 } from "react-native";
 
 import { Permissions, Location } from "expo";
@@ -64,12 +65,36 @@ _loadDatabase = async => {
                   durata: child.val().Durata,
                   immagineAgenzia: child.val().ImmagineAgenzia,
                   immagineEvento: child.val().ImmagineEvento,
-
+                  favorite: false
                 });
               }
             });
-              this.setState({ cardList: eventi });
-            });
+            // CONTROLLO CHE L'EVENTO SIA TRA I PREFERITI E MODIFICO IL CAMPO FAVORITE
+            // POSSO FARE QUESTO CONTROLLO SOLO SE FACCIO IL LOGIN, ALTRIMENTI, TUTTI FALSI
+            if (firebase.auth().currentUser) {
+              var temp = eventi
+              const uid = firebase.auth().currentUser.uid;
+              firebase.database().ref("App/Users/"+ uid + "/Favorites").on("value", snap => {
+                snap.forEach(child => {
+                  const newCardlist = temp.map( currentCard =>
+                    currentCard.IDevento == child.val().IDevento
+                      ? { ...currentCard, favorite: true }
+                      : currentCard
+                  );
+                  temp = newCardlist
+                  //this.setState({ cardList: newCardlist });
+                  console.log(newCardlist)
+                });
+                this.setState({ cardList: temp });
+              });
+            }
+            else {
+              this.setState({cardList: eventi})
+            }
+
+            //
+          
+          });
   } else if (this.state.searchOption === "Eventi") {
     let eventNameList = firebase.database().ref("App/Events");
         eventNameList.on("value", snap => {
@@ -95,11 +120,34 @@ _loadDatabase = async => {
                 durata: child.val().Durata,
                 immagineAgenzia: child.val().ImmagineAgenzia,
                 immagineEvento: child.val().ImmagineEvento,
-
+                favorite: false
               });
             }
           });
-            this.setState({ cardList: eventi });
+            
+          // CONTROLLO CHE L'EVENTO SIA TRA I PREFERITI E MODIFICO IL CAMPO FAVORITE
+            // POSSO FARE QUESTO CONTROLLO SOLO SE FACCIO IL LOGIN, ALTRIMENTI, TUTTI FALSI
+            if (firebase.auth().currentUser) {
+              var temp = eventi
+              const uid = firebase.auth().currentUser.uid;
+              firebase.database().ref("App/Users/"+ uid + "/Favorites").on("value", snap => {
+                snap.forEach(child => {
+                  const newCardlist = temp.map( currentCard =>
+                    currentCard.IDevento == child.val().IDevento
+                      ? { ...currentCard, favorite: true }
+                      : currentCard
+                  );
+                  temp = newCardlist
+                  //this.setState({ cardList: newCardlist });
+                  console.log(newCardlist)
+                });
+                this.setState({ cardList: temp });
+              });
+            }
+            else {
+              this.setState({cardList: eventi})
+            }
+        
           });
   } else if (this.state.searchOption === "Organizzatori") {
     let ManagerNameList = firebase.database().ref("App/Events");
@@ -126,22 +174,71 @@ _loadDatabase = async => {
                 durata: child.val().Durata,
                 immagineAgenzia: child.val().ImmagineAgenzia,
                 immagineEvento: child.val().ImmagineEvento,
-
+                favorite: false,
               });
             }
           });
-            this.setState({ cardList: eventi });
+            
+          // CONTROLLO CHE L'EVENTO SIA TRA I PREFERITI E MODIFICO IL CAMPO FAVORITE
+            // POSSO FARE QUESTO CONTROLLO SOLO SE FACCIO IL LOGIN, ALTRIMENTI, TUTTI FALSI
+            if (firebase.auth().currentUser) {
+              var temp = eventi
+              const uid = firebase.auth().currentUser.uid;
+              firebase.database().ref("App/Users/"+ uid + "/Favorites").on("value", snap => {
+                snap.forEach(child => {
+                  const newCardlist = temp.map( currentCard =>
+                    currentCard.IDevento == child.val().IDevento
+                      ? { ...currentCard, favorite: true }
+                      : currentCard
+                  );
+                  temp = newCardlist
+                  //this.setState({ cardList: newCardlist });
+                  console.log(newCardlist)
+                });
+                this.setState({ cardList: temp });
+              });
+            }
+            else {
+              this.setState({cardList: eventi})
+            }
+        
           });
+          
   }
-
   this.setState({loading: false})
 }
 
-  async componentDidMount(){
-    //console.log(this.props.navigation.state.params.searchOption);
-    await this._loadDatabase();
+_checkFavorite = () => {
+  console.log("check")
+  const uid = firebase.auth().currentUser.uid;
+  let favoriteList = firebase.database().ref("App/Users/"+ uid + "/Favorites").on("value", snap => {
+    snap.forEach(child => {
+      //console.log(child)
+      const newCardlist = this.state.cardList.map( currentCard =>
+        currentCard === child
+          ? { ...currentCard, favorite: true }
+          : currentCard
+      );
 
+      this.setState({ cardList: newCardlist });
+      console.log(this.state.cardList)
+
+    });
+  });
+
+  console.log("arrivederci")
+}
+
+  async componentWillMount(){
+    //console.log(this.props.navigation.state.params.searchOption);
+    this._loadDatabase();
+    //this._checkFavorite();
   }
+
+  // async componentDidMount(){
+  //   //console.log(this.props.navigation.state.params.searchOption);
+  //   await this._checkFavorite();
+  // }
 
   uploadFavorite = item => {
     const userId = firebase.auth().currentUser.uid;
@@ -162,17 +259,17 @@ _loadDatabase = async => {
       descrizioneBreve: item.descrizioneBreve,
       descrizioneCompleta: item.descrizioneCompleta,
       prezzo: item.prezzo,
-      difficolta: item.difficolta,
       data: item.data,
       orario: item.orario,
       //durata: item.Durata,
       immagineAgenzia:item.immagineAgenzia,
       immagineEvento: item.immagineEvento,
     };
-    firebase
+    var pushedRef = firebase
     .database()
     .ref("App/Users/" + userId+ "/Favorites/" + item.IDevento)
     .update(newFavorite)
+    console.log(pushedRef.key)
     
     /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
     var id = firebase
@@ -195,14 +292,32 @@ _loadDatabase = async => {
   )
 
   _favorite = item => {
-    const newCardlist = this.state.cardList.map(
-      currentCard =>
-        currentCard === item
-          ? { ...currentCard, favorite: !currentCard.favorite }
-          : currentCard
-    );
-    this.uploadFavorite(item);
-    this.setState({ cardList: newCardlist });
+
+    if (!firebase.auth().currentUser) {
+        Alert.alert(
+          "Accedi per poter aggiungere questo evento ai preferiti!",
+          "",
+          [
+            {
+              text: "Cancella",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            }
+          ],
+        );
+        return;
+    }
+    else {
+
+      const newCardlist = this.state.cardList.map(
+        currentCard =>
+          currentCard === item
+            ? { ...currentCard, favorite: true }
+            : currentCard
+      );
+      this.uploadFavorite(item);
+      this.setState({ cardList: newCardlist });
+    }
   };
 
   _keyExtractor = (item, index) => {
