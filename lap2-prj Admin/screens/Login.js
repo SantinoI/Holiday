@@ -36,20 +36,6 @@ export default class Login extends React.Component {
     password: "pippo1234",
     error: ""
   };
-
-// _checkIfClient = (user) => {
-//   firebase.database().ref("App/Organizzatori").on("value", snap => {
-//     if (snap.val() === user.uid) {
-//       console.log("true")
-//       return true;
-//     }
-//     else {
-//       console.log("false")
-//      return false;
-//     }
-//   })
-// }
-
 componentWillMount() {
   firebase.auth().onAuthStateChanged( user => {
     if (user) {
@@ -124,7 +110,7 @@ registerForPushNotificationsAsync = async () => {
                     <Item floatingLabel last style={{marginTop:25}} >
                       <Label>Password</Label>
                       <Input secureTextEntry={true} onChangeText={text => this.setState({ password: text })}
-                               //value={this.state.password} 
+                              
                       />
                     </Item>
                   </Form>

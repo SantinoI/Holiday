@@ -15,14 +15,10 @@ import { createBottomTabNavigator } from "react-navigation";
 
 
 import Login from "./screens/Login";
-import Home from "./screens/Home";
-import ManagerPage from "./screens/ManagerPage";
 import EventPage from "./screens/EventPage";
 import NewEventPage from "./screens/NewEventPage";
-import Favorites from "./screens/Favorites";
 import Profile from "./screens/Profile";
 import RegisterPage from "./screens/RegisterPage";
-import SearchResult from "./screens/SearchResult";
 import BookingList from "./screens/BookingList";
 
 import * as firebase from "firebase";
@@ -87,18 +83,6 @@ const RootNav = createStackNavigator(
     TabNav: {
       screen: TabNav
     },
-    // ProfileNavigator: {
-    //   screen: ProfileNavigator
-    // },
-    // Profile: {
-    //   screen: Profile
-    // },
-    // EventPage: {
-    //   screen: EventPage
-    // },
-    // NewEventPage: {
-    //   screen: NewEventPage
-    // },
   },
   {
     headerMode:'none',
@@ -128,13 +112,13 @@ export default class App extends React.Component {
 
   renderNotLog() {
     return (
-      <TabNav/>
+      <RootNav/>
     );
   }
 
   renderLog() {
     return(
-      <RootNav/>
+      <TabNav/>
       );
   }
 
