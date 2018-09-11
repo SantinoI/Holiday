@@ -123,7 +123,7 @@ registerForPushNotificationsAsync = async () => {
                     </Item>
                     <Item floatingLabel last style={{marginTop:25}} >
                       <Label>Password</Label>
-                      <Input  onChangeText={text => this.setState({ password: text })}
+                      <Input secureTextEntry={true} onChangeText={text => this.setState({ password: text })}
                                //value={this.state.password} 
                       />
                     </Item>
