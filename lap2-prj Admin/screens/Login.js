@@ -13,11 +13,7 @@ import {
   Dimensions
 } from "react-native";
 import { Permissions, Notifications } from 'expo';
-import { Button, FormLabel, FormInput } from "react-native-elements";
-import { Text, Form, Item, Label, Input, Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
-import { StackNavigator } from "react-navigation";
-import { TabNavigator } from "react-navigation";
-
+import { Text, Form, Item, Label, Input, Card, Container } from 'native-base';
 import * as firebase from "firebase";
 
 
@@ -110,7 +106,7 @@ registerForPushNotificationsAsync = async () => {
                     <Item floatingLabel last style={{marginTop:25}} >
                       <Label>Password</Label>
                       <Input secureTextEntry={true} onChangeText={text => this.setState({ password: text })}
-                              
+
                       />
                     </Item>
                   </Form>

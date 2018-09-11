@@ -8,22 +8,16 @@ import {
   View,
   FlatList,
   ActionSheetIOS,
-  TouchableHighlight,
   TouchableOpacity,
-  TextInput,
-  Alert,
   ActivityIndicator,
   Image,
-  Dimensions,
   StatusBar
 } from "react-native";
 
-import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container, Button } from 'native-base';
+import {Card, CardItem,Body} from 'native-base';
 
-import { Permissions, Location, ImagePicker, ImageManipulator, } from "expo";
-import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
-import { TabNavigator } from "react-navigation";
+import { Permissions,ImagePicker, ImageManipulator, } from "expo";
+import { FontAwesome , Feather, MaterialCommunityIcons} from "@expo/vector-icons";
 import EventCard from "../components/EventCard";
 
 import * as firebase from "firebase";

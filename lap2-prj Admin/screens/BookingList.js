@@ -2,17 +2,13 @@ import React from "react";
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   FlatList,
   StatusBar,
-  Button
 } from "react-native";
 
-import { Ionicons } from "@expo/vector-icons";
 import BookingComponent from "../components/BookingComponent";
 import * as firebase from "firebase";
 
-const TINT_COLOR = "rgb(4, 159, 239)";
 const BACKGROUND_COLOR = "#d7e4e5";
 
 const PUSH_ENDPOINT = "https://exp.host/--/api/v2/push/send";

@@ -4,16 +4,9 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  FlatList
 } from "react-native";
-import { Content, Card, CardItem, Thumbnail, Center ,Left, Body, Right, Container, Button } from 'native-base';
+import { Card, CardItem,Left,} from 'native-base';
 
-import { MaterialIcons } from "@expo/vector-icons";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { ScrollView } from "../node_modules/react-native-gesture-handler";
-
-const TINT_COLOR = "rgb(4, 159, 239)";
-const BACKGROUND_COLOR = "#d7e4e5";
 
 
 export default class BookingComponent extends React.Component {

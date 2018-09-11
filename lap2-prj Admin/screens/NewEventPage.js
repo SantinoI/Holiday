@@ -5,21 +5,17 @@ import {
   Text,
   ScrollView,
   ActionSheetIOS,
-  View,
-  FlatList,
-  TouchableHighlight,
+  View,  
   TouchableOpacity,
-  TextInput,
-  Dimensions,
   Image,
   Alert
 } from "react-native";
-import { Button, Input, Label, Item, Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
+import {Input, Label, Item, Card, CardItem, Left, Container } from 'native-base';
 
 import { ImagePicker, ImageManipulator } from "expo";
 
 import DatePicker from 'react-native-datepicker'
-import { Permissions, Location } from "expo";
+import { Permissions} from "expo";
 
 import * as firebase from "firebase";
 

@@ -7,36 +7,22 @@ import {
   ActionSheetIOS,
   ScrollView,
   View,
-  FlatList,
-  TouchableHighlight,
   TouchableOpacity,
-  TextInput,
-  Dimensions,
   Alert
 } from "react-native";
 
 import { ImagePicker, ImageManipulator } from "expo";
 
-import { Button, FormLabel, FormInput } from "react-native-elements";
 import {
   Text,
   Form,
   Item,
   Label,
   Input,
-  Content,
   Card,
-  CardItem,
-  Thumbnail,
-  Left,
-  Body,
-  Right,
   Container
 } from "native-base";
 import { Permissions, Notifications } from 'expo';
-import { StackNavigator } from "react-navigation";
-import { TabNavigator } from "react-navigation";
-
 import * as firebase from "firebase";
 
 const TINT_COLOR = "rgb(4, 159, 239)";
@@ -103,9 +89,7 @@ export default class RegisterPage extends React.Component {
     // Get the token that uniquely identifies this device
     let token = await Notifications.getExpoPushTokenAsync();
     console.log(token)
-  
-    // var updates = {}
-    // updates['/expoToken'] = token;
+
     console.log(userUid)
     firebase.database().ref("App/Organizzatori").child(userUid).update({ExpoToken: token})
   

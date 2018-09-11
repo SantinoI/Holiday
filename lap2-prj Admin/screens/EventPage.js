@@ -1,30 +1,12 @@
 import React from "react";
 import {
   StyleSheet,
-  Platform,
   Text,
   ScrollView,
-  View,
-  FlatList,
-  TouchableHighlight,
-  TouchableOpacity,
-  TextInput,
-  Dimensions,
+
   Image
 } from "react-native";
-import { Input, Label, Item, Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
-
-
-import { Permissions, Location } from "expo";
-import { MaterialIcons } from "@expo/vector-icons";
-import { StackNavigator } from "react-navigation";
-import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons} from "@expo/vector-icons";
-import { TabNavigator } from "react-navigation";
-import { SearchBar, Button } from "react-native-elements";
-
-import EventCard from "../components/EventCard";
-
-import * as firebase from "firebase";
+import {Card, CardItem, Left, Container } from 'native-base';
 
 const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";
@@ -34,8 +16,6 @@ export default class EventPage extends React.Component {
   componentWillMount(){
     console.log("Event info" + this.props.navigation.state.params.eventInfo)
   }
-
- 
 
   render() {
     return (
