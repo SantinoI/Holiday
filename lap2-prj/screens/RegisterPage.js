@@ -250,6 +250,17 @@ export default class RegisterPage extends React.Component {
           }
         }
       );
+    } else{
+      Alert.alert(
+        'Seleziona immagine',
+        'Seleziona un immagine da utilizzare come immagine profilo',
+        [
+          {text: 'Apri galleria', onPress: () => this._openPhotoGallery()},
+          {text: 'Cancella', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+          
+        ],
+        { cancelable: false }
+      )
     }
   };
 

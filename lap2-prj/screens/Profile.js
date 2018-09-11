@@ -6,6 +6,7 @@ import {
   ActionSheetIOS,
   ScrollView,
   View,
+  Alert,
   TouchableOpacity,
   Image,
 } from "react-native";
@@ -13,7 +14,7 @@ import {
 import { Card, CardItem, Body} from 'native-base';
 
 import { Permissions, ImagePicker, ImageManipulator, } from "expo";
-import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
+import { FontAwesome , MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 
 
 import { Calendar} from 'react-native-calendars';
@@ -225,6 +226,8 @@ export default class Profile extends React.Component {
     }
   };
 
+ 
+
   _selectPhoto = () => {
     console.log("show actions sheet");
     if (Platform.OS === "ios") {
@@ -240,6 +243,17 @@ export default class Profile extends React.Component {
           }
         }
       );
+    } else{
+      Alert.alert(
+        'Seleziona immagine',
+        'Seleziona un immagine da utilizzare come immagine profilo',
+        [
+          {text: 'Apri galleria', onPress: () => this._openPhotoGallery()},
+          {text: 'Cancella', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+          
+        ],
+        { cancelable: false }
+      )
     }
   };
 

@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
-  StatusBar
+  StatusBar,
+  Alert
 } from "react-native";
 
 import {Card, CardItem,Body} from 'native-base';
@@ -119,6 +120,18 @@ export default class Profile extends React.Component {
             }
           }
         );
+      }
+      else{
+        Alert.alert(
+          'Seleziona immagine',
+          'Seleziona un immagine da utilizzare come immagine profilo',
+          [
+            {text: 'Apri galleria', onPress: () => this._openPhotoGallery()},
+            {text: 'Cancella', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            
+          ],
+          { cancelable: false }
+        )
       }
     };
 

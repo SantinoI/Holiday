@@ -36,6 +36,7 @@ export default class NewEventPage extends React.Component {
       descrizioneBreve: '',
       descrizioneCompleta: '',
       isLoading: false,
+      id_evento: ""
   }
 
   //FUNZIONE PER CARICARE DATI
@@ -47,6 +48,7 @@ export default class NewEventPage extends React.Component {
     .ref("App/" + "Events/")
     .push(data);
     var id_evento = id.key;
+    this.setState({id_evento: id_evento});
     
     const localita = {
       Regione: this.state.regione,
@@ -90,7 +92,7 @@ export default class NewEventPage extends React.Component {
       )
     ) {
       Alert.alert(
-        "Riempi i campi vuoti per poterti registrare",
+        "Riempi i campi vuoti per poter creare l'evento",
         "",
         [
           {
@@ -162,24 +164,39 @@ export default class NewEventPage extends React.Component {
           }
         );
       }
+      else{
+        Alert.alert(
+          'Seleziona immagine',
+          'Seleziona un immagine da utilizzare come immagine evento',
+          [
+            {text: 'Apri galleria', onPress: () => this._openPhotoGallery()},
+            {text: 'Cancella', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            
+          ],
+          { cancelable: false }
+        )
+      }
     };
-
+    
     //Carimecameno foto
     _uploadImage = async localURI => {
+      //const id_evento = id.key;
       const uid = firebase.auth().currentUser.uid;
       const response = await fetch(localURI);
       const blob = await response.blob();
       const ref = firebase
         .storage()
         .ref("Users/" + uid +"/EventsImages/"+ this.state.nomeEvento )
-
         const uploadStatus = await ref.put(blob);
-      // console.log(uploadStatus);
-      const downloadURL = await uploadStatus.ref.getDownloadURL();
-      console.log(downloadURL);
-      //return downloadURL;
+        const downloadURL = await uploadStatus.ref.getDownloadURL();
+
+      await firebase
+      .database()
+      .ref("App/Events" + this.state.id_evento)
+      .update({ImmagineEvento: downloadURL})
+      //this.setState({image : downloadURL});
+      console.log("download url:" + downloadURL)
     };
-    
 
 
     // FUNZIONI PER OTTENERE DATA CORRENTE
