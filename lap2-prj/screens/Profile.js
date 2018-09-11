@@ -81,49 +81,7 @@ export default class Profile extends React.Component {
       }
     }
 
-    // _loadBookings = async request => {
-    //   const user = firebase.auth().currentUser;
-    //   if (user) {
-    //     console.log(user.uid);
-    //     let uid = user.uid;
-    //     //console.log(path)
-    //     let eventList = firebase.database().ref("App/Events");
-    //     eventList.on("value", snap => {
-    //       var prenotazioni = [];
-    //       snap.forEach(child => {
-    //         console.log(child.val());
-    //         //console.log(child.val().IDcliente);
-    //         if (child.val().IDcliente == uid) {
-    //           console.log("ci siamo");
-    //           prenotazioni.push({
-    //             // IDevento: child.val().IDevento,
-    //             // agenzia: child.val().Agenzia,
-    //             // nomeEvento: child.val().NomeEvento,
-    //             // citta: child.val().Localita.Citta,
-    //             // provincia: child.val().Localita.Provincia,
-    //             // descrizioneBreve: child.val().DescrizioneBreve,s
-    //             // descrizioneCompleta: child.val().DescrizioneCompleta,
-    //             // prezzo: child.val().Prezzo,
-    //             // difficolta: child.val().Difficolta,
-    //             // data: child.val().Data,
-    //             // orari: child.val().Orario,
-    //             // durata: child.val.Durata,
-    //             // immagineAgenzia: child.val().ImmagineAgenzia,
-    //             // immagineEvento: child.val().ImmagineEvento
-    //             stato: child.val().Stato
-    //           });
-
-    //         //}
-    //         }
-    //       });
-    //       prenotazioni = prenotazioni[1]
-
-    //       this.setState({ bookingList: prenotazioni });
-    //       console.log(this.state.bookingList);
-    //     });
-    //   }
-    // };
-
+    // funzione che preleva dal database i dati sulle prenotazioni dell'utente
     _loadBookings = async request => {
       const user = firebase.auth().currentUser;
       if (user) {
@@ -132,11 +90,9 @@ export default class Profile extends React.Component {
         //console.log(path)
         let eventList = firebase.database().ref("App/Prenotazioni");
         eventList.on("value", snap => {
-          //var date = [];
           var prenotazioni = [];
           snap.forEach(child => {
             if (child.val().IDcliente == uid) {
-              //console.log("ci siamo");
               //date.push(child.val().DatiEvento.Data)
 
               prenotazioni.push({
@@ -166,15 +122,13 @@ export default class Profile extends React.Component {
           });
 
           this.setState({ bookingList: prenotazioni });
-          //this.setState({dates: date});
           console.log(this.state.bookingList);
-         // console.log(this.state.dates);
         });
       }
     };
 
+    // funzione che in base allo stato della prenotazione modifica l'oggetto per la visualizzazione delle date nel calendario
     _loadDays = () => {
-
       const user = firebase.auth().currentUser;
       if (user) {
         let uid = user.uid;
@@ -185,7 +139,6 @@ export default class Profile extends React.Component {
           var color = "";
           snap.forEach(child => {
             if (child.val().IDcliente == uid) {
-              //date.push(child.val().DatiEvento.Data)
 
                 if (child.val().Stato == "ATTESA") {
                   color = "#f1c40f"
@@ -204,9 +157,9 @@ export default class Profile extends React.Component {
           }); 
 
           var obj = {};
-            for (var i=0; i<date.length; i++) {
-              obj[date[i].data] = ({selected: true, marked: true, selectedColor: date[i].selcolor, });
-}
+          for (var i=0; i<date.length; i++) {
+            obj[date[i].data] = ({selected: true, marked: true, selectedColor: date[i].selcolor, });
+          }
 
           //var obj = date.reduce((c, v) => Object.assign(c, {[v]: {selected: true,marked: true, dotColor: "yellow"}}), {});
 
@@ -215,18 +168,17 @@ export default class Profile extends React.Component {
         });
       }
     }
+
     async componentWillMount() {
       firebase.auth().onAuthStateChanged( user => {
-        if (user) {
-          this.setState({logged: true})
-          this._loadUserData();
-          this._loadBookings();
-          this._loadDays();
-          //this.props.navigation.setParams({ logged: true })
+        if (user) {   // se l'utente è connesso allora:
+          this.setState({logged: true}) // setta lo stato a true
+          this._loadUserData();         // carica i dati utente
+          this._loadBookings();         // carica le prenotazioni  
+          this._loadDays();             // prepara i giorni del calendario
         }
         else {
-          this.setState({logged: false})
-          //this.props.navigation.setParams({ logged: false })
+          this.setState({logged: false})      //altrimenti setta lo stato a FALSO e spostati alla pagina di login
           this.props.navigation.navigate('Login')
         }
       })
@@ -260,7 +212,7 @@ export default class Profile extends React.Component {
     .ref("App/" + "Users/" + userId)
     .update({ProfileImage: this.state.profileImage})
   }
-      //Apertura galleria per choosing foto profilo utente
+      //Apertura galleria per scegliere foto profilo utente
   _openPhotoGallery = async () => {
     const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
     if (status !== "granted") {
@@ -301,9 +253,8 @@ export default class Profile extends React.Component {
     }
   };
 
-    renderNotLog() {
+    renderNotLog() {        // RENDER DA CARICARE QUANDO L'UTENTE E' OFFLINE
       return (
-
         <ScrollView style={{ paddingTop: 50 , backgroundColor:BACKGROUND_COLOR}}>
             <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:88, borderRadius: 10, alignItems:"center"}}>
 
@@ -333,10 +284,11 @@ export default class Profile extends React.Component {
       );
     }
 
-    renderLog() {
+    renderLog() {       // RENDER DA CARICARE QUANDO L'UTENTE E' ONLINE
       return (
 
         <ScrollView style={{ paddingTop: 50, backgroundColor:BACKGROUND_COLOR }}>
+
           <Card style={{ marginTop: 50,marginLeft: 10, marginRight: 10,marginBottom:60, borderRadius: 10}}>
                 <TouchableOpacity style={{marginTop: -75 ,marginBottom: 0, alignSelf: 'center'}} onPress={this._selectPhoto}>
                   <Image
@@ -404,6 +356,7 @@ export default class Profile extends React.Component {
                 </CardItem>
                   
              </Card>
+
           </ScrollView>
       );
     }
@@ -429,12 +382,6 @@ Profile.navigationOptions = ({ navigation }) => {
         backgroundColor: BACKGROUND_COLOR,
         borderBottomWidth: 0
       },
-      
-      /*headerRight: (
-        <TouchableOpacity onPress={() => _onAccountPress()}>
-            <MaterialCommunityIcons style={{marginRight: 30}} name='exit-to-app' size={30} color={TINT_COLOR}/>
-        </TouchableOpacity>
-      )*/
     };
   };
 

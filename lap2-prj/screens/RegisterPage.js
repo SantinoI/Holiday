@@ -87,25 +87,23 @@ export default class RegisterPage extends React.Component {
     );
     let finalStatus = existingStatus;
 
-    // only ask if permissions have not already been determined, because
-    // iOS won't necessarily prompt the user a second time.
+    // verranno richiesti solo se non sono già stati concessi,
+    // ios non li chiederà necessariamente una seconda volta
     if (existingStatus !== 'granted') {
-      // Android remote notification permissions are granted during the app
-      // install, so this will only ask on iOS
+            // i permessi di notifica sono garantiti durante l'installazione dell'app
+      // questo messaggio sarà visualizzato solo su ios
       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
       finalStatus = status;
     }
 
-    // Stop here if the user did not grant permissions
+// fermati qui se l'utente non ha concesso i permessi 
     if (finalStatus !== 'granted') {
       return;
     }
-    // Get the token that uniquely identifies this device
+    // prendi il token che identifica univocamente il device
     let token = await Notifications.getExpoPushTokenAsync();
     console.log(token)
 
-    // var updates = {}
-    // updates['/expoToken'] = token;
     console.log(userUid)
     firebase.database().ref("App/Users").child(userUid).update({ExpoToken: token})
 

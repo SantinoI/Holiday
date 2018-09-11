@@ -35,22 +35,8 @@ const BACKGROUND_COLOR = "#d7e4e5";
 export default class Profile extends React.Component {
     state = {
       profileImage: null,
-      //logged: false
     }
 
-    // _loadDatabase = async => {
-    //   const user = firebase.auth().currentUser;
-      
-    //     this.setState({imageLoading: true})
-    //     firebase.database().ref("App/Users/" + uid + "/ProfileImage")
-    //       .on("value", snap => {
-    //         let imageURL = snap.val()
-    //         console.log(snap.val())
-    //         this.setState({ profileImage: imageURL });
-    //       });
-    //     this.setState({imageLoading: false})
-    //   }
-    // }
 
     componentWillMount() {
       console.log(this.props.navigation.state.params.managerInfo)

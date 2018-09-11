@@ -13,13 +13,6 @@ import {
   Dimensions
 } from "react-native";
 
-import { Permissions, Location } from "expo";
-import { MaterialIcons } from "@expo/vector-icons";
-import { StackNavigator } from "react-navigation";
-import { FontAwesome } from "@expo/vector-icons";
-import { TabNavigator } from "react-navigation";
-import { SearchBar, Button } from "react-native-elements";
-
 import BookCard from "../components/BookCard";
 
 import * as firebase from "firebase";

@@ -39,7 +39,7 @@ export default class SearchResult extends React.Component {
 _loadDatabase = async => {
 
   this.setState({loading: true})
-  if (this.state.searchOption === "Città") {
+  if (this.state.searchOption === "Città") {              // SE LA RICERCA E' PER CITTA
     let eventList = firebase.database().ref("App/Events");
           eventList.on("value", snap => {
             var eventi = [];
@@ -51,7 +51,6 @@ _loadDatabase = async => {
                   agenzia: child.val().Agenzia,
                   email: child.val().Email,
                   numero: child.val().Numero,
-                  facebook: child.val().Facebook,
                   nomeEvento: child.val().NomeEvento,
                   citta: child.val().Localita.Citta,
                   provincia: child.val().Localita.Provincia,
@@ -95,7 +94,7 @@ _loadDatabase = async => {
             //
           
           });
-  } else if (this.state.searchOption === "Eventi") {
+  } else if (this.state.searchOption === "Eventi") {                // SE LA RICERCA E' PER EVENTI
     let eventNameList = firebase.database().ref("App/Events");
         eventNameList.on("value", snap => {
           var eventi = [];
@@ -149,7 +148,7 @@ _loadDatabase = async => {
             }
         
           });
-  } else if (this.state.searchOption === "Organizzatori") {
+  } else if (this.state.searchOption === "Organizzatori") {             // SE LA RICERCA E' PER ORGANIZZATORI
     let ManagerNameList = firebase.database().ref("App/Events");
         ManagerNameList.on("value", snap => {
           var eventi = [];
@@ -208,37 +207,10 @@ _loadDatabase = async => {
   this.setState({loading: false})
 }
 
-_checkFavorite = () => {
-  console.log("check")
-  const uid = firebase.auth().currentUser.uid;
-  let favoriteList = firebase.database().ref("App/Users/"+ uid + "/Favorites").on("value", snap => {
-    snap.forEach(child => {
-      //console.log(child)
-      const newCardlist = this.state.cardList.map( currentCard =>
-        currentCard === child
-          ? { ...currentCard, favorite: true }
-          : currentCard
-      );
-
-      this.setState({ cardList: newCardlist });
-      console.log(this.state.cardList)
-
-    });
-  });
-
-  console.log("arrivederci")
-}
-
   async componentWillMount(){
-    //console.log(this.props.navigation.state.params.searchOption);
     this._loadDatabase();
-    //this._checkFavorite();
   }
 
-  // async componentDidMount(){
-  //   //console.log(this.props.navigation.state.params.searchOption);
-  //   await this._checkFavorite();
-  // }
 
   uploadFavorite = item => {
     const userId = firebase.auth().currentUser.uid;
@@ -254,14 +226,11 @@ _checkFavorite = () => {
       numero: item.numero,
       nomeEvento: item.nomeEvento,
       Localita: Localita,
-      //citta: item.citta,
-      //provincia: item.provincia,
       descrizioneBreve: item.descrizioneBreve,
       descrizioneCompleta: item.descrizioneCompleta,
       prezzo: item.prezzo,
       data: item.data,
       orario: item.orario,
-      //durata: item.Durata,
       immagineAgenzia:item.immagineAgenzia,
       immagineEvento: item.immagineEvento,
     };
@@ -271,31 +240,16 @@ _checkFavorite = () => {
     .update(newFavorite)
     console.log(pushedRef.key)
     
-    /* IMPORTANTISSIMA NELL'APP AMMINISTRATORE -- NON CANCELLARE 
-    var id = firebase
-      .database()
-      .ref("App/" + "Users/" + userId + "/" + "favorites/")
-      .push(newFavorite).key;
-    
-      const setId ={
-        id: id
-      } 
-      firebase
-      .database()
-      .ref("App/" + "Users/" + userId + "/" + "favorites/" + id)
-      .update(setId);*/
   };
 
   renderCard = ({item}) => (
-    <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item})}
-     onManagerPress={() => this.props.navigation.navigate("ManagerPage", {managerInfo: item.agenzia})}/>
+    <EventCard data={item} onFavorite={() => this._favorite(item)} onEventPress={() => this.props.navigation.navigate("EventPage", {eventInfo: item})}/>
   )
 
   _favorite = item => {
-
     if (!firebase.auth().currentUser) {
         Alert.alert(
-          "Accedi per poter aggiungere questo evento ai preferiti!",
+          "Accedi per poter aggiungere questo evento tra quelli a cui desidereresti partecipare!",
           "",
           [
             {
@@ -308,7 +262,6 @@ _checkFavorite = () => {
         return;
     }
     else {
-
       const newCardlist = this.state.cardList.map(
         currentCard =>
           currentCard === item
@@ -320,8 +273,7 @@ _checkFavorite = () => {
     }
   };
 
-  _keyExtractor = (item, index) => {
-    //item.id = index;
+  _keyExtractor = (index) => {
     return String(index);
   };
 

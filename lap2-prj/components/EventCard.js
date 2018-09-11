@@ -21,7 +21,7 @@ export default class EventCard extends Component {
         <CardItem style={{borderRadius: 25}}>
 
           <Left style={{flex:0.8}}>
-            <TouchableOpacity onPress={this.props.onManagerPress}>
+            <TouchableOpacity>
             <Thumbnail source={{uri: this.props.data.immagineAgenzia}} /> 
             </TouchableOpacity>
             <Body>
@@ -42,7 +42,7 @@ export default class EventCard extends Component {
         <CardItem cardBody >
 
           <Image  style={{borderRadius: 5, marginLeft: 5, marginRight: 5, height: 200, width: null, flex: 1}}
-                  source={{uri: this.props.data.immagineEvento}} //DA MODIFICARE CON PROP
+                  source={{uri: this.props.data.immagineEvento}}
            />
 
         </CardItem>

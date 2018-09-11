@@ -12,18 +12,7 @@ import {
   Dimensions,
   Image
 } from "react-native";
-import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
-
-
-import { Permissions, Location } from "expo";
-import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons} from "@expo/vector-icons";
-import { TabNavigator } from "react-navigation";
-import { SearchBar, Button } from "react-native-elements";
-
-import EventCard from "../components/EventCard";
-
-import * as firebase from "firebase";
+import {Card, CardItem,Container } from 'native-base';
 
 const TINT_COLOR = "#39b9c3";
 const BACKGROUND_COLOR = "#d7e4e5";

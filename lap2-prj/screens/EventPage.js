@@ -506,13 +506,6 @@ export default class EventPage extends React.Component {
                   {this.props.navigation.state.params.eventInfo.numero}
                 </Text>
               </Body>
-
-              <Body style={{ flexDirection: "row", margin: 5 }}>
-                <MaterialCommunityIcons name="facebook" size={16} />
-                <Text style={{ marginLeft: 10 }}>
-                  {this.props.navigation.state.params.eventInfo.facebook}
-                </Text>
-              </Body>
             </CardItem>
           </Card>
         </ScrollView>

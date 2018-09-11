@@ -45,7 +45,7 @@ export default class Home extends React.Component {
     address: null,
     location: null,
     loading: true,
-    cardList: [],/*       AGGIUNTA DELL'ARRAY NELLO STATE        */
+    cardList: [],
   };
 
   _getLocationAsync = async () => {
@@ -124,7 +124,6 @@ export default class Home extends React.Component {
   };
 
   /*       FUNZIONE PER IL RENDERING DI CIASCUNA CARD DELLA FLATLIST          */
-
   renderCard = ({ item }) => {
     {console.log(item);}
     return (
@@ -134,11 +133,10 @@ export default class Home extends React.Component {
   };
 
   _keyExtractor = (item, index) => {
-    //item.id = index;
     return String(index);
   };
 
-  /* CALL BACK PER EVENT CARD */
+  /* CALLBACK PER EVENT CARD */
   _favorite = item => {
     const newCardlist = this.state.cardList.map(
       currentCard =>
@@ -149,6 +147,7 @@ export default class Home extends React.Component {
     this.setState({ cardList: newCardlist });
   };
 
+  /* QUESTA FUNZIONE MODIFICA LO STATE IN BASE AL FILTRO DI RICERCA SELEZIONATO */
   _searchOption = filter => {
     switch (filter) {
       case "Città" : this.setState({searchOption: "Città"}); break;
@@ -178,6 +177,8 @@ export default class Home extends React.Component {
             />
           </View>
           
+          {/* CODICE CONTENENTE I BUTTON PER I FILTRI DI RICERCA*/}
+          
           <View style = {styles.buttonContainer} >
             <TouchableOpacity
                     style={this.state.searchOption === "Città" ? (styles.searchOptionSelect) : styles.searchOption}
@@ -203,8 +204,10 @@ export default class Home extends React.Component {
                 >
                   <Text style={this.state.searchOption === "Organizzatori" ? (styles.optionTextSelect) : styles.optionText}>Organizzatori</Text>
             </TouchableOpacity>
-
           </View>
+
+          {/* ****************************************************** */}
+
             <SearchBar
               inputStyle={{ backgroundColor: "rgb(233,233,238)", }}
               containerStyle={styles.searchBar}
@@ -233,7 +236,7 @@ export default class Home extends React.Component {
           </View>
         ) :
         (
-          this.state.cardList.length ? 
+          this.state.cardList.length ? // E' STATO TROVATO QUALCHE EVENTO?
             (
             <View>
                 <Text style={ styles.scrolltext}>
@@ -248,7 +251,7 @@ export default class Home extends React.Component {
                 />
               </View>
             </View>
-            ) :
+            ) :       // NON SONO STATI TROVATI EVENTI
             ( 
               <Text style={styles.noResultText}>Sembra che non ci siano eventi nelle vicinanze :(</Text>
             )

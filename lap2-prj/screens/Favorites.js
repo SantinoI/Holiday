@@ -224,7 +224,7 @@ export default class Favorites extends React.Component {
 
 Favorites.navigationOptions = ({ navigation }) => {
   return {
-    title: "Favorites",
+    title: "Eventi a cui vorresti partecipare",
     headerStyle: {
       backgroundColor: BACKGROUND_COLOR,
       borderBottomWidth: 0
