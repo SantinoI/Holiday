@@ -2,28 +2,14 @@ import React from 'react';
 
 import {
   StyleSheet,
-  Platform,
-  ImageBackground,
-  ScrollView,
   View,
-  FlatList,
-  TouchableHighlight,
-  TouchableOpacity,
-  TextInput,
-  Dimensions
 } from "react-native";
-
 import { Permissions, Notifications } from 'expo';
-
-import { Button, FormLabel, FormInput } from "react-native-elements";
-import { Text, Form, Item, Label, Input, Content, Card, CardItem, Thumbnail, Left, Body, Right, Container } from 'native-base';
-import { StackNavigator } from "react-navigation";
-import { TabNavigator } from "react-navigation";
-
+import { Button } from "react-native-elements";
+import { Text, Form, Item, Label, Input, Card, Container } from 'native-base';
 import * as firebase from "firebase";
 
 
-const TINT_COLOR = "rgb(4, 159, 239)";
 const BACKGROUND_COLOR = "#d7e4e5";
 const TINT_COLOR2 = "#39b9c3";
 

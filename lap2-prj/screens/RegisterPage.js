@@ -7,38 +7,29 @@ import {
   ActionSheetIOS,
   ScrollView,
   View,
-  FlatList,
-  TouchableHighlight,
   TouchableOpacity,
-  TextInput,
-  Dimensions,
   Alert
 } from "react-native";
 
-import { ImagePicker, ImageManipulator, Permissions } from "expo";
+import { 
+  ImagePicker, 
+  ImageManipulator, 
+  Permissions 
+} from "expo";
 
-import { Button, FormLabel, FormInput } from "react-native-elements";
 import {
   Text,
   Form,
   Item,
   Label,
   Input,
-  Content,
   Card,
-  CardItem,
-  Thumbnail,
-  Left,
-  Body,
-  Right,
   Container
 } from "native-base";
-import { StackNavigator } from "react-navigation";
-import { TabNavigator } from "react-navigation";
+
 
 import * as firebase from "firebase";
 
-const TINT_COLOR = "rgb(4, 159, 239)";
 const BACKGROUND_COLOR = "#d7e4e5";
 const TINT_COLOR2 = "#39b9c3";
 
@@ -90,13 +81,13 @@ export default class RegisterPage extends React.Component {
     // verranno richiesti solo se non sono già stati concessi,
     // ios non li chiederà necessariamente una seconda volta
     if (existingStatus !== 'granted') {
-            // i permessi di notifica sono garantiti durante l'installazione dell'app
-      // questo messaggio sarà visualizzato solo su ios
+    // i permessi di notifica sono garantiti durante l'installazione dell'app
+    // questo messaggio sarà visualizzato solo su ios
       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
       finalStatus = status;
     }
 
-// fermati qui se l'utente non ha concesso i permessi 
+    // fermati qui se l'utente non ha concesso i permessi 
     if (finalStatus !== 'granted') {
       return;
     }
@@ -233,7 +224,7 @@ export default class RegisterPage extends React.Component {
     let result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
       console.log(result);
-      // Resize the image
+      // Resize dell'immagine
       const manipResult = await ImageManipulator.manipulate(
         result.uri,
         [{ resize: { width: 375 } }],
@@ -319,6 +310,7 @@ export default class RegisterPage extends React.Component {
               <Item floatingLabel last style={{ marginTop: 25 }}>
                 <Label>Password</Label>
                 <Input
+                  secureTextEntry={true}
                   onChangeText={text => this.setState({ password: text })}
                 />
               </Item>
@@ -326,6 +318,7 @@ export default class RegisterPage extends React.Component {
               <Item floatingLabel last style={{ marginTop: 25 }}>
                 <Label>Conferma Password</Label>
                 <Input
+                  secureTextEntry={true}
                   onChangeText={text =>
                     this.setState({ confirmPassword: text })
                   }
@@ -333,6 +326,7 @@ export default class RegisterPage extends React.Component {
               </Item>
             </Form>
           </ScrollView>
+
           {/* Tasto registrati, quando si clicca si attivano i controlli */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity

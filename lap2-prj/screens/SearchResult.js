@@ -1,25 +1,16 @@
 import React from "react";
 import {
   StyleSheet,
-  Platform,
   Text,
-  ImageBackground,
   ScrollView,
   View,
   FlatList,
-  TouchableHighlight,
-  TouchableOpacity,
-  TextInput,
   Dimensions,
   Alert
 } from "react-native";
 
-import { Permissions, Location } from "expo";
-import { MaterialIcons } from "@expo/vector-icons";
-import { StackNavigator } from "react-navigation";
-import { FontAwesome } from "@expo/vector-icons";
-import { TabNavigator } from "react-navigation";
-import { SearchBar, Button } from "react-native-elements";
+
+import { SearchBar } from "react-native-elements";
 
 import EventCard from "../components/EventCard";
 
@@ -37,9 +28,9 @@ export default class SearchResult extends React.Component {
   };
 
 _loadDatabase = async => {
-
+  
   this.setState({loading: true})
-  if (this.state.searchOption === "Città") {              // SE LA RICERCA E' PER CITTA
+  if (this.state.searchOption === "Città") {              // SE LA RICERCA E' PER CITTA'
     let eventList = firebase.database().ref("App/Events");
           eventList.on("value", snap => {
             var eventi = [];
@@ -124,7 +115,7 @@ _loadDatabase = async => {
             }
           });
             
-          // CONTROLLO CHE L'EVENTO SIA TRA I PREFERITI E MODIFICO IL CAMPO FAVORITE
+            // CONTROLLO CHE L'EVENTO SIA TRA I PREFERITI E MODIFICO IL CAMPO FAVORITE
             // POSSO FARE QUESTO CONTROLLO SOLO SE FACCIO IL LOGIN, ALTRIMENTI, TUTTI FALSI
             if (firebase.auth().currentUser) {
               var temp = eventi
@@ -178,7 +169,7 @@ _loadDatabase = async => {
             }
           });
             
-          // CONTROLLO CHE L'EVENTO SIA TRA I PREFERITI E MODIFICO IL CAMPO FAVORITE
+            // CONTROLLO CHE L'EVENTO SIA TRA I PREFERITI E MODIFICO IL CAMPO FAVORITE
             // POSSO FARE QUESTO CONTROLLO SOLO SE FACCIO IL LOGIN, ALTRIMENTI, TUTTI FALSI
             if (firebase.auth().currentUser) {
               var temp = eventi

@@ -3,29 +3,20 @@ import {
   StyleSheet,
   Platform,
   Text,
-  ImageBackground,
   ActionSheetIOS,
   ScrollView,
   View,
-  FlatList,
-  TouchableHighlight,
   TouchableOpacity,
-  TextInput,
-  Alert,
-  ActivityIndicator,
   Image,
-  Dimensions
 } from "react-native";
 
-import { Content, Card, CardItem, Thumbnail, Left, Body, Right, Container, Button } from 'native-base';
+import { Card, CardItem, Body} from 'native-base';
 
-import { Permissions, Location, ImagePicker, ImageManipulator, } from "expo";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Permissions, ImagePicker, ImageManipulator, } from "expo";
 import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
-import { TabNavigator } from "react-navigation";
-import EventCard from "../components/EventCard";
 
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+
+import { Calendar} from 'react-native-calendars';
 
 
 import * as firebase from "firebase";
@@ -53,7 +44,6 @@ export default class Profile extends React.Component {
       cognome:"",
       email:"",
       bookingList: [],
-      //dates: ["2018-05-23", "2018-05-20", "2018-05-27"],
       dates: null,
       marked: false
     }
@@ -361,6 +351,8 @@ export default class Profile extends React.Component {
       );
     }
 
+
+    //render in base l'user è loggato
     render() {
       return(
           this.state.logged ? (this.renderLog()) : this.renderNotLog()           
