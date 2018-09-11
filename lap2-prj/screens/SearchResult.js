@@ -27,7 +27,10 @@ export default class SearchResult extends React.Component {
     loading: false,
   };
 
-_loadDatabase = async => {
+// questa funzione risulta particolarmente ridondante e poco "refactorizzata"
+// perchè altrimenti si verificano problemi di chiamate asincrone.
+
+_loadDatabase = () => {
   
   this.setState({loading: true})
   if (this.state.searchOption === "Città") {              // SE LA RICERCA E' PER CITTA'
