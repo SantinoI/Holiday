@@ -20,13 +20,6 @@ import { ImagePicker, ImageManipulator } from "expo";
 
 import DatePicker from 'react-native-datepicker'
 import { Permissions, Location } from "expo";
-import { MaterialIcons } from "@expo/vector-icons";
-import { StackNavigator } from "react-navigation";
-import { FontAwesome , Feather, MaterialCommunityIcons, SimpleLineIcons} from "@expo/vector-icons";
-import { TabNavigator } from "react-navigation";
-import { SearchBar } from "react-native-elements";
-import Icon from 'react-native-vector-icons/Feather';
-import EventCard from "../components/EventCard";
 
 import * as firebase from "firebase";
 
@@ -47,11 +40,6 @@ export default class NewEventPage extends React.Component {
       descrizioneBreve: '',
       descrizioneCompleta: '',
       isLoading: false,
-  }
-
-
-  componentWillMount(){
-    console.log()
   }
 
   //FUNZIONE PER CARICARE DATI
@@ -102,15 +90,7 @@ export default class NewEventPage extends React.Component {
     if (
       !(
         this.state.image 
-        //this.state.nomeEvento &&
-        // this.state.regione &&
-        // this.state.provincia &&
-        // this.state.citta &&
-        // this.state.data &&
-        // this.state.orario &&
-        // this.state.prezzo &&
-        // this.state.descrizioneBreve &&
-        // this.state.descrizioneCompleta
+
       )
     ) {
       Alert.alert(
@@ -146,7 +126,6 @@ export default class NewEventPage extends React.Component {
       
   };
 
-  //FUNZIONE PER CARICARE IMMAGINE [non funziona]
 
   //Apertura galleria per choosing foto profilo utente
     _openPhotoGallery = async () => {

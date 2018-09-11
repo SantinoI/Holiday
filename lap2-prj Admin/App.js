@@ -126,67 +126,25 @@ export default class App extends React.Component {
 
   }
 
-  render() {
+  renderNotLog() {
     return (
-      this.state.logged ? (<TabNav/>) : (<RootNav/>)
-    )
+      <TabNav/>
+    );
   }
 
-  // render() {
-  //   return (
-  //     <RootNav/>
-  //   )
-  // }
+  renderLog() {
+    return(
+      <RootNav/>
+      );
+  }
+
+  render() {
+    return(
+      //this.state.logged ? (<TabNav/>) : (<RootNav/>)c
+      this.state.logged ? (this.renderLog()) : this.renderNotLog()                  
+  );
+
+
+  }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export default createBottomTabNavigator(
-//   {
-//     Home: { screen: App},
-//     Favorites: {screen: Favorite},
-//     Profile: {screen: ProfileNavigator},
-//   },
-//   {
-//     navigationOptions: ({ navigation }) => ({
-//       tabBarIcon: ({ focused, tintColor }) => {
-//         const { routeName } = navigation.state;
-//         let iconName;
-//         if (routeName === 'Home') {
-//           iconName = `home${focused ? '' : '-outline'}`;
-//           return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
-//         } else if (routeName === 'Favorites') {
-//           iconName = `heart${focused ? '' : '-outline'}`;
-//           return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
-//         }
-//         else if (routeName === 'Profile') {
-//           iconName = `account${focused ? '' : '-outline'}`;
-//           return <MaterialCommunityIcons name={iconName} size={30} color={TINT_COLOR} />;
-//         }
-        
-//       }
-//     }),
-//     tabBarOptions: {
-//       activeTintColor: TINT_COLOR,
-//       inactiveTintColor: 'gray',
-//     },
-//   }
-// );
-
-//export default App;
-//return <MaterialCommunityIcons name={"home-outline"} size={40} color={TINT_COLOR} />;
-//return <Entypo name={"heart-outlined"} size={25} color={tintColor} />

@@ -285,7 +285,7 @@ export default class Profile extends React.Component {
                                                                                                                                    sede: this.state.Sede,
                                                                                                                                    email: this.state.email,
                                                                                                                                    numero: this.state.numero,
-                                                                                                                                   idOrganizzatore: firebase.auth().currentUser.uid})}>>
+                                                                                                                                   idOrganizzatore: firebase.auth().currentUser.uid})}>
                       <Text style={{textAlign:'center', color: 'white' }}> Inserisci nuovo evento </Text>
                     </TouchableOpacity>
                   </View>
@@ -334,11 +334,9 @@ export default class Profile extends React.Component {
     }
 
     render() {
+
       return(
-        //<View style={{backgroundColor:BACKGROUND_COLOR, paddingBottom: (80*110)/100, flex: 1}}>
-          this.state.logged ? (this.renderLog()) : this.renderNotLog()          
-        //</View>
-        
+          this.state.logged ? (this.renderLog()) : this.renderNotLog()                  
       );
     }
 }
