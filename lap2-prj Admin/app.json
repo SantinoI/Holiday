@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "lap2-prj",
-    "description": "This project is really great.",
+    "name": "Holiday-Admin",
+    "description": "Menage events with the admin App!",
     "slug": "lap2-prj",
     "privacy": "public",
     "sdkVersion": "27.0.0",
     "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo-round.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo-round.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
