@@ -72,23 +72,48 @@ export default class Home extends React.Component {
         if (child.val().Localita.Provincia == this.state.address[0].city) {
           eventi.push({
             IDevento: child.val().IDevento,
+            IDorganizzatore: child.val().IDorganizzatore,
             agenzia: child.val().Agenzia,
+            email: child.val().Email,
+            numero: child.val().Numero,
             nomeEvento: child.val().NomeEvento,
             citta: child.val().Localita.Citta,
             provincia: child.val().Localita.Provincia,
+            regione: child.val().Localita.Regione,
             descrizioneBreve: child.val().DescrizioneBreve,
             descrizioneCompleta: child.val().DescrizioneCompleta,
             prezzo: child.val().Prezzo,
             difficolta: child.val().Difficolta,
             data: child.val().Data,
-            orari: child.val().Orario,
-            durata: child.val.Durata,
+            orario: child.val().Orario,
+            durata: child.val().Durata,
             immagineAgenzia: child.val().ImmagineAgenzia,
-            immagineEvento: child.val().ImmagineEvento
+            immagineEvento: child.val().ImmagineEvento,
+            favorite: false
           });
         }
       });
-      this.setState({ cardList: eventi });
+      if (firebase.auth().currentUser) {
+        var temp = eventi
+        const uid = firebase.auth().currentUser.uid;
+        firebase.database().ref("App/Users/"+ uid + "/Favorites").on("value", snap => {
+          snap.forEach(child => {
+            const newCardlist = temp.map( currentCard =>
+              currentCard.IDevento == child.val().IDevento
+                ? { ...currentCard, favorite: true }
+                : currentCard
+            );
+            temp = newCardlist
+            //this.setState({ cardList: newCardlist });
+            console.log(newCardlist)
+          });
+          this.setState({ cardList: temp });
+        });
+      }
+      else {
+        this.setState({cardList: eventi})
+      }
+      //this.setState({ cardList: eventi });
     });
   };
 
@@ -123,6 +148,37 @@ export default class Home extends React.Component {
     }
   };
 
+  uploadFavorite = item => {
+    console.log("IDevento" + item.IDevento)
+    const userId = firebase.auth().currentUser.uid;
+    console.log(item);
+    const Localita = {
+      citta: item.citta,
+      provincia: item.provincia
+    }
+    const newFavorite = {
+      IDevento: item.IDevento,
+      agenzia: item.agenzia,
+      email: item.email,
+      numero: item.numero,
+      nomeEvento: item.nomeEvento,
+      Localita: Localita,
+      descrizioneBreve: item.descrizioneBreve,
+      descrizioneCompleta: item.descrizioneCompleta,
+      prezzo: item.prezzo,
+      data: item.data,
+      orario: item.orario,
+      immagineAgenzia:item.immagineAgenzia,
+      immagineEvento: item.immagineEvento,
+    };
+    var pushedRef = firebase
+    .database()
+    .ref("App/Users/" + userId + "/Favorites/" + item.IDevento)
+    .update(newFavorite)
+    console.log(pushedRef.key)
+    
+  };
+
   /*       FUNZIONE PER IL RENDERING DI CIASCUNA CARD DELLA FLATLIST          */
   renderCard = ({ item }) => {
     {console.log(item);}
@@ -138,15 +194,31 @@ export default class Home extends React.Component {
 
   /* CALLBACK PER EVENT CARD */
   _favorite = item => {
-    const newCardlist = this.state.cardList.map(
-      currentCard =>
-        currentCard === item
-          ? { ...currentCard, favorite: !currentCard.favorite }
-          : currentCard
-    );
-    this.setState({ cardList: newCardlist });
+    if (!firebase.auth().currentUser) {
+        Alert.alert(
+          "Accedi per poter aggiungere questo evento tra quelli a cui desidereresti partecipare!",
+          "",
+          [
+            {
+              text: "Cancella",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            }
+          ],
+        );
+        return;
+    }
+    else {
+      const newCardlist = this.state.cardList.map(
+        currentCard =>
+          currentCard === item
+            ? { ...currentCard, favorite: true }
+            : currentCard
+      );
+      this.uploadFavorite(item);
+      this.setState({ cardList: newCardlist });
+    }
   };
-
   /* QUESTA FUNZIONE MODIFICA LO STATE IN BASE AL FILTRO DI RICERCA SELEZIONATO */
   _searchOption = filter => {
     switch (filter) {
