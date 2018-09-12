@@ -192,7 +192,7 @@ export default class NewEventPage extends React.Component {
 
       await firebase
       .database()
-      .ref("App/Events" + this.state.id_evento)
+      .ref("App/Events/" + this.state.id_evento)
       .update({ImmagineEvento: downloadURL})
       //this.setState({image : downloadURL});
       console.log("download url:" + downloadURL)
