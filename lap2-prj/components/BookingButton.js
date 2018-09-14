@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import {
-    StyleSheet,
-    Platform,
     Text,
-    ScrollView,
     View,
-    TouchableOpacity,
-    Image
+    TouchableOpacity
   } from "react-native";
 
 
   const TINT_COLOR = "#39b9c3";
-  const BACKGROUND_COLOR = "#d7e4e5";
 
 export default class BookingButton extends Component {
     state = {

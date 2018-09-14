@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Image, TouchableOpacity, Dimensions, Text} from 'react-native';
-import { Content, Card, CardItem, Thumbnail, Left, Body, Right } from 'native-base';
-import { MaterialIcons, Feather, FontAwesome } from "@expo/vector-icons";
+import { Image, TouchableOpacity,  Text} from 'react-native';
+import {  Card, CardItem, Thumbnail, Left, Body, Right } from 'native-base';
+import {  FontAwesome } from "@expo/vector-icons";
 
 
 
